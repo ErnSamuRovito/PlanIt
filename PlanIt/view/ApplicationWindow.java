@@ -2,7 +2,9 @@
 
 package view;
 
+import model.SqLiteConnection;
 import javax.swing.*;
+import java.sql.*;
 
 public class ApplicationWindow {
     private static ApplicationWindow instance;
@@ -24,6 +26,16 @@ public class ApplicationWindow {
 
         // Imposta il pannello iniziale (LoginView)
         setPanel(new LoginView());
+
+
+        // connessione al DB
+        SqLiteConnection dbConnection = new SqLiteConnection();
+        Connection connection = dbConnection.getConnection();
+
+        // Puoi eseguire query qui utilizzando `connection`
+
+        // Non dimenticare di chiudere la connessione alla fine
+        // dbConnection.closeConnection();
     }
 
     public static synchronized ApplicationWindow getInstance() {
