@@ -1,6 +1,7 @@
 package view;
 
 import controller.LoginButtonController;
+import core.GlobalResources;
 import view.factory.ButtonFactory;
 import view.factory.TextFieldFactory;
 
@@ -17,6 +18,7 @@ public class LoginView extends JPanel {
 
     private void initializeUI()
     {
+        setBackground(GlobalResources.COLOR_PANNA);
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
