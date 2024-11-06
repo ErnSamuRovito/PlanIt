@@ -19,8 +19,8 @@ public class SqLiteConnection {
             throw new RuntimeException(e);
         }
 
-        // Usa il percorso relativo al database
-        String url = "jdbc:sqlite:/home/samuele/IdeaProjects/PlanIt/Plant-It/src/main/java/resources/planIt.db";
+        String relativePath = "Plant-It/src/main/java/resources/planIt.db";
+        String url = "jdbc:sqlite:" + Paths.get(relativePath);
 
         try {
             // Prova a connetterti al database
