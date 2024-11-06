@@ -2,11 +2,8 @@
 
 package core;
 
-import view.LoginView;
-import view.DeskView;
-import view.ApplicationWindow;
-
-import javax.swing.*;
+import view.panel.LoginView;
+import view.panel.DeskView;
 
 public class ComponentManager {
     private static ComponentManager instance;
@@ -41,7 +38,7 @@ public class ComponentManager {
     }
 
     // Metodo per impostare il pannello attivo tramite ApplicationWindow
-    public void setPanel(JPanel panel) {
-        ApplicationWindow.getInstance().setPanel(panel);
-    }
+    //public void setPanel(JPanel panel) {
+    //    ApplicationWindow.getInstance().setPanel(panel);
+    //}
 }

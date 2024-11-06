@@ -3,6 +3,8 @@
 package view;
 
 import model.SqLiteConnection;
+import view.panel.LoginView;
+
 import javax.swing.*;
 import java.sql.*;
 

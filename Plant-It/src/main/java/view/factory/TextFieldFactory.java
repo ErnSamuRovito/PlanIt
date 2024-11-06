@@ -1,6 +1,6 @@
 package view.factory;
 
-import view.CustomTextField;
+import view.UI.CustomTextField;
 import java.awt.*;
 
 public class TextFieldFactory implements UIComponentFactory<CustomTextField>

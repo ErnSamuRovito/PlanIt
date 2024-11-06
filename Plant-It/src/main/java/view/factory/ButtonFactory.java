@@ -2,7 +2,7 @@
 
 package view.factory;
 
-import view.CustomButton;
+import view.UI.CustomButton;
 import java.awt.*;
 import java.awt.event.ActionListener;
 

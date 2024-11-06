@@ -1,9 +1,11 @@
 // Package: view
 
-package view;
+package view.panel;
 
 import core.GlobalResources;
 import core.ComponentManager; // Importa ComponentManager
+import view.ApplicationWindow;
+import view.UI.CustomButton;
 import view.factory.ButtonFactory; // Importa ButtonFactory
 
 import javax.swing.*;
@@ -34,7 +36,7 @@ public class DeskView extends JPanel {
                 .setSize(new Dimension(150, 40)) // Imposta la dimensione del pulsante
                 .setActionListener(e -> {
                     // Associa l'azione di ritorno alla LoginView
-                    ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getLoginView());
+                    ApplicationWindow.getInstance().setPanel(ComponentManager.getInstance().getLoginView());
                 })
                 .create();
 

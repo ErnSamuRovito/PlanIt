@@ -20,7 +20,7 @@ public class SqLiteConnection {
         }
 
         // Usa il percorso relativo al database
-        String url = "jdbc:sqlite:src/main/java/resources/planIt.db";
+        String url = "jdbc:sqlite:/home/samuele/IdeaProjects/PlanIt/Plant-It/src/main/java/resources/planIt.db";
 
         try {
             // Prova a connetterti al database

@@ -1,4 +1,4 @@
-package org.example;
+package core;
 
 import view.ApplicationWindow;
 
