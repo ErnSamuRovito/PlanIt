@@ -19,7 +19,7 @@ public class SqLiteConnection {
             throw new RuntimeException(e);
         }
 
-        String relativePath = "Plant-It/src/main/java/resources/planIt.db";
+        String relativePath = "src/main/java/resources/planIt.db";
         String url = "jdbc:sqlite:" + Paths.get(relativePath);
 
         try {
