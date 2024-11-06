@@ -33,7 +33,7 @@ public class LoginView extends JPanel {
 
         addComponent(createTitleLabel(), 0);
 
-        addComponent(new JLabel("Nickname:"), 1);
+        addComponent(new JLabel("Username:"), 1);
         addComponent(usernameField, 2);
 
         addComponent(new JLabel("Password:"), 3);
@@ -64,7 +64,7 @@ public class LoginView extends JPanel {
     }
 
     private CustomButton createLoginButton() {
-        return new ButtonFactory("Accedi")
+        return new ButtonFactory("Login")
                 .setSize(BUTTON_SIZE)
                 .setActionListener(new LoginButtonController())
                 .create();

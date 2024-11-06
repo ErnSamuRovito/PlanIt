@@ -17,7 +17,7 @@ public class CustomTextField extends JTextField {
         setFont(new Font("SansSerif", Font.PLAIN, 14));
 
         this.backgroundColor = GlobalResources.COLOR_WHITE;
-        this.focusBackgroundColor = GlobalResources.COLOR_GREEN_1;
+        this.focusBackgroundColor = GlobalResources.COLOR_GREEN_2;
         this.textColor = Color.BLACK;
 
         setForeground(textColor);

@@ -32,7 +32,7 @@ public class DeskView extends JPanel {
         sideMenu.setPreferredSize(new Dimension(200, getHeight())); // Larghezza fissa di 200 px
 
         // Crea il pulsante "Torna alla Login" utilizzando la factory
-        CustomButton backButton = new ButtonFactory("Torna alla Login")
+        CustomButton backButton = new ButtonFactory("Exit")
                 .setSize(new Dimension(150, 40)) // Imposta la dimensione del pulsante
                 .setActionListener(e -> {
                     // Associa l'azione di ritorno alla LoginView
