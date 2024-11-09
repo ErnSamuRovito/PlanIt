@@ -1,6 +1,7 @@
 package view.panel;
 
 import controller.LoginButtonController;
+import controller.ToLoginController;
 import controller.ToSigninController;
 import core.GlobalResources;
 import view.UICreationalPattern.UIBuilders.*;
@@ -18,16 +19,17 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class LoginView extends JPanel {
+public class SigninView extends JPanel {
     private static final Dimension FIELD_SIZE = new Dimension(200, 30);
     private static final Dimension BUTTON_SIZE = new Dimension(150, 50);
 
     private CustomTextField usernameField;
+    private CustomTextField emailField;
     private CustomPasswordField passwordField;
     private CustomButton loginButton;
-    private CustomClickableLabel signinLabel;
+    private CustomClickableLabel loginLabel;
 
-    public LoginView() {
+    public SigninView() {
         // Imposta layout e margini del pannello
         setLayout(new GridBagLayout());
         setBackground(GlobalResources.COLOR_PANNA);
@@ -39,12 +41,16 @@ public class LoginView extends JPanel {
         UIDirector uiDirector = new UIDirector();
 
         // Creazione del campo di testo username usando il Builder e la Factory ----------------
-        UIBuilder usernameFieldBuilder = new CustomTextFieldBuilder();
-        uiDirector.buildStandardTextField(usernameFieldBuilder);
-        usernameFieldBuilder.text("Username").size(FIELD_SIZE).placeholder("Username");
+        UIBuilder textFieldBuilder = new CustomTextFieldBuilder();
+        uiDirector.buildStandardTextField(textFieldBuilder);
+        textFieldBuilder.text("Username").size(FIELD_SIZE).placeholder("Username");
         // Usa la factory per creare il campo di testo username
-        UIComponentFactory usernameFieldFactory = new CustomTextFieldFactory(usernameFieldBuilder);
-        usernameField = (CustomTextField) usernameFieldFactory.orderComponent(usernameFieldBuilder);
+        UIComponentFactory textFieldFactory = new CustomTextFieldFactory(textFieldBuilder);
+        usernameField = (CustomTextField) textFieldFactory.orderComponent(textFieldBuilder);
+
+        textFieldBuilder.text("Email").size(FIELD_SIZE).placeholder("Email");
+        // Usa la factory per creare il campo di testo username
+        emailField = (CustomTextField) textFieldFactory.orderComponent(textFieldBuilder);
 
         // Creazione del campo di testo password usando il Builder e la Factory ----------------
         UIBuilder passwordFieldBuilder = new CustomPasswordFieldBuilder();
@@ -66,18 +72,19 @@ public class LoginView extends JPanel {
         // Creazione del pulsante di login usando il Builder e la Factory ----------------
         UIBuilder labelBuilder =  new CustomClickableLabelBuilder();
         uiDirector.buildStandardClickableLabel(labelBuilder);
-        labelBuilder.text("Don't have an account? Sign up!").size(BUTTON_SIZE);
+        labelBuilder.text("Already have an account? Log in!").size(BUTTON_SIZE);
         // Usa la factory per creare il pulsante
         UIComponentFactory labelFactory = new CustomClickableLabelFactory(labelBuilder);
-        signinLabel = (CustomClickableLabel) labelFactory.orderComponent(labelBuilder);
-        signinLabel.addMouseListener(new MouseAdapter() {
-            @Override public void mouseClicked(MouseEvent e) {new ToSigninController().actionPerformed(null);}
+        loginLabel = (CustomClickableLabel) labelFactory.orderComponent(labelBuilder);
+        loginLabel.addMouseListener(new MouseAdapter() {
+            @Override public void mouseClicked(MouseEvent e) {new ToLoginController().actionPerformed(null);}
         });
 
         // Aggiungi componenti al pannello
         gbc.gridy = 0; add(usernameField, gbc);
-        gbc.gridy = 1; add(passwordField, gbc);
-        gbc.gridy = 2; add(loginButton, gbc);
-        gbc.gridy = 3; add(signinLabel, gbc);
+        gbc.gridy = 1; add(emailField, gbc);
+        gbc.gridy = 2; add(passwordField, gbc);
+        gbc.gridy = 3; add(loginButton, gbc);
+        gbc.gridy = 4; add(loginLabel, gbc);
     }
 }

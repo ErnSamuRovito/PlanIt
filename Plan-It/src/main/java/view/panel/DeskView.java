@@ -3,10 +3,6 @@
 package view.panel;
 
 import core.GlobalResources;
-import core.ComponentManager; // Importa ComponentManager
-import view.ApplicationWindow;
-import view.UI.CustomButton;
-import view.factory.ButtonFactory; // Importa ButtonFactory
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,17 +26,6 @@ public class DeskView extends JPanel {
         JPanel sideMenu = new JPanel();
         sideMenu.setBackground(GlobalResources.COLOR_CREMA); // Colore del menu
         sideMenu.setPreferredSize(new Dimension(200, getHeight())); // Larghezza fissa di 200 px
-
-        // Crea il pulsante "Torna alla Login" utilizzando la factory
-        CustomButton backButton = new ButtonFactory("Torna alla Login")
-                .setSize(new Dimension(150, 40)) // Imposta la dimensione del pulsante
-                .setActionListener(e -> {
-                    // Associa l'azione di ritorno alla LoginView
-                    ApplicationWindow.getInstance().setPanel(ComponentManager.getInstance().getLoginView());
-                })
-                .create();
-
-        sideMenu.add(backButton); // Aggiungi il pulsante al menu laterale
 
         // Posiziona il menu sul lato sinistro
         add(sideMenu, BorderLayout.WEST);
