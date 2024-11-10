@@ -2,7 +2,7 @@
 
 package view;
 
-import model.SqLiteConnection;
+import core.SqLiteConnection;
 import view.panel.LoginView;
 
 import javax.swing.*;
@@ -31,8 +31,6 @@ public class ApplicationWindow {
 
 
         // connessione al DB
-        SqLiteConnection dbConnection = new SqLiteConnection();
-        Connection connection = dbConnection.getConnection();
 
         // Puoi eseguire query qui utilizzando `connection`
 
