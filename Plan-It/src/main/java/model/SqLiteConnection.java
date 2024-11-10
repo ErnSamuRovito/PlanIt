@@ -7,6 +7,8 @@ import java.nio.file.Paths;
 
 public class SqLiteConnection {
     private Connection connection;
+    final String relativePath = "src/main/java/resources/planIt.db";
+    String url = "jdbc:sqlite:" + Paths.get(relativePath);
 
     public SqLiteConnection() {
         // Verifica se il driver è disponibile nel classpath
@@ -18,9 +20,6 @@ public class SqLiteConnection {
             e.printStackTrace();  // Stampa l'eccezione per maggiore visibilità
             throw new RuntimeException(e);
         }
-
-        String relativePath = "src/main/java/resources/planIt.db";
-        String url = "jdbc:sqlite:" + Paths.get(relativePath);
 
         try {
             // Prova a connetterti al database

@@ -1,6 +1,7 @@
 package view.panel;
 
 import controller.LoginButtonController;
+import controller.RegisterButtonController;
 import controller.ToLoginController;
 import controller.ToSigninController;
 import core.GlobalResources;
@@ -60,14 +61,15 @@ public class SigninView extends JPanel {
         UIComponentFactory passwordFieldFactory = new CustomTextFieldFactory(passwordFieldBuilder);
         passwordField = (CustomPasswordField) passwordFieldFactory.orderComponent(passwordFieldBuilder);
 
-        // Creazione del pulsante di login usando il Builder e la Factory ----------------
+        // Creazione del pulsante register usando il Builder e la Factory ----------------
         UIBuilder buttonBuilder =  new CustomButtonBuilder();
         uiDirector.buildStandardButton(buttonBuilder);
-        buttonBuilder.text("Login").size(BUTTON_SIZE);
+        buttonBuilder.text("Register").size(BUTTON_SIZE);
         // Usa la factory per creare il pulsante
         UIComponentFactory buttonFactory = new CustomButtonFactory(buttonBuilder);
         loginButton = (CustomButton) buttonFactory.orderComponent(buttonBuilder);
-        loginButton.addActionListener(new LoginButtonController());
+        loginButton.addActionListener(new RegisterButtonController());
+
 
         // Creazione del pulsante di login usando il Builder e la Factory ----------------
         UIBuilder labelBuilder =  new CustomClickableLabelBuilder();
@@ -86,5 +88,9 @@ public class SigninView extends JPanel {
         gbc.gridy = 2; add(passwordField, gbc);
         gbc.gridy = 3; add(loginButton, gbc);
         gbc.gridy = 4; add(loginLabel, gbc);
+    }
+
+    public CustomTextField getEmailField() {
+        return emailField;
     }
 }
