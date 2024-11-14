@@ -3,7 +3,7 @@
 package view;
 
 import core.SqLiteConnection;
-import model.DesktopNotification;
+import model.DesktopNotifier;
 import view.panel.LoginView;
 
 import javax.swing.*;
@@ -30,15 +30,16 @@ public class ApplicationWindow {
         // Imposta il pannello iniziale (LoginView)
         setPanel(new LoginView());
 
-        DesktopNotification desktopNotification = new DesktopNotification();
-        DesktopNotification.sendNotification("ciao", "sono plan-it");
+        DesktopNotifier notifier = new DesktopNotifier();
+        notifier.sendNotification("Titolo della Notifica", "Questo è un messaggio di notifica");
 
         // connessione al DB
+        SqLiteConnection.getInstance().getConnection();
 
         // Puoi eseguire query qui utilizzando `connection`
 
         // Non dimenticare di chiudere la connessione alla fine
-        // dbConnection.closeConnection();
+        SqLiteConnection.getInstance().closeConnection();
     }
 
     public static synchronized ApplicationWindow getInstance() {

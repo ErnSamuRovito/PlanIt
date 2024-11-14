@@ -9,11 +9,12 @@ public class FormatValidator
 
     public static boolean isValidEmail(String email)
     {
-        if (email == null || email.isEmpty())
-        {
-            return false;
-        }
+        if (email == null || email.isEmpty()) {return false;}
         return EMAIL_PATTERN.matcher(email).matches();
+    }
+
+    public static boolean isValidPassword(String password){
+        return (password!=null && password.length() >= 6);
     }
 }
 

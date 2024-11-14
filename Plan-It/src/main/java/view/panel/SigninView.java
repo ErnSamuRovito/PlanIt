@@ -93,4 +93,7 @@ public class SigninView extends JPanel {
     public CustomTextField getEmailField() {
         return emailField;
     }
+    public CustomPasswordField getPasswordField() {
+        return passwordField;
+    }
 }

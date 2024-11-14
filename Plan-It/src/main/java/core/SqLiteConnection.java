@@ -8,8 +8,8 @@ import java.nio.file.Paths;
 public class SqLiteConnection {
     private static SqLiteConnection instance; // Unica istanza della classe
     private Connection connection;
-    private final String relativePath = "src/main/java/resources/planIt.db";
-    private final String url = "jdbc:sqlite:" + Paths.get(relativePath);
+    //private final String relativePath = "jdbc:sqlite:PlanIt.sqlite";
+    private final String url = "jdbc:sqlite:PlanIt.sqlite";
 
     // Costruttore privato per impedire la creazione di nuove istanze
     private SqLiteConnection() {

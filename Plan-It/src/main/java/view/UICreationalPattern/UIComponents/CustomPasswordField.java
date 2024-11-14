@@ -83,4 +83,14 @@ public class CustomPasswordField extends JPasswordField implements UIComponent {
         super.paintComponent(g2);
         g2.dispose();
     }
+
+    public String getPasswordString(){
+        char[] password = getPassword();
+        String toReturn="";
+        for (int i = 0; i < password.length; i++) {
+            toReturn+=password[i];
+        }
+        System.out.println("getPasswordString() --> "+toReturn);
+        return toReturn;
+    }
 }
