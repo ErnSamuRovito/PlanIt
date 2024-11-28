@@ -6,6 +6,7 @@ import controller.ToSigninController;
 import javax.naming.ldap.Control;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -45,7 +46,7 @@ public class CustomLabel extends JLabel implements UIComponent {
         if (clickable) {
             removeMouseListeners();
             addMouseListeners();
-            addActionListener();
+            if (controlAction != null) addActionListener();
             revalidate();
             repaint();
         }
@@ -75,9 +76,19 @@ public class CustomLabel extends JLabel implements UIComponent {
         }
     }
 
-    private void addActionListener(){
+    private void addActionListener() {
         addMouseListener(new MouseAdapter() {
-            @Override public void mouseClicked(MouseEvent e) {controlAction.actionPerformed(null);}
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (controlAction != null) {
+                    ActionEvent actionEvent = new ActionEvent(
+                            e.getSource(),  // La sorgente dell'evento
+                            ActionEvent.ACTION_PERFORMED,  // Tipo di evento
+                            null // Puoi passare il testo come comando di azione
+                    );
+                    controlAction.actionPerformed(actionEvent); // Passa l'evento corretto
+                }
+            }
         });
     }
 

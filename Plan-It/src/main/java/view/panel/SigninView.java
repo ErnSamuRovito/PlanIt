@@ -63,11 +63,10 @@ public class SigninView extends JPanel {
         UIBuilder buttonBuilder =  new CustomButtonBuilder();
         uiDirector.buildStandardButton(buttonBuilder);
         buttonBuilder.text("Register").size(BUTTON_SIZE);
+        buttonBuilder.controlAction(new RegisterButtonController());
         // Usa la factory per creare il pulsante
         UIComponentFactory buttonFactory = new CustomButtonFactory(buttonBuilder);
         loginButton = (CustomButton) buttonFactory.orderComponent(buttonBuilder);
-        loginButton.addActionListener(new RegisterButtonController());
-
 
         // Creazione del pulsante di login usando il Builder e la Factory ----------------
         UIBuilder labelBuilder =  new CustomLabelBuilder();

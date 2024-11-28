@@ -58,10 +58,11 @@ public class LoginView extends JPanel {
         UIBuilder buttonBuilder =  new CustomButtonBuilder();
         uiDirector.buildStandardButton(buttonBuilder);
         buttonBuilder.text("Login").size(BUTTON_SIZE);
+        buttonBuilder.controlAction(new LoginButtonController());
         // Usa la factory per creare il pulsante
         UIComponentFactory buttonFactory = new CustomButtonFactory(buttonBuilder);
         loginButton = (CustomButton) buttonFactory.orderComponent(buttonBuilder);
-        loginButton.addActionListener(new LoginButtonController());
+        //loginButton.addActionListener(new LoginButtonController());
 
         // Creazione del pulsante di login usando il Builder e la Factory ----------------
         UIBuilder labelBuilder =  new CustomLabelBuilder();
