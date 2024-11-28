@@ -1,13 +1,11 @@
 package view.panel;
 
-import controller.LoginButtonController;
 import controller.RegisterButtonController;
 import controller.ToLoginController;
-import controller.ToSigninController;
 import core.GlobalResources;
 import view.UICreationalPattern.UIBuilders.*;
 import view.UICreationalPattern.UIComponents.CustomButton;
-import view.UICreationalPattern.UIComponents.CustomClickableLabel;
+import view.UICreationalPattern.UIComponents.CustomLabel;
 import view.UICreationalPattern.UIComponents.CustomPasswordField;
 import view.UICreationalPattern.UIComponents.CustomTextField;
 import view.UICreationalPattern.UIFactories.CustomButtonFactory;
@@ -28,7 +26,7 @@ public class SigninView extends JPanel {
     private CustomTextField emailField;
     private CustomPasswordField passwordField;
     private CustomButton loginButton;
-    private CustomClickableLabel loginLabel;
+    private CustomLabel loginLabel;
 
     public SigninView() {
         // Imposta layout e margini del pannello
@@ -72,15 +70,13 @@ public class SigninView extends JPanel {
 
 
         // Creazione del pulsante di login usando il Builder e la Factory ----------------
-        UIBuilder labelBuilder =  new CustomClickableLabelBuilder();
+        UIBuilder labelBuilder =  new CustomLabelBuilder();
         uiDirector.buildStandardClickableLabel(labelBuilder);
         labelBuilder.text("Already have an account? Log in!").size(BUTTON_SIZE);
+        labelBuilder.controlAction(new ToLoginController());
         // Usa la factory per creare il pulsante
         UIComponentFactory labelFactory = new CustomClickableLabelFactory(labelBuilder);
-        loginLabel = (CustomClickableLabel) labelFactory.orderComponent(labelBuilder);
-        loginLabel.addMouseListener(new MouseAdapter() {
-            @Override public void mouseClicked(MouseEvent e) {new ToLoginController().actionPerformed(null);}
-        });
+        loginLabel = (CustomLabel) labelFactory.orderComponent(labelBuilder);
 
         // Aggiungi componenti al pannello
         gbc.gridy = 0; add(usernameField, gbc);

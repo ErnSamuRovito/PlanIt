@@ -1,8 +1,12 @@
 package view.UICreationalPattern.UIBuilders;
 
+import controller.ToLoginController;
+import controller.ToSigninController;
 import core.GlobalResources;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class UIDirector {
     public void buildStandardButton(UIBuilder builder) {
@@ -48,6 +52,19 @@ public class UIDirector {
                 .focusPainted(false)
                 .borderPainted(false)
                 .contentAreaFilled(false)
-                .opaque(false);
+                .opaque(false)
+                .clickable(true);
+    }
+
+    public void buildStandardLabel(UIBuilder builder) {
+        builder .backgroundColor(GlobalResources.COLOR_CREMA)
+                .hoverBackgroundColor(GlobalResources.COLOR_GREEN_1)
+                .pressedBackgroundColor(GlobalResources.COLOR_GREEN_2)
+                .textColor(GlobalResources.COLOR_CREMA)
+                .focusPainted(false)
+                .borderPainted(false)
+                .contentAreaFilled(false)
+                .opaque(false)
+                .clickable(false);
     }
 }

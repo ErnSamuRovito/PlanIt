@@ -12,16 +12,10 @@ public class CustomButton extends JButton implements UIComponent {
     private final Color textColor;
     private final String text;
     private final Dimension size;
-    private final String placeholder;
-
-    private final Boolean focusPainted;
-    private final Boolean borderPainted;
-    private final Boolean contentAreaFilled;
     private final Boolean opaque;
 
     public CustomButton(Color backgroundColor, Color hoverBackgroundColor, Color pressedBackgroundColor, Color textColor,
-                        String text, Dimension size, String placeholder,
-                        Boolean focusPainted, Boolean borderPainted, Boolean contentAreaFilled, Boolean opaque) {
+                        String text, Dimension size, Boolean opaque) {
         super(text);
 
         this.backgroundColor = backgroundColor;
@@ -30,19 +24,17 @@ public class CustomButton extends JButton implements UIComponent {
         this.textColor = textColor;
         this.text = text;
         this.size = size;
-        this.placeholder = placeholder;
-        this.focusPainted = focusPainted;
-        this.borderPainted = borderPainted;
-        this.contentAreaFilled = contentAreaFilled;
         this.opaque = opaque;
 
         setPreferredSize(size);
         setBackground(backgroundColor);
         setForeground(textColor);
         setOpaque(opaque);
-        setFocusPainted(focusPainted);
-        setBorderPainted(borderPainted);
-        setContentAreaFilled(contentAreaFilled);
+
+        //di default.
+        setFocusPainted(false);
+        setBorderPainted(false);
+        setContentAreaFilled(false);
     }
 
     @Override

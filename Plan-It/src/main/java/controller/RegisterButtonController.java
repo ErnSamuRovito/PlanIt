@@ -16,7 +16,7 @@ import java.util.Arrays;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
 
-public class RegisterButtonController implements ActionListener {
+public class RegisterButtonController extends ControlAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() instanceof CustomButton registerButton) {

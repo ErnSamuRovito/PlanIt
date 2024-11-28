@@ -5,7 +5,7 @@ import controller.ToSigninController;
 import core.GlobalResources;
 import view.UICreationalPattern.UIBuilders.*;
 import view.UICreationalPattern.UIComponents.CustomButton;
-import view.UICreationalPattern.UIComponents.CustomClickableLabel;
+import view.UICreationalPattern.UIComponents.CustomLabel;
 import view.UICreationalPattern.UIComponents.CustomPasswordField;
 import view.UICreationalPattern.UIComponents.CustomTextField;
 import view.UICreationalPattern.UIFactories.CustomButtonFactory;
@@ -25,7 +25,7 @@ public class LoginView extends JPanel {
     private CustomTextField usernameField;
     private CustomPasswordField passwordField;
     private CustomButton loginButton;
-    private CustomClickableLabel signinLabel;
+    private CustomLabel signinLabel;
 
     public LoginView() {
         // Imposta layout e margini del pannello
@@ -64,15 +64,13 @@ public class LoginView extends JPanel {
         loginButton.addActionListener(new LoginButtonController());
 
         // Creazione del pulsante di login usando il Builder e la Factory ----------------
-        UIBuilder labelBuilder =  new CustomClickableLabelBuilder();
+        UIBuilder labelBuilder =  new CustomLabelBuilder();
         uiDirector.buildStandardClickableLabel(labelBuilder);
         labelBuilder.text("Don't have an account? Sign up!").size(BUTTON_SIZE);
+        labelBuilder.controlAction(new ToSigninController());
         // Usa la factory per creare il pulsante
         UIComponentFactory labelFactory = new CustomClickableLabelFactory(labelBuilder);
-        signinLabel = (CustomClickableLabel) labelFactory.orderComponent(labelBuilder);
-        signinLabel.addMouseListener(new MouseAdapter() {
-            @Override public void mouseClicked(MouseEvent e) {new ToSigninController().actionPerformed(null);}
-        });
+        signinLabel = (CustomLabel) labelFactory.orderComponent(labelBuilder);
 
         // Aggiungi componenti al pannello
         gbc.gridy = 0; add(usernameField, gbc);
