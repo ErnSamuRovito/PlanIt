@@ -1,5 +1,3 @@
-// Package: view
-
 package view.panel;
 
 import core.GlobalResources;
@@ -8,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class DeskView extends JPanel {
+    private JPanel sideMenu;
+    private JPanel homePanel;
 
     public DeskView() {
         initializeUI();
@@ -17,17 +17,42 @@ public class DeskView extends JPanel {
         setLayout(new BorderLayout());
         setBackground(GlobalResources.COLOR_PANNA);
 
-        // Aggiunge il menù laterale
-        addSideMenu();
+        // Crea i pannelli
+        sideMenu = createSideMenu();
+        homePanel = new JPanel();
+        homePanel.setBackground(GlobalResources.COLOR_PANNA);
+        homePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+        // Crea lo SplitPane per rendere regolabili i pannelli
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sideMenu, homePanel);
+        splitPane.setDividerLocation(200);        // Posizione iniziale del divisore
+        splitPane.setDividerSize(0);              // Rende invisibile il divisore
+        splitPane.setContinuousLayout(true);      // Aggiorna il layout durante il trascinamento
+        splitPane.setBorder(BorderFactory.createEmptyBorder());  // Rimuove il bordo
+
+        // Aggiunge lo SplitPane al pannello principale
+        add(splitPane, BorderLayout.CENTER);
+        addFolder();
     }
 
-    // Metodo per creare e aggiungere il pannello laterale (menu)
-    private void addSideMenu() {
+    // Metodo per creare il pannello laterale (menu)
+    private JPanel createSideMenu() {
         JPanel sideMenu = new JPanel();
-        sideMenu.setBackground(GlobalResources.COLOR_CREMA); // Colore del menu
-        sideMenu.setPreferredSize(new Dimension(200, getHeight())); // Larghezza fissa di 200 px
+        sideMenu.setBackground(GlobalResources.COLOR_CREMA);
+        sideMenu.setPreferredSize(new Dimension(200, getHeight())); // Larghezza iniziale
+        sideMenu.setLayout(new BorderLayout());
 
-        // Posiziona il menu sul lato sinistro
-        add(sideMenu, BorderLayout.WEST);
+        return sideMenu;
+    }
+
+    private void addFolder(){
+        Folder folder1 = new Folder("Scuola");
+        Folder folder2 = new Folder("Lavoro");
+        Folder folder3 = new Folder("Progetto");
+        Folder folder4 = new Folder("NomeMoltoLungoPerTest");
+        homePanel.add(folder1);
+        homePanel.add(folder2);
+        homePanel.add(folder3);
+        homePanel.add(folder4);
     }
 }
