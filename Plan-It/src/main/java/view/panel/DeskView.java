@@ -42,6 +42,10 @@ public class DeskView extends JPanel {
         sideMenu.setPreferredSize(new Dimension(200, getHeight())); // Larghezza iniziale
         sideMenu.setLayout(new BorderLayout());
 
+        // Aggiungi la GIF animata al side menu
+        JLabel gifLabel = new JLabel(new ImageIcon(GlobalResources.plantHappyState));
+        sideMenu.add(gifLabel, BorderLayout.NORTH);
+
         return sideMenu;
     }
 
