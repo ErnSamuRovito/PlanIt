@@ -54,9 +54,16 @@ public class DeskView extends JPanel {
         Folder folder2 = new Folder("Lavoro");
         Folder folder3 = new Folder("Progetto");
         Folder folder4 = new Folder("NomeMoltoLungoPerTest");
+        Task task1 = new Task("Task1");
+        Task task2 = new Task("Task2");
+        Task task3 = new Task("Task3");
         homePanel.add(folder1);
         homePanel.add(folder2);
         homePanel.add(folder3);
         homePanel.add(folder4);
+
+        homePanel.add(task1);
+        homePanel.add(task2);
+        homePanel.add(task3);
     }
 }

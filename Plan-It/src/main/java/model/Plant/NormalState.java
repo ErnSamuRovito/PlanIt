@@ -1,8 +1,8 @@
-package model;
+package model.Plant;
 
 import javax.swing.*;
 
-public class SadState extends State {
+public class NormalState extends State {
     @Override
     public ImageIcon getGifImage() {
         return gifImage;

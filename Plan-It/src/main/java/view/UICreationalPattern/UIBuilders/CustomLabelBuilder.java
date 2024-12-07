@@ -6,7 +6,7 @@ public class CustomLabelBuilder extends UIBuilder {
     @Override
     public CustomLabel build() {
         return new CustomLabel(
-                backgroundColor, hoverBackgroundColor, pressedBackgroundColor, textColor, text, size, opaque, clickable, controlAction
+                backgroundColor, hoverBackgroundColor, pressedBackgroundColor, textColor, text, size, opaque, clickable, action
         );
     }
 }

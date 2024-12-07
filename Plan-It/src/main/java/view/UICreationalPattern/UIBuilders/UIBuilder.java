@@ -1,6 +1,6 @@
 package view.UICreationalPattern.UIBuilders;
 
-import controller.ControlAction;
+import controller.commandPattern.ActionCommand;
 import view.UICreationalPattern.UIComponents.UIComponent;
 import java.awt.*;
 
@@ -17,7 +17,8 @@ public abstract class UIBuilder {
     protected Boolean contentAreaFilled;
     protected Boolean opaque;
     protected Boolean clickable;
-    protected ControlAction controlAction;
+    protected ActionCommand action;
+    //protected ControlAction controlAction;
 
     public UIBuilder text(String text) {
         this.text = text;
@@ -67,10 +68,14 @@ public abstract class UIBuilder {
         this.clickable = clickable;
         return this;
     }
-    public UIBuilder controlAction(ControlAction controlAction) {
-        this.controlAction = controlAction;
+    public UIBuilder action(ActionCommand action) {
+        this.action = action;
         return this;
     }
+    /*public UIBuilder controlAction(ControlAction controlAction) {
+        this.controlAction = controlAction;
+        return this;
+    }*/
 
     // Metodo astratto che verrà implementato nelle classi concrete
     public abstract UIComponent build();

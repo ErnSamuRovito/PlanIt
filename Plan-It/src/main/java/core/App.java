@@ -4,8 +4,7 @@ import model.Folder;
 import model.Task;
 import view.ApplicationWindow;
 
-public class App
-{
+public class App {
     public static void main(String[] args) {
         // File singoli
         Task task1 = new Task("portare fuori il cane");

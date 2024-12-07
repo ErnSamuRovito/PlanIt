@@ -1,12 +1,9 @@
 package view.UICreationalPattern.UIComponents;
 
-import controller.ControlAction;
-import controller.ToSigninController;
+import controller.commandPattern.ActionCommand;
 
-import javax.naming.ldap.Control;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -18,12 +15,13 @@ public class CustomLabel extends JLabel implements UIComponent {
     private final Color textColor;
     private final Dimension size;
     private final boolean opaque, clickable;
-    private final ControlAction controlAction;
+    //private final ControlAction controlAction;
+    private final ActionCommand command;
 
     // Costruttore
     public CustomLabel(Color backgroundColor, Color hoverBackgroundColor, Color pressedBackgroundColor,
                        Color textColor, String text, Dimension size, boolean opaque, boolean clickable,
-                       ControlAction controlAction) {
+                       ActionCommand command) {
         super(text); // Imposta il testo iniziale del JLabel
 
         this.backgroundColor = backgroundColor;
@@ -33,7 +31,7 @@ public class CustomLabel extends JLabel implements UIComponent {
         this.size = size;
         this.opaque = opaque;
         this.clickable = clickable;
-        this.controlAction = controlAction;
+        this.command = command;
 
         setPreferredSize(size);
         setForeground(textColor);
@@ -46,7 +44,7 @@ public class CustomLabel extends JLabel implements UIComponent {
         if (clickable) {
             removeMouseListeners();
             addMouseListeners();
-            if (controlAction != null) addActionListener();
+            if (command != null) addActionListener();
             revalidate();
             repaint();
         }
@@ -79,16 +77,7 @@ public class CustomLabel extends JLabel implements UIComponent {
     private void addActionListener() {
         addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                if (controlAction != null) {
-                    ActionEvent actionEvent = new ActionEvent(
-                            e.getSource(),  // La sorgente dell'evento
-                            ActionEvent.ACTION_PERFORMED,  // Tipo di evento
-                            null // Puoi passare il testo come comando di azione
-                    );
-                    controlAction.actionPerformed(actionEvent); // Passa l'evento corretto
-                }
-            }
+            public void mouseClicked(MouseEvent e) { if (command != null) {command.execute();} }
         });
     }
 

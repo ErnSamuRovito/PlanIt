@@ -1,7 +1,7 @@
 package view.panel;
 
-import controller.LoginButtonController;
-import controller.ToSigninController;
+import controller.commandPattern.GoToSigninCommand;
+import controller.commandPattern.LoginCommand;
 import core.GlobalResources;
 import view.UICreationalPattern.UIBuilders.*;
 import view.UICreationalPattern.UIComponents.CustomButton;
@@ -15,8 +15,6 @@ import view.UICreationalPattern.UIFactories.UIComponentFactory;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class LoginView extends JPanel {
     private static final Dimension FIELD_SIZE = new Dimension(200, 30);
@@ -58,7 +56,7 @@ public class LoginView extends JPanel {
         UIBuilder buttonBuilder =  new CustomButtonBuilder();
         uiDirector.buildStandardButton(buttonBuilder);
         buttonBuilder.text("Login").size(BUTTON_SIZE);
-        buttonBuilder.controlAction(new LoginButtonController());
+        buttonBuilder.action(new LoginCommand());
         // Usa la factory per creare il pulsante
         UIComponentFactory buttonFactory = new CustomButtonFactory(buttonBuilder);
         loginButton = (CustomButton) buttonFactory.orderComponent(buttonBuilder);
@@ -68,7 +66,7 @@ public class LoginView extends JPanel {
         UIBuilder labelBuilder =  new CustomLabelBuilder();
         uiDirector.buildStandardClickableLabel(labelBuilder);
         labelBuilder.text("Don't have an account? Sign up!").size(BUTTON_SIZE);
-        labelBuilder.controlAction(new ToSigninController());
+        labelBuilder.action(new GoToSigninCommand());
         // Usa la factory per creare il pulsante
         UIComponentFactory labelFactory = new CustomClickableLabelFactory(labelBuilder);
         signinLabel = (CustomLabel) labelFactory.orderComponent(labelBuilder);
