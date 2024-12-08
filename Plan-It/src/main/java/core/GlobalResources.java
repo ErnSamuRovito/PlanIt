@@ -14,7 +14,7 @@ public class GlobalResources {
     public static final String folderImage="src/main/java/resources/images/folder.png";
     public static final String addFolderImage="src/main/java/resources/images/addFolder.png";
     public static final String taskImage="src/main/java/resources/images/task.png";
-    public static final int folderXOffset=20, folderYOffset=35;
+    public static final int xOffset =20, yOffset =35;
 
     //Plant's constants
     public static final String plantHappyState="src/main/java/resources/images/avatarPlant/avatarPlantHappy.gif";

@@ -1,6 +1,8 @@
 package view.panel;
 
 import core.GlobalResources;
+import view.panel.iconPanel.Folder;
+import view.panel.iconPanel.Task;
 
 import javax.swing.*;
 import java.awt.*;

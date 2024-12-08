@@ -1,4 +1,4 @@
-package view.panel;
+package view.panel.iconPanel;
 
 import core.GlobalResources;
 
@@ -9,24 +9,17 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class Folder extends JPanel {
-    private BufferedImage image;
-    private String title;
-    private JLabel titleLabel;
+public abstract class IconPanel extends JPanel {
+    protected BufferedImage image;
+    protected String title;
+    protected JLabel titleLabel;
 
-    public Folder(String title) {
-        try {
-            //TUTTO QUESTO CODICE È DI PROVA, SERVE PER CREARE UN PLACEHOLDER! VERRA' CAMBIATO!
-            if (title.length()%2==0)
-                image = ImageIO.read(new File(GlobalResources.folderImage));
-            else
-                image = ImageIO.read(new File(GlobalResources.addFolderImage));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public IconPanel(String imagePath, String title) {
+        try { image = ImageIO.read(new File(imagePath)); }
+        catch (IOException e) { e.printStackTrace(); }
 
         setPreferredSize(new Dimension(
-                image.getWidth()+GlobalResources.folderXOffset, image.getHeight()+GlobalResources.folderYOffset)
+            image.getWidth()+GlobalResources.xOffset, image.getHeight()+GlobalResources.yOffset)
         );
         setBackground(new Color(255, 255, 255, 0));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -35,7 +28,7 @@ public class Folder extends JPanel {
         addTitle();
     }
 
-    private void addTitle() {
+    protected void addTitle() {
         titleLabel = new JLabel(title);
         titleLabel.setAlignmentX(CENTER_ALIGNMENT); // Centra la JLabel orizzontalmente
 

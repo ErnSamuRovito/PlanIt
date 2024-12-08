@@ -39,6 +39,6 @@ public class AnimatedGifPanel extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(GlobalResources.COLOR_PANNA);
         g2d.fillRect(0, 0, getWidth(), getHeight());
-        g2d.drawImage(frames.get(currentFrame), GlobalResources.folderXOffset, GlobalResources.folderYOffset, this);
+        g2d.drawImage(frames.get(currentFrame), GlobalResources.xOffset, GlobalResources.yOffset, this);
     }
 }
