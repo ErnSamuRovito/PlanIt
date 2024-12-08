@@ -20,7 +20,7 @@ public class LoginView extends JPanel {
     private static final Dimension FIELD_SIZE = new Dimension(200, 30);
     private static final Dimension BUTTON_SIZE = new Dimension(150, 50);
 
-    private CustomTextField usernameField;
+    private CustomTextField userField;
     private CustomPasswordField passwordField;
     private CustomButton loginButton;
     private CustomLabel signinLabel;
@@ -39,10 +39,10 @@ public class LoginView extends JPanel {
         // Creazione del campo di testo username usando il Builder e la Factory ----------------
         UIBuilder usernameFieldBuilder = new CustomTextFieldBuilder();
         uiDirector.buildStandardTextField(usernameFieldBuilder);
-        usernameFieldBuilder.text("Username").size(FIELD_SIZE).placeholder("Username");
+        usernameFieldBuilder.text("Username or Email").size(FIELD_SIZE).placeholder("Username or Email");
         // Usa la factory per creare il campo di testo username
         UIComponentFactory usernameFieldFactory = new CustomTextFieldFactory(usernameFieldBuilder);
-        usernameField = (CustomTextField) usernameFieldFactory.orderComponent(usernameFieldBuilder);
+        userField = (CustomTextField) usernameFieldFactory.orderComponent(usernameFieldBuilder);
 
         // Creazione del campo di testo password usando il Builder e la Factory ----------------
         UIBuilder passwordFieldBuilder = new CustomPasswordFieldBuilder();
@@ -56,7 +56,7 @@ public class LoginView extends JPanel {
         UIBuilder buttonBuilder =  new CustomButtonBuilder();
         uiDirector.buildStandardButton(buttonBuilder);
         buttonBuilder.text("Login").size(BUTTON_SIZE);
-        buttonBuilder.action(new LoginCommand());
+        buttonBuilder.action(new LoginCommand(this));
         // Usa la factory per creare il pulsante
         UIComponentFactory buttonFactory = new CustomButtonFactory(buttonBuilder);
         loginButton = (CustomButton) buttonFactory.orderComponent(buttonBuilder);
@@ -72,9 +72,12 @@ public class LoginView extends JPanel {
         signinLabel = (CustomLabel) labelFactory.orderComponent(labelBuilder);
 
         // Aggiungi componenti al pannello
-        gbc.gridy = 0; add(usernameField, gbc);
+        gbc.gridy = 0; add(userField, gbc);
         gbc.gridy = 1; add(passwordField, gbc);
         gbc.gridy = 2; add(loginButton, gbc);
         gbc.gridy = 3; add(signinLabel, gbc);
     }
+
+    public CustomTextField getUserField(){return userField;}
+    public CustomPasswordField getPasswordField() {return passwordField;}
 }

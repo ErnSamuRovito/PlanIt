@@ -83,10 +83,7 @@ public class SigninView extends JPanel {
         gbc.gridy = 4; add(loginLabel, gbc);
     }
 
-    public CustomTextField getEmailField() {
-        return emailField;
-    }
-    public CustomPasswordField getPasswordField() {
-        return passwordField;
-    }
+    public CustomTextField getUsernameField(){return usernameField;}
+    public CustomTextField getEmailField() {return emailField;}
+    public CustomPasswordField getPasswordField() {return passwordField;}
 }

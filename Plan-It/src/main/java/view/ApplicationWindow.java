@@ -20,7 +20,7 @@ public class ApplicationWindow {
     private ApplicationWindow() {
         frame = new JFrame(DEFAULT_TITLE);
         frame.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-        frame.setResizable(false);
+        //frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Imposta la posizione al centro dello schermo
@@ -36,10 +36,8 @@ public class ApplicationWindow {
         // connessione al DB
         SqLiteConnection.getInstance().getConnection();
 
-        // Puoi eseguire query qui utilizzando `connection`
-
         // Non dimenticare di chiudere la connessione alla fine
-        SqLiteConnection.getInstance().closeConnection();
+        //SqLiteConnection.getInstance().closeConnection();
     }
 
     public static synchronized ApplicationWindow getInstance() {

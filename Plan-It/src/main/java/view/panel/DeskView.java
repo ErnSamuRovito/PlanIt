@@ -28,7 +28,7 @@ public class DeskView extends JPanel {
         // Crea lo SplitPane per rendere regolabili i pannelli
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sideMenu, homePanel);
         splitPane.setDividerLocation(200);        // Posizione iniziale del divisore
-        splitPane.setDividerSize(0);              // Rende invisibile il divisore
+        splitPane.setDividerSize(3);              // Rende invisibile il divisore
         splitPane.setContinuousLayout(true);      // Aggiorna il layout durante il trascinamento
         splitPane.setBorder(BorderFactory.createEmptyBorder());  // Rimuove il bordo
 

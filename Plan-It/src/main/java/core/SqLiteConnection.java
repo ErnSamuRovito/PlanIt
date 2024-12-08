@@ -46,6 +46,15 @@ public class SqLiteConnection {
     }
 
     public Connection getConnection() {
+        try {
+            if (connection == null || connection.isClosed()) {
+                System.out.println("Reopening database connection...");
+                connection = DriverManager.getConnection(url);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error reopening database connection: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
         return connection;
     }
 
