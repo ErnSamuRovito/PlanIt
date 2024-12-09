@@ -1,8 +1,7 @@
 package view.panel;
 
 import core.GlobalResources;
-import view.panel.iconPanel.Folder;
-import view.panel.iconPanel.Task;
+import view.panel.iconPanel.IconFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,6 +34,7 @@ public class DeskView extends JPanel {
         // Aggiunge lo SplitPane al pannello principale
         add(splitPane, BorderLayout.CENTER);
         addFolder();
+        addCreateIcon();
     }
 
     // Metodo per creare il pannello laterale (menu)
@@ -52,20 +52,15 @@ public class DeskView extends JPanel {
     }
 
     private void addFolder(){
-        Folder folder1 = new Folder("Scuola");
-        Folder folder2 = new Folder("Lavoro");
-        Folder folder3 = new Folder("Progetto");
-        Folder folder4 = new Folder("NomeMoltoLungoPerTest");
-        Task task1 = new Task("Task1");
-        Task task2 = new Task("Task2");
-        Task task3 = new Task("Task3");
-        homePanel.add(folder1);
-        homePanel.add(folder2);
-        homePanel.add(folder3);
-        homePanel.add(folder4);
+        homePanel.add(IconFactory.createIconPanel("folder","Home"));
+        homePanel.add(IconFactory.createIconPanel("folder","Work"));
+        homePanel.add(IconFactory.createIconPanel("folder","Project"));
+        homePanel.add(IconFactory.createIconPanel("task","task1"));
+        homePanel.add(IconFactory.createIconPanel("task","task2"));
+        homePanel.add(IconFactory.createIconPanel("task","task3"));
+    }
 
-        homePanel.add(task1);
-        homePanel.add(task2);
-        homePanel.add(task3);
+    private void addCreateIcon(){
+        homePanel.add(IconFactory.createIconPanel("add","new"));
     }
 }

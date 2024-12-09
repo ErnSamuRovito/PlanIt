@@ -1,5 +1,6 @@
 package view.panel.iconPanel;
 
+import controller.commandPattern.ActionCommand;
 import core.GlobalResources;
 
 import javax.imageio.ImageIO;
@@ -9,12 +10,12 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public abstract class IconPanel extends JPanel {
+public class IconPanel extends JPanel {
     protected BufferedImage image;
     protected String title;
     protected JLabel titleLabel;
 
-    public IconPanel(String imagePath, String title) {
+    public IconPanel(String title, String imagePath, ActionCommand command) {
         try { image = ImageIO.read(new File(imagePath)); }
         catch (IOException e) { e.printStackTrace(); }
 
@@ -39,8 +40,7 @@ public abstract class IconPanel extends JPanel {
         add(verticalBox); // Aggiungi il box al pannello
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
+    @Override protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (image != null) {
             // Disegna l'immagine centrata nel JPanel
