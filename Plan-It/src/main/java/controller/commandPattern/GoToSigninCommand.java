@@ -1,10 +1,9 @@
 package controller.commandPattern;
 
-import view.ApplicationWindow;
-import view.panel.SigninView;
+import core.ComponentManager;
 
 public class GoToSigninCommand implements ActionCommand{
     @Override public void execute() {
-        ApplicationWindow.getInstance().setPanel(new SigninView());
+        ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getSigninView());
     }
 }

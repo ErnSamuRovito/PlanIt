@@ -1,10 +1,10 @@
 package controller.commandPattern;
 
-import view.ApplicationWindow;
-import view.panel.LoginView;
+import core.ComponentManager;
 
 public class GoToLoginCommand implements ActionCommand{
     @Override public void execute() {
-        ApplicationWindow.getInstance().setPanel(new LoginView());
+        //ApplicationWindow.getInstance().setPanel(new LoginView());
+        ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getLoginView());
     }
 }

@@ -1,10 +1,9 @@
 package controller.commandPattern;
 
+import core.ComponentManager;
 import core.SqLiteConnection;
-import view.ApplicationWindow;
 import view.UICreationalPattern.UIComponents.CustomPasswordField;
 import view.UICreationalPattern.UIComponents.CustomTextField;
-import view.panel.DeskView;
 import view.panel.LoginView;
 
 import java.sql.Connection;
@@ -31,7 +30,7 @@ public class LoginCommand implements ActionCommand{
             String passwordInput = passwordField.getPasswordString();
 
             if (searchUser(userInput, passwordInput)) {
-                ApplicationWindow.getInstance().setPanel(new DeskView());
+                ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView(userInput));
             } else {
                 showMessageDialog(null, "Login failed. Try again.", "Plan-It", ERROR_MESSAGE);
             }

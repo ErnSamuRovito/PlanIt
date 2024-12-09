@@ -3,12 +3,10 @@ package core;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.nio.file.Paths;
 
 public class SqLiteConnection {
     private static SqLiteConnection instance; // Unica istanza della classe
     private Connection connection;
-    //private final String relativePath = "jdbc:sqlite:PlanIt.sqlite";
     private final String url = "jdbc:sqlite:PlanIt.sqlite";
 
     // Costruttore privato per impedire la creazione di nuove istanze
@@ -21,20 +19,10 @@ public class SqLiteConnection {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-
-        try {
-            // Connessione al database
-            connection = DriverManager.getConnection(url);
-            System.out.println("Connected to database successfully: " + url);
-        } catch (SQLException e) {
-            System.out.println("Error connecting to database: " + url);
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
     }
 
     // Metodo per ottenere l'unica istanza della classe
-    public static SqLiteConnection getInstance() {
+    public static synchronized SqLiteConnection getInstance() {
         if (instance == null) {
             synchronized (SqLiteConnection.class) {
                 if (instance == null) {
@@ -45,29 +33,36 @@ public class SqLiteConnection {
         return instance;
     }
 
+    // Restituisce la connessione al database
     public Connection getConnection() {
         try {
             if (connection == null || connection.isClosed()) {
-                System.out.println("Reopening database connection...");
+                System.out.println("Opening new database connection...");
                 connection = DriverManager.getConnection(url);
+                System.out.println("Database connection opened successfully.");
+            } else {
+                System.out.println("Using existing database connection...");
             }
         } catch (SQLException e) {
-            System.out.println("Error reopening database connection: " + e.getMessage());
-            throw new RuntimeException(e);
+            System.out.println("Error connecting to database: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Failed to connect to the database.", e);
         }
         return connection;
     }
 
-    public void closeConnection() {
+
+    // Chiude la connessione al database
+    /*public void closeConnection() {
         try {
-            if (connection != null) {
-                System.out.println("Closing connection successfully: " + connection);
+            if (connection != null && !connection.isClosed()) {
+                System.out.println("Closing database connection...");
                 connection.close();
-                connection = null;
+                connection = null; // Rende la connessione nulla dopo la chiusura
             }
         } catch (SQLException e) {
-            System.out.println("Error closing database connection: " + connection);
-            throw new RuntimeException(e);
+            System.out.println("Error closing database connection: " + e.getMessage());
+            e.printStackTrace(); // Aggiunta di un log dettagliato
         }
-    }
+    }*/
 }

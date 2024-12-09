@@ -1,5 +1,6 @@
 package view.panel;
 
+import core.DataProvider;
 import core.GlobalResources;
 import view.panel.iconPanel.IconFactory;
 
@@ -9,8 +10,10 @@ import java.awt.*;
 public class DeskView extends JPanel {
     private JPanel sideMenu;
     private JPanel homePanel;
+    private DataProvider dataProvider;
 
-    public DeskView() {
+    public DeskView(DataProvider dataProvider) {
+        this.dataProvider = dataProvider;
         initializeUI();
     }
 
@@ -33,7 +36,7 @@ public class DeskView extends JPanel {
 
         // Aggiunge lo SplitPane al pannello principale
         add(splitPane, BorderLayout.CENTER);
-        addFolder();
+        loadData();
         addCreateIcon();
     }
 
@@ -51,13 +54,27 @@ public class DeskView extends JPanel {
         return sideMenu;
     }
 
+    private void loadData() {
+        // Recupera i folder dal data provider e li aggiunge al pannello
+        for (String folder : dataProvider.getFolders()) {
+            homePanel.add(IconFactory.createIconPanel("folder", folder));
+        }
+
+        // Recupera i task dal data provider e li aggiunge al pannello
+        for (String task : dataProvider.getTasks()) {
+            homePanel.add(IconFactory.createIconPanel("task", task));
+        }
+    }
+
     private void addFolder(){
+        /*
         homePanel.add(IconFactory.createIconPanel("folder","Home"));
         homePanel.add(IconFactory.createIconPanel("folder","Work"));
         homePanel.add(IconFactory.createIconPanel("folder","Project"));
         homePanel.add(IconFactory.createIconPanel("task","task1"));
         homePanel.add(IconFactory.createIconPanel("task","task2"));
         homePanel.add(IconFactory.createIconPanel("task","task3"));
+        */
     }
 
     private void addCreateIcon(){

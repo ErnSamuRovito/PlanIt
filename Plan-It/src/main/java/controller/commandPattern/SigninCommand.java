@@ -1,5 +1,6 @@
 package controller.commandPattern;
 
+import core.ComponentManager;
 import core.SqLiteConnection;
 import model.FormatValidator;
 import view.ApplicationWindow;
@@ -35,7 +36,7 @@ public class SigninCommand implements ActionCommand{
             // Validazione delle credenziali
             if (FormatValidator.isValidEmail(emailInput) && FormatValidator.isValidPassword(passwordInput)) {
                 if (registerUser(usernameInput, emailInput, passwordInput)) {
-                    ApplicationWindow.getInstance().setPanel(new DeskView());
+                    ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView(usernameInput));
                 } else {
                     showMessageDialog(null, "Registration failed. Try again.", "Plan-It", ERROR_MESSAGE);
                 }
