@@ -35,33 +35,15 @@ public class DatabaseDataProvider implements DataProvider {
         }
     }
 
-    public long getUserId() {
-        String query = "SELECT id FROM User WHERE username = ? OR email = ?";
-        try (PreparedStatement statement = getValidConnection().prepareStatement(query)) {
-            statement.setString(1, user);
-            statement.setString(2, user);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return resultSet.getLong("id");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error fetching user ID from database", e);
-        }
-        return -1;
-    }
-
     @Override
     public List<String> getFolders() {
         List<String> folders = new ArrayList<>();
-        String query = "SELECT folder_name FROM Folder WHERE owner = ?";
-        try (PreparedStatement statement = getValidConnection().prepareStatement(query)) {
-            long userId = getUserId();
-            if (userId == -1) {
-                throw new RuntimeException("User ID not found, unable to fetch folders.");
-            }
-            statement.setLong(1, userId);
+        String query = "SELECT folder_name FROM Folder WHERE owner IN (SELECT id FROM User WHERE username=? or email=?)";
+        try (Connection connection = SqLiteConnection.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, user);
+            statement.setString(2, user);
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
