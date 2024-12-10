@@ -1,5 +1,6 @@
 package view.panel;
 
+import controller.commandPattern.ExploreFolderCommand;
 import core.DataProvider;
 import core.GlobalResources;
 import view.panel.iconPanel.IconFactory;
@@ -57,7 +58,14 @@ public class DeskView extends JPanel {
     private void loadData() {
         // Recupera i folder dal data provider e li aggiunge al pannello
         for (String folder : dataProvider.getFolders()) {
-            homePanel.add(IconFactory.createIconPanel("folder", folder));
+            //creo le istanze di IconPanel e gli attacco il comando, che riceve:
+            // - il nome dell'utente a cui appartiene
+            // - il nome della cartella
+            homePanel.add(
+                IconFactory.createIconPanel(
+                    "folder", folder, new ExploreFolderCommand(dataProvider.getUser(), folder)
+                )
+            );
         }
 
         // Recupera i task dal data provider e li aggiunge al pannello
@@ -78,6 +86,6 @@ public class DeskView extends JPanel {
     }
 
     private void addCreateIcon(){
-        homePanel.add(IconFactory.createIconPanel("add","new"));
+        homePanel.add(IconFactory.createIconPanel("add","new",null));
     }
 }

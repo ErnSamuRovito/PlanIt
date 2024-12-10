@@ -6,6 +6,9 @@ import java.util.List;
 public class DatabaseDataProvider implements DataProvider {
     private String user, startFolder="/";
     @Override public void setStartFolder(String startFolder) {this.startFolder = startFolder;}
+    @Override public void setUser(String user) {this.user = user;}
+    @Override public String getStartFolder() {return startFolder;}
+    @Override public String getUser() {return user;}
 
     public DatabaseDataProvider(String user) {
         this.user = user;
