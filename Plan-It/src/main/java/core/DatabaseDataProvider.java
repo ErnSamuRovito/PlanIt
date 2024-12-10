@@ -38,12 +38,14 @@ public class DatabaseDataProvider implements DataProvider {
     @Override
     public List<String> getFolders() {
         List<String> folders = new ArrayList<>();
-        String query = "SELECT folder_name FROM Folder WHERE owner IN (SELECT id FROM User WHERE username=? or email=?)";
+        String query = "SELECT folder_name FROM Folder WHERE parent is ? and owner IN (SELECT id FROM User WHERE username=? or email=?)";
         try (Connection connection = SqLiteConnection.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
-            statement.setString(1, user);
+            //statement.setLong(1,2);   //--> apposto, è fatto! Qui indico chi deve essere il parent.
+                                        // Se non viene passato nulla, viene gestito come null (root folder).
             statement.setString(2, user);
+            statement.setString(3, user);
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
