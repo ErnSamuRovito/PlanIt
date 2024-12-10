@@ -36,7 +36,7 @@ public class SigninCommand implements ActionCommand{
             // Validazione delle credenziali
             if (FormatValidator.isValidEmail(emailInput) && FormatValidator.isValidPassword(passwordInput)) {
                 if (registerUser(usernameInput, emailInput, passwordInput)) {
-                    ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView(usernameInput));
+                    ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView(usernameInput,"/"));
                 } else {
                     showMessageDialog(null, "Registration failed. Try again.", "Plan-It", ERROR_MESSAGE);
                 }

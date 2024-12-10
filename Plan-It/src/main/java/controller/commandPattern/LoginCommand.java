@@ -30,7 +30,7 @@ public class LoginCommand implements ActionCommand{
             String passwordInput = passwordField.getPasswordString();
 
             if (searchUser(userInput, passwordInput)) {
-                ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView(userInput));
+                ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView(userInput,"/"));
             } else {
                 showMessageDialog(null, "Login failed. Try again.", "Plan-It", ERROR_MESSAGE);
             }

@@ -4,49 +4,51 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseDataProvider implements DataProvider {
-    private String user;
-    private Connection connection;
+    private String user, startFolder="/";
+    @Override public void setStartFolder(String startFolder) {this.startFolder = startFolder;}
 
     public DatabaseDataProvider(String user) {
         this.user = user;
     }
 
-    // Apre la connessione se non è già aperta
-    private Connection getValidConnection() throws SQLException {
-        if (connection == null || connection.isClosed()) {
-            // La connessione viene aperta una sola volta
-            connection = SqLiteConnection.getInstance().getConnection();
-            System.out.println("Connessione aperta.");
-        } else {
-            System.out.println("Connessione già aperta.");
-        }
-        return connection;
-    }
-
-    // Metodo per chiudere la connessione manualmente
-    public void closeConnection() {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
-                System.out.println("Connessione chiusa manualmente.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public List<String> getFolders() {
         List<String> folders = new ArrayList<>();
-        String query = "SELECT folder_name FROM Folder WHERE parent is ? and owner IN (SELECT id FROM User WHERE username=? or email=?)";
+        String query = """
+            SELECT folder_name
+            FROM Folder
+            WHERE (parent = (
+                    SELECT id
+                    FROM Folder
+                    WHERE folder_name = ?
+                    AND owner IN (
+                        SELECT id
+                        FROM User
+                        WHERE username = ? OR email = ?
+                    )
+                ) OR (parent IS NULL AND ? IS NULL))
+            AND owner IN (
+                SELECT id
+                FROM User
+                WHERE username = ? OR email = ?
+            );
+        """;
         try (Connection connection = SqLiteConnection.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
-            //statement.setLong(1,2);   //--> apposto, è fatto! Qui indico chi deve essere il parent.
-                                        // Se non viene passato nulla, viene gestito come null (root folder).
-            statement.setString(2, user);
-            statement.setString(3, user);
-
+            if (startFolder.equals("/")) {
+                //per cercare cartelle root
+                statement.setNull(1, java.sql.Types.VARCHAR); //folder name
+                statement.setNull(4, java.sql.Types.VARCHAR); //folder name
+            }else{
+                //per cercare sottocartelle di una cartella specifica
+                statement.setString(1, startFolder); //folder name
+                statement.setString(4, startFolder); //folder name
+            }
+            statement.setString(2, user); //nome o email
+            statement.setString(3, user); //nome o email
+            statement.setString(5, user); //nome o email
+            statement.setString(6, user); //nome o email
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     folders.add(resultSet.getString("folder_name"));
@@ -59,25 +61,7 @@ public class DatabaseDataProvider implements DataProvider {
         return folders;
     }
 
-    @Override
-    public List<String> getTasks() {
-        List<String> tasks = new ArrayList<>();
-        String query = "SELECT title FROM Task";
-        try (PreparedStatement statement = getValidConnection().prepareStatement(query)) {
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    tasks.add(resultSet.getString("title"));
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error fetching tasks from database", e);
-        }
-        return tasks;
-    }
+    @Override public List<String> getTasks() {return null;}
 
-    @Override
-    public List<String> getTasksByFolder(String folderName) {
-        return null;//List.of();
-    }
+    @Override public List<String> getTasksByFolder(String folderName) {return null;}
 }

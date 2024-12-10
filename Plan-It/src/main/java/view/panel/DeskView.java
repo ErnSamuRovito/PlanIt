@@ -61,9 +61,9 @@ public class DeskView extends JPanel {
         }
 
         // Recupera i task dal data provider e li aggiunge al pannello
-        for (String task : dataProvider.getTasks()) {
-            homePanel.add(IconFactory.createIconPanel("task", task));
-        }
+        //for (String task : dataProvider.getTasks()) {
+        //    homePanel.add(IconFactory.createIconPanel("task", task));
+        //}
     }
 
     private void addFolder(){

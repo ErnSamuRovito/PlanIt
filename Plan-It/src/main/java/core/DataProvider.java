@@ -6,4 +6,5 @@ public interface DataProvider {
     List<String> getFolders();
     List<String> getTasks();
     List<String> getTasksByFolder(String folderName);
+    void setStartFolder(String startFolder);
 }
