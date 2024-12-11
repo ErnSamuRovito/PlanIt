@@ -1,6 +1,7 @@
 package core;
 
 import model.Folder;
+import model.Plant.AvatarPlant;
 import model.Task;
 import view.ApplicationWindow;
 
@@ -29,6 +30,7 @@ public class App {
         // Visualizzazione della struttura
         rootFolder.display();
 
+        AvatarPlant.getInstance().setState(AvatarPlant.getInstance().getHappyState());
         ApplicationWindow window = ApplicationWindow.getInstance();
     }
 }

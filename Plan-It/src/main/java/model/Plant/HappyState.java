@@ -1,15 +1,27 @@
 package model.Plant;
 
+import core.GlobalResources;
+
 import javax.swing.*;
 
-public class HappyState extends State {
+public class HappyState implements State {
     @Override
-    public ImageIcon getGifImage() {
-        return gifImage;
+    public void becomeHappy() {
+        System.out.println("sono già Happy");
     }
 
     @Override
-    public void setGifImage(ImageIcon image) {
-        this.gifImage = image;
+    public void becomeSad() {
+        System.out.println("Happy State not available");
+    }
+
+    @Override
+    public void becomeNormal() {
+        AvatarPlant.getInstance().setState(AvatarPlant.getInstance().getNormalState());
+    }
+
+    @Override
+    public String getPathGifImage() {
+        return GlobalResources.plantHappyState;
     }
 }

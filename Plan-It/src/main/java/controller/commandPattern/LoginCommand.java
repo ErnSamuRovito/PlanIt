@@ -2,6 +2,7 @@ package controller.commandPattern;
 
 import core.ComponentManager;
 import core.SqLiteConnection;
+import model.Plant.AvatarPlant;
 import view.UICreationalPattern.UIComponents.CustomPasswordField;
 import view.UICreationalPattern.UIComponents.CustomTextField;
 import view.panel.LoginView;
@@ -29,15 +30,19 @@ public class LoginCommand implements ActionCommand{
             CustomPasswordField passwordField = parentView.getPasswordField();
             String passwordInput = passwordField.getPasswordString();
 
-            if (searchUser(userInput, passwordInput)) {
+            int idLogged = searchUserAndGetId(userInput, passwordInput);
+
+            if (idLogged != -1) {
                 ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView(userInput,"/"));
+                AvatarPlant.getInstance().loadPlant(idLogged);
+                System.out.println("HP PIANTINA : " + AvatarPlant.getInstance().getHp());
             } else {
                 showMessageDialog(null, "Login failed. Try again.", "Plan-It", ERROR_MESSAGE);
             }
         }
     }
 
-    private boolean searchUser(String user, String password) {
+    private int searchUserAndGetId(String user, String password) {
         String query = "SELECT * FROM User WHERE (username = ? OR email = ?) AND password = ?";
         try (Connection connection = SqLiteConnection.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -52,16 +57,15 @@ public class LoginCommand implements ActionCommand{
                 // Controlla se esiste un risultato
                 if (resultSet.next()) {
                     System.out.println("User found: " + resultSet.getString("username"));
-                    return true; // Utente trovato
+                    return resultSet.getInt(1);
                 } else {
                     System.out.println("No user found matching the criteria.");
-                    return false; // Nessun utente trovato
+                    return -1; // Nessun utente trovato
                 }
             }
         } catch (SQLException e) {
             System.err.println("Error searching for user: " + e.getMessage());
-            return false;
+            return -1;
         }
     }
-
 }

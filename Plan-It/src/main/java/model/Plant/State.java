@@ -2,10 +2,12 @@ package model.Plant;
 
 import javax.swing.*;
 
-public abstract class State {
-    String name;
-    ImageIcon gifImage;
+public interface State {
+//    public abstract String getPathGifImage();
+//    public abstract void setPathGifImage(String image);
 
-    public abstract ImageIcon getGifImage();
-    public abstract void setGifImage(ImageIcon image);
+    void becomeHappy();
+    void becomeSad();
+    void becomeNormal();
+    String getPathGifImage();
 }

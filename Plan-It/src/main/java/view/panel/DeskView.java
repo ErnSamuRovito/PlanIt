@@ -3,6 +3,7 @@ package view.panel;
 import controller.commandPattern.ExploreFolderCommand;
 import core.DataProvider;
 import core.GlobalResources;
+import model.Plant.AvatarPlant;
 import view.panel.iconPanel.IconFactory;
 
 import javax.swing.*;
@@ -49,7 +50,9 @@ public class DeskView extends JPanel {
         sideMenu.setLayout(new BorderLayout());
 
         // Aggiungi la GIF animata al side menu
-        JLabel gifLabel = new JLabel(new ImageIcon(GlobalResources.plantHappyState));
+        JLabel gifLabel = new JLabel(new ImageIcon(AvatarPlant.getInstance().getPathGifImage()));
+        System.out.println("state pianta : " + AvatarPlant.getInstance().getState());
+        System.out.println("path pianta : " + AvatarPlant.getInstance().getPathGifImage());
         sideMenu.add(gifLabel, BorderLayout.NORTH);
 
         return sideMenu;

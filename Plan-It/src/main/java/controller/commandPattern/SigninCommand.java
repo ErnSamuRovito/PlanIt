@@ -3,69 +3,112 @@ package controller.commandPattern;
 import core.ComponentManager;
 import core.SqLiteConnection;
 import model.FormatValidator;
-import view.ApplicationWindow;
+import model.Plant.AvatarPlant;
+import model.Plant.NormalState;
+import model.Plant.SadState;
+import model.User;
 import view.UICreationalPattern.UIComponents.CustomPasswordField;
 import view.UICreationalPattern.UIComponents.CustomTextField;
-import view.panel.DeskView;
 import view.panel.SigninView;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
 
-public class SigninCommand implements ActionCommand{
+public class SigninCommand implements ActionCommand {
+    private static final String ERROR_TITLE = "Plan-It";
+    private static final String ERROR_REGISTRATION_FAILED = "Registration failed. Try again.";
+    private static final String ERROR_USER_ID_RETRIEVAL = "Failed to retrieve user ID.";
+    private static final String ERROR_EMAIL_INVALID = "Email isn't correct!";
+    private static final String ERROR_PASSWORD_INVALID = "The password must have at least 6 characters!";
+    private static final String SUCCESS_PLANT_CREATION = "Piantina creata con successo!";
+    private static final String ERROR_PLANT_CREATION = "Errore nella creazione della piantina.";
+
     private final SigninView parentView;
 
     public SigninCommand(SigninView parentView) {
         this.parentView = parentView;
     }
 
-    @Override public void execute() {
-        if (parentView != null) {
-            // Ottieni i campi dalla vista
-            CustomTextField usernameField = parentView.getUsernameField();
-            String usernameInput = usernameField.getText();
+    @Override
+    public void execute() {
+        if (parentView == null) {
+            return;
+        }
 
-            CustomTextField emailField = parentView.getEmailField();
-            String emailInput = emailField.getText();
+        String usernameInput = parentView.getUsernameField().getText();
+        String emailInput = parentView.getEmailField().getText();
+        String passwordInput = parentView.getPasswordField().getPasswordString();
 
-            CustomPasswordField passwordField = parentView.getPasswordField();
-            String passwordInput = passwordField.getPasswordString();
+        if (!FormatValidator.isValidEmail(emailInput)) {
+            showMessageDialog(null, ERROR_EMAIL_INVALID, ERROR_TITLE, ERROR_MESSAGE);
+            return;
+        }
 
-            // Validazione delle credenziali
-            if (FormatValidator.isValidEmail(emailInput) && FormatValidator.isValidPassword(passwordInput)) {
-                if (registerUser(usernameInput, emailInput, passwordInput)) {
-                    ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView(usernameInput,"/"));
-                } else {
-                    showMessageDialog(null, "Registration failed. Try again.", "Plan-It", ERROR_MESSAGE);
-                }
+        if (!FormatValidator.isValidPassword(passwordInput)) {
+            showMessageDialog(null, ERROR_PASSWORD_INVALID, ERROR_TITLE, ERROR_MESSAGE);
+            return;
+        }
+
+        int userId = registerUserAndGetId(usernameInput, emailInput, passwordInput);
+
+        User.getInstance().loadUser(userId);
+        System.out.println(User.getInstance().toString());
+        AvatarPlant.getInstance().loadPlant(userId);
+        System.out.println("HP PIANTINA : " + AvatarPlant.getInstance().getHp());
+
+        if (userId != -1) {
+            if (createPlant("Piantina di " + usernameInput, userId)) {
+                System.out.println(SUCCESS_PLANT_CREATION);
             } else {
-                if (!FormatValidator.isValidEmail(emailInput))
-                    showMessageDialog(null, "Email isn't correct!", "Plan-It", ERROR_MESSAGE);
-                if (!FormatValidator.isValidPassword(passwordInput))
-                    showMessageDialog(null, "The password must have at least 6 characters!", "Plan-It", ERROR_MESSAGE);
-                System.out.println("Email valida: " + FormatValidator.isValidEmail(emailInput));
-                System.out.println("Password valida: " + FormatValidator.isValidPassword(passwordInput));
+                System.err.println(ERROR_PLANT_CREATION);
             }
+            ComponentManager.getInstance().setPanel(
+                    ComponentManager.getInstance().getDeskView(usernameInput, "/")
+            );
+        } else {
+            showMessageDialog(null, ERROR_REGISTRATION_FAILED, ERROR_TITLE, ERROR_MESSAGE);
         }
     }
 
-    private boolean registerUser(String username, String email, String password) {
+    private int registerUserAndGetId(String username, String email, String password) {
         String query = "INSERT INTO User (username, password, email) VALUES (?, ?, ?)";
         try (Connection connection = SqLiteConnection.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setString(1, username);
-                preparedStatement.setString(2, password);
-                preparedStatement.setString(3, email);
+             PreparedStatement preparedStatement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+            preparedStatement.setString(3, email);
 
-                int rowsAffected = preparedStatement.executeUpdate();
-                System.out.println(rowsAffected);
-                System.out.println("Query eseguita!!!!");
-                return rowsAffected > 0;
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        return generatedKeys.getInt(1);
+                    }
+                }
+            }
         } catch (SQLException e) {
-                System.err.println("Error inserting user: " + e.getMessage());
-                return false;
+            System.err.println("Error inserting user: " + e.getMessage());
+        }
+        return -1;
+    }
+
+    private boolean createPlant(String name, int owner) {
+        String query = "INSERT INTO AvatarPlant (name, hp, owner) VALUES (?, ?, ?)";
+        try (Connection connection = SqLiteConnection.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, name);
+            preparedStatement.setInt(2, 100);
+            preparedStatement.setInt(3, owner);
+
+            return preparedStatement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error inserting plant: " + e.getMessage());
+            return false;
         }
     }
 }
