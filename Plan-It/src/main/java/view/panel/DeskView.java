@@ -1,10 +1,12 @@
 package view.panel;
 
 import controller.commandPattern.ExploreFolderCommand;
+import core.ComponentManager;
 import core.DataProvider;
 import core.GlobalResources;
 import model.Plant.AvatarPlant;
 import view.panel.iconPanel.IconFactory;
+import view.panel.iconPanel.IconPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +15,8 @@ public class DeskView extends JPanel {
     private JPanel sideMenu;
     private JPanel homePanel;
     private DataProvider dataProvider;
+
+    IconPanel iconPanelAdd;
 
     public DeskView(DataProvider dataProvider) {
         this.dataProvider = dataProvider;
@@ -40,6 +44,7 @@ public class DeskView extends JPanel {
         add(splitPane, BorderLayout.CENTER);
         loadData();
         addCreateIcon();
+        addPopupMenu();
     }
 
     // Metodo per creare il pannello laterale (menu)
@@ -88,7 +93,40 @@ public class DeskView extends JPanel {
         */
     }
 
+    private void addPopupMenu() {
+        // Creazione del menu a comparsa
+        JPopupMenu popupMenu = new JPopupMenu();
+
+        // Creazione delle voci del menu per la creazione di folder o task
+        JMenuItem createFolderItem = new JMenuItem("Crea Cartella");
+        JMenuItem createTaskItem = new JMenuItem("Crea Task");
+
+        // Aggiungi le voci al menu a comparsa
+        popupMenu.add(createFolderItem);
+        popupMenu.add(createTaskItem);
+
+        // Aggiungi gli action listener per ciascuna voce
+        createFolderItem.addActionListener(e -> createFolder());
+        createTaskItem.addActionListener(e -> createTask());
+
+        // Imposta il menu a comparsa sul pannello home
+        iconPanelAdd.setComponentPopupMenu(popupMenu);
+    }
+
+    private void createTask() {
+        CreatePanel cp = new CreatePanel();
+        cp = new TaskCreateDecorator(cp);
+        ComponentManager.getInstance().setPanel(cp);
+    }
+
+    private void createFolder() {
+        CreatePanel cp = new CreatePanel();
+        cp = new FolderCreateDecorator(cp);
+        ComponentManager.getInstance().setPanel(cp);
+    }
+
     private void addCreateIcon(){
-        homePanel.add(IconFactory.createIconPanel("add","new",null));
+        iconPanelAdd = IconFactory.createIconPanel("add","new",null);
+        homePanel.add(iconPanelAdd);
     }
 }

@@ -3,6 +3,7 @@
 package core;
 
 import view.ApplicationWindow;
+import view.panel.CreatePanel;
 import view.panel.LoginView;
 import view.panel.DeskView;
 import view.panel.SigninView;
@@ -39,6 +40,10 @@ public class ComponentManager {
         return signinView;
         */
         return new SigninView();
+    }
+
+    public CreatePanel getCreatePanel() {
+        return new CreatePanel();
     }
 
     public DeskView getDeskView(String user, String startFolder) {
