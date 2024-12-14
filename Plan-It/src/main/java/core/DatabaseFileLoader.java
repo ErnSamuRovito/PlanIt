@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseFileLoader {
-    private String user, startFolder="/";
+    private String user, startFolder="/root";
     public void setStartFolder(String startFolder) {this.startFolder = startFolder;}
     public void setUser(String user) {this.user = user;}
     public String getStartFolder() {return startFolder;}

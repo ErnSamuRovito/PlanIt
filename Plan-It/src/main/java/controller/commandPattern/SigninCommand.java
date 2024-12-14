@@ -75,7 +75,7 @@ public class SigninCommand implements ActionCommand {
             else{System.err.println(ERROR_ROOT_FOLDER_CREATION);}
 
             ComponentManager.getInstance().setPanel(
-                    ComponentManager.getInstance().getDeskView(usernameInput, "root")
+                    ComponentManager.getInstance().getDeskView(usernameInput, "/root")
             );
         } else {
             showMessageDialog(null, ERROR_REGISTRATION_FAILED, ERROR_TITLE, ERROR_MESSAGE);

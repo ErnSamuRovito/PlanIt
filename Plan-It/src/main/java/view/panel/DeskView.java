@@ -1,6 +1,7 @@
 package view.panel;
 
 import controller.commandPattern.ExploreFolderCommand;
+import controller.commandPattern.GoBackCommand;
 import controller.commandPattern.GoToTaskViewCommand;
 import core.ComponentManager;
 import core.DatabaseFileLoader;
@@ -20,7 +21,7 @@ public class DeskView extends JPanel {
     private JPanel homePanel;
     private DatabaseFileLoader databaseFileLoader;
 
-    IconPanel iconPanelAdd;
+    private IconPanel iconPanelAdd, iconPanelBack;
 
     public DeskView(DatabaseFileLoader databaseFileLoader) {
         this.databaseFileLoader = databaseFileLoader;
@@ -46,6 +47,8 @@ public class DeskView extends JPanel {
 
         // Aggiunge lo SplitPane al pannello principale
         add(splitPane, BorderLayout.CENTER);
+
+        addBackIcon();
         loadData();
         addCreateIcon();
         addPopupMenu();
@@ -123,5 +126,16 @@ public class DeskView extends JPanel {
     private void addCreateIcon(){
         iconPanelAdd = IconFactory.createIconPanel("add","new",null);
         homePanel.add(iconPanelAdd);
+    }
+
+    private void addBackIcon(){
+        if (!databaseFileLoader.getStartFolder().equals("/root")) {
+            iconPanelBack = IconFactory.createIconPanel(
+                    "back",
+                    "back",
+                    new GoBackCommand(databaseFileLoader.getUser(), databaseFileLoader.getStartFolder())
+            );
+            homePanel.add(iconPanelBack);
+        }
     }
 }

@@ -12,6 +12,8 @@ public class IconFactory {
                 return new IconPanel(title, GlobalResources.folderImage, command);
             case "add":
                 return new IconPanel(title, GlobalResources.addImage, command);
+            case "back":
+                return new IconPanel(title, GlobalResources.backImage, command);
             default:
                 throw new IllegalArgumentException("Unknown type: " + type);
         }
