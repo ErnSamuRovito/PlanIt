@@ -3,18 +3,17 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseDataProvider implements DataProvider {
+public class DatabaseFileLoader {
     private String user, startFolder="/";
-    @Override public void setStartFolder(String startFolder) {this.startFolder = startFolder;}
-    @Override public void setUser(String user) {this.user = user;}
-    @Override public String getStartFolder() {return startFolder;}
-    @Override public String getUser() {return user;}
+    public void setStartFolder(String startFolder) {this.startFolder = startFolder;}
+    public void setUser(String user) {this.user = user;}
+    public String getStartFolder() {return startFolder;}
+    public String getUser() {return user;}
 
-    public DatabaseDataProvider(String user) {
+    public DatabaseFileLoader(String user) {
         this.user = user;
     }
 
-    @Override
     public List<String> getFolders() {
         List<String> folders = new ArrayList<>();
         String query = """
@@ -64,7 +63,7 @@ public class DatabaseDataProvider implements DataProvider {
         return folders;
     }
 
-    @Override public List<String> getTasks() {
+    public List<String> getTasks() {
         List<String> tasks = new ArrayList<>();
         String query = """
             SELECT title
@@ -106,6 +105,4 @@ public class DatabaseDataProvider implements DataProvider {
         }
         return tasks;
     }
-
-    @Override public List<String> getTasksByFolder(String folderName) {return null;}
 }

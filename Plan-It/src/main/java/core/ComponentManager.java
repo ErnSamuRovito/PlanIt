@@ -28,12 +28,13 @@ public class ComponentManager {
     public SigninView getSigninView() {return new SigninView();}
     public CreatePanel getCreatePanel() {return new CreatePanel();}
     public DeskView getDeskView(String user, String startFolder) {
-        DataProvider dataProvider = new DatabaseDataProvider(user);
-        dataProvider.setStartFolder(startFolder);
-        return new DeskView(dataProvider);
+        DatabaseFileLoader databaseFileLoader = new DatabaseFileLoader(user);
+        databaseFileLoader.setStartFolder(startFolder);
+        return new DeskView(databaseFileLoader);
     }
-    public TaskView getTaskView(String taskName){
-        return new TaskView();
+    public TaskView getTaskView(String taskTitle, String startFolder){
+        DatabaseTaskDataLoader databaseTaskDataLoader = new DatabaseTaskDataLoader(taskTitle,startFolder);
+        return new TaskView(databaseTaskDataLoader);
     }
 
     // Metodo per impostare il pannello attivo tramite ApplicationWindow

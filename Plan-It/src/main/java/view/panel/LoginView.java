@@ -9,7 +9,7 @@ import view.UICreationalPattern.UIComponents.CustomLabel;
 import view.UICreationalPattern.UIComponents.CustomPasswordField;
 import view.UICreationalPattern.UIComponents.CustomTextField;
 import view.UICreationalPattern.UIFactories.CustomButtonFactory;
-import view.UICreationalPattern.UIFactories.CustomClickableLabelFactory;
+import view.UICreationalPattern.UIFactories.CustomLabelFactory;
 import view.UICreationalPattern.UIFactories.CustomTextFieldFactory;
 import view.UICreationalPattern.UIFactories.UIComponentFactory;
 
@@ -68,7 +68,7 @@ public class LoginView extends JPanel {
         labelBuilder.text("Don't have an account? Sign up!").size(BUTTON_SIZE);
         labelBuilder.action(new GoToSigninCommand());
         // Usa la factory per creare il pulsante
-        UIComponentFactory labelFactory = new CustomClickableLabelFactory(labelBuilder);
+        UIComponentFactory labelFactory = new CustomLabelFactory(labelBuilder);
         signinLabel = (CustomLabel) labelFactory.orderComponent(labelBuilder);
 
         // Aggiungi componenti al pannello

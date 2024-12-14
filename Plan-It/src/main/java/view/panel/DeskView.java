@@ -3,7 +3,7 @@ package view.panel;
 import controller.commandPattern.ExploreFolderCommand;
 import controller.commandPattern.GoToTaskViewCommand;
 import core.ComponentManager;
-import core.DataProvider;
+import core.DatabaseFileLoader;
 import core.GlobalResources;
 import model.Plant.AvatarPlant;
 import view.panel.createPannel.CreatePanel;
@@ -18,12 +18,12 @@ import java.awt.*;
 public class DeskView extends JPanel {
     private JPanel sideMenu;
     private JPanel homePanel;
-    private DataProvider dataProvider;
+    private DatabaseFileLoader databaseFileLoader;
 
     IconPanel iconPanelAdd;
 
-    public DeskView(DataProvider dataProvider) {
-        this.dataProvider = dataProvider;
+    public DeskView(DatabaseFileLoader databaseFileLoader) {
+        this.databaseFileLoader = databaseFileLoader;
         initializeUI();
     }
 
@@ -69,20 +69,22 @@ public class DeskView extends JPanel {
 
     private void loadData() {
         // Recupera i folder dal data provider e li aggiunge al pannello
-        for (String folder : dataProvider.getFolders()) {
+        for (String folder : databaseFileLoader.getFolders()) {
             //creo le istanze di IconPanel e gli attacco il comando, che riceve:
             // - il nome dell'utente a cui appartiene
             // - il nome della cartella
             homePanel.add(
                 IconFactory.createIconPanel(
-                    "folder", folder, new ExploreFolderCommand(dataProvider.getUser(), folder)
+                    "folder", folder, new ExploreFolderCommand(databaseFileLoader.getUser(), folder)
                 )
             );
         }
 
         // Recupera i task dal data provider e li aggiunge al pannello
-        for (String task : dataProvider.getTasks()) {
-            homePanel.add(IconFactory.createIconPanel("task", task, new GoToTaskViewCommand(task)));
+        for (String task : databaseFileLoader.getTasks()) {
+            homePanel.add(IconFactory.createIconPanel(
+                "task", task, new GoToTaskViewCommand(task,databaseFileLoader.getStartFolder()))
+            );
         }
     }
 

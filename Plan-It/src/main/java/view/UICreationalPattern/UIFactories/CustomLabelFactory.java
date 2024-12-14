@@ -4,10 +4,10 @@ package view.UICreationalPattern.UIFactories;
 import view.UICreationalPattern.UIBuilders.UIBuilder;
 import view.UICreationalPattern.UIComponents.UIComponent;
 
-public class CustomClickableLabelFactory extends UIComponentFactory {
+public class CustomLabelFactory extends UIComponentFactory {
     private UIBuilder builder;
 
-    public CustomClickableLabelFactory(UIBuilder builder) {
+    public CustomLabelFactory(UIBuilder builder) {
         this.builder = builder;
     }
 
