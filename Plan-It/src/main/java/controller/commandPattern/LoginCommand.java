@@ -33,7 +33,7 @@ public class LoginCommand implements ActionCommand{
             int idLogged = searchUserAndGetId(userInput, passwordInput);
 
             if (idLogged != -1) {
-                ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView(userInput,"/"));
+                ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView(userInput,"root"));
                 AvatarPlant.getInstance().loadPlant(idLogged);
                 System.out.println("HP PIANTINA : " + AvatarPlant.getInstance().getHp());
             } else {

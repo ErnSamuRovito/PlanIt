@@ -1,4 +1,4 @@
-package view.panel;
+package view.panel.createPannel;
 
 public abstract class CreatePanelDecorator extends CreatePanel {
     protected CreatePanel createPanel;

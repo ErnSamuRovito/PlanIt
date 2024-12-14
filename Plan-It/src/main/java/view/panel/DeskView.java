@@ -1,10 +1,14 @@
 package view.panel;
 
 import controller.commandPattern.ExploreFolderCommand;
+import controller.commandPattern.GoToTaskViewCommand;
 import core.ComponentManager;
 import core.DataProvider;
 import core.GlobalResources;
 import model.Plant.AvatarPlant;
+import view.panel.createPannel.CreatePanel;
+import view.panel.createPannel.FolderCreateDecorator;
+import view.panel.createPannel.TaskCreateDecorator;
 import view.panel.iconPanel.IconFactory;
 import view.panel.iconPanel.IconPanel;
 
@@ -77,20 +81,9 @@ public class DeskView extends JPanel {
         }
 
         // Recupera i task dal data provider e li aggiunge al pannello
-        //for (String task : dataProvider.getTasks()) {
-        //    homePanel.add(IconFactory.createIconPanel("task", task));
-        //}
-    }
-
-    private void addFolder(){
-        /*
-        homePanel.add(IconFactory.createIconPanel("folder","Home"));
-        homePanel.add(IconFactory.createIconPanel("folder","Work"));
-        homePanel.add(IconFactory.createIconPanel("folder","Project"));
-        homePanel.add(IconFactory.createIconPanel("task","task1"));
-        homePanel.add(IconFactory.createIconPanel("task","task2"));
-        homePanel.add(IconFactory.createIconPanel("task","task3"));
-        */
+        for (String task : dataProvider.getTasks()) {
+            homePanel.add(IconFactory.createIconPanel("task", task, new GoToTaskViewCommand(task)));
+        }
     }
 
     private void addPopupMenu() {
@@ -98,8 +91,8 @@ public class DeskView extends JPanel {
         JPopupMenu popupMenu = new JPopupMenu();
 
         // Creazione delle voci del menu per la creazione di folder o task
-        JMenuItem createFolderItem = new JMenuItem("Crea Cartella");
-        JMenuItem createTaskItem = new JMenuItem("Crea Task");
+        JMenuItem createFolderItem = new JMenuItem("Create Folder");
+        JMenuItem createTaskItem = new JMenuItem("Create Task");
 
         // Aggiungi le voci al menu a comparsa
         popupMenu.add(createFolderItem);
@@ -114,15 +107,15 @@ public class DeskView extends JPanel {
     }
 
     private void createTask() {
-        CreatePanel cp = new CreatePanel();
-        cp = new TaskCreateDecorator(cp);
-        ComponentManager.getInstance().setPanel(cp);
+        CreatePanel createPanel = new CreatePanel();
+        createPanel = new TaskCreateDecorator(createPanel);
+        ComponentManager.getInstance().setPanel(createPanel);
     }
 
     private void createFolder() {
-        CreatePanel cp = new CreatePanel();
-        cp = new FolderCreateDecorator(cp);
-        ComponentManager.getInstance().setPanel(cp);
+        CreatePanel createPanel = new CreatePanel();
+        createPanel = new FolderCreateDecorator(createPanel);
+        ComponentManager.getInstance().setPanel(createPanel);
     }
 
     private void addCreateIcon(){

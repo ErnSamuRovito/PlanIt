@@ -1,6 +1,5 @@
-package view.panel;
+package view.panel.createPannel;
 
-import controller.commandPattern.SigninCommand;
 import core.GlobalResources;
 import view.UICreationalPattern.UIBuilders.CustomButtonBuilder;
 import view.UICreationalPattern.UIBuilders.CustomTextFieldBuilder;
@@ -12,15 +11,14 @@ import view.UICreationalPattern.UIFactories.CustomButtonFactory;
 import view.UICreationalPattern.UIFactories.CustomTextFieldFactory;
 import view.UICreationalPattern.UIFactories.UIComponentFactory;
 
-import javax.swing.*;
 import java.awt.*;
 
-public class TaskCreateDecorator extends CreatePanelDecorator {
+public class FolderCreateDecorator extends CreatePanelDecorator{
     private static final Dimension FIELD_SIZE = new Dimension(200, 30);
     private static final Dimension BUTTON_SIZE = new Dimension(150, 50);
 
-    public TaskCreateDecorator(CreatePanel createPanel) {
-        super(createPanel); // Pass the createPanel instance to the parent constructor
+    public FolderCreateDecorator(CreatePanel createPanel) {
+        super(createPanel);
     }
 
     @Override
@@ -38,7 +36,7 @@ public class TaskCreateDecorator extends CreatePanelDecorator {
         UIBuilder nameTaskFieldBuilder = new CustomTextFieldBuilder();
         UIDirector uiDirector = new UIDirector();
         uiDirector.buildStandardTextField(nameTaskFieldBuilder);
-        nameTaskFieldBuilder.text("Task").size(FIELD_SIZE).placeholder("Insert name task");
+        nameTaskFieldBuilder.text("Folder").size(FIELD_SIZE).placeholder("Insert name folder");
 
         // Use factory to create the text field
         UIComponentFactory textFieldFactory = new CustomTextFieldFactory(nameTaskFieldBuilder);
@@ -47,7 +45,7 @@ public class TaskCreateDecorator extends CreatePanelDecorator {
         // Create "Create new task" button using Builder and Factory ----------------
         UIBuilder buttonBuilder = new CustomButtonBuilder();
         uiDirector.buildStandardButton(buttonBuilder);
-        buttonBuilder.text("Create new task").size(BUTTON_SIZE);
+        buttonBuilder.text("Create new folder").size(BUTTON_SIZE);
 
         // buttonBuilder.action(new SigninCommand(this));
 

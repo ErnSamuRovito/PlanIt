@@ -27,6 +27,7 @@ public class SigninCommand implements ActionCommand {
     private static final String ERROR_PASSWORD_INVALID = "The password must have at least 6 characters!";
     private static final String SUCCESS_PLANT_CREATION = "Piantina creata con successo!";
     private static final String ERROR_PLANT_CREATION = "Errore nella creazione della piantina.";
+    private static final String ERROR_ROOT_FOLDER_CREATION = "Errore nella creazione della cartella root.";
 
     private final SigninView parentView;
 
@@ -62,13 +63,19 @@ public class SigninCommand implements ActionCommand {
         System.out.println("HP PIANTINA : " + AvatarPlant.getInstance().getHp());
 
         if (userId != -1) {
+            // Crea la piantina assocuata all'utente
             if (createPlant("Piantina di " + usernameInput, userId)) {
                 System.out.println(SUCCESS_PLANT_CREATION);
             } else {
                 System.err.println(ERROR_PLANT_CREATION);
             }
+
+            // Crea la cartella 'root' associata all'utente
+            if (createRootFolder(userId)){System.out.println(SUCCESS_PLANT_CREATION);}
+            else{System.err.println(ERROR_ROOT_FOLDER_CREATION);}
+
             ComponentManager.getInstance().setPanel(
-                    ComponentManager.getInstance().getDeskView(usernameInput, "/")
+                    ComponentManager.getInstance().getDeskView(usernameInput, "root")
             );
         } else {
             showMessageDialog(null, ERROR_REGISTRATION_FAILED, ERROR_TITLE, ERROR_MESSAGE);
@@ -108,6 +115,20 @@ public class SigninCommand implements ActionCommand {
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             System.err.println("Error inserting plant: " + e.getMessage());
+            return false;
+        }
+    }
+
+    private boolean createRootFolder(int userId){
+        String query = "INSERT INTO Folder (folder_name, owner) VALUES (?, ?)";
+        try (Connection connection = SqLiteConnection.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, "root");
+            preparedStatement.setInt(2, userId);
+
+            return preparedStatement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error creating root folder: " + e.getMessage());
             return false;
         }
     }

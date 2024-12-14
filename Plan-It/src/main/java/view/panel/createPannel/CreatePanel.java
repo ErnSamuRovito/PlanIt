@@ -1,8 +1,7 @@
-package view.panel;
+package view.panel.createPannel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Objects;
 
 public class CreatePanel extends JPanel {
     public CreatePanel() {
