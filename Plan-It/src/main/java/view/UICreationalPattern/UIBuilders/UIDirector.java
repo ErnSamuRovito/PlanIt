@@ -64,6 +64,18 @@ public class UIDirector {
                 .clickable(false);
     }
 
+    public static void buildBackClickableLabel(UIBuilder builder) {
+        builder .backgroundColor(GlobalResources.COLOR_PANNA)
+                .hoverBackgroundColor(GlobalResources.COLOR_GREEN_1)
+                .pressedBackgroundColor(GlobalResources.COLOR_GREEN_2)
+                .textColor(GlobalResources.COLOR_PANNA)
+                .focusPainted(false)
+                .borderPainted(false)
+                .contentAreaFilled(false)
+                .opaque(false)
+                .clickable(true);
+    }
+
     public static void buildStandardTextPane(UIBuilder builder) {
         builder .backgroundColor(Color.WHITE)
                 .textColor(Color.BLACK)

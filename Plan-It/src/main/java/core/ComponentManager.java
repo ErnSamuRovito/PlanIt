@@ -32,9 +32,9 @@ public class ComponentManager {
         databaseFileLoader.setStartFolder(startFolder);
         return new DeskView(databaseFileLoader);
     }
-    public TaskView getTaskView(String taskTitle, String startFolder){
+    public TaskView getTaskView(String taskTitle, String user, String startFolder){
         DatabaseTaskDataLoader databaseTaskDataLoader = new DatabaseTaskDataLoader(taskTitle,startFolder);
-        return new TaskView(databaseTaskDataLoader);
+        return new TaskView(databaseTaskDataLoader,user,startFolder);
     }
 
     // Metodo per impostare il pannello attivo tramite ApplicationWindow

@@ -1,7 +1,13 @@
-package view;
+package view.panel;
 
+import controller.commandPattern.ActionCommand;
+import controller.commandPattern.GoToLoginCommand;
 import core.GlobalResources;
-import view.panel.SideMenu;
+import view.UICreationalPattern.UIBuilders.CustomLabelBuilder;
+import view.UICreationalPattern.UIBuilders.UIDirector;
+import view.UICreationalPattern.UIComponents.CustomLabel;
+import view.UICreationalPattern.UIFactories.CustomLabelFactory;
+import view.UICreationalPattern.UIFactories.UIComponentFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,5 +44,21 @@ public class SplitPanel extends JSplitPane {
 
         // Configura il colore di sfondo del pannello principale
         setBackground(GlobalResources.COLOR_PANNA);
+    }
+
+    protected void addBackClickableLabel(ActionCommand command) {
+        CustomLabelBuilder labelBuilder = new CustomLabelBuilder();
+        UIDirector.buildBackClickableLabel(labelBuilder);
+        labelBuilder.text("Back");
+        labelBuilder.action(command);
+
+        // Impostiamo la dimensione preferita per il label
+        labelBuilder.size(new Dimension(sideMenu.getWidth(), 50));
+
+        UIComponentFactory labelFactory = new CustomLabelFactory(labelBuilder);
+        CustomLabel backLabel = (CustomLabel) labelFactory.createComponent();
+
+        // Usa un 'VerticalStrut' per aggiungere spazio fisso tra la gif e la label
+        sideMenu.add(backLabel); // Aggiungi la label "Back"
     }
 }

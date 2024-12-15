@@ -2,11 +2,16 @@ package view.panel;
 
 import controller.commandPattern.ExploreFolderCommand;
 import controller.commandPattern.GoBackCommand;
+import controller.commandPattern.GoToLoginCommand;
 import controller.commandPattern.GoToTaskViewCommand;
 import core.ComponentManager;
 import core.DatabaseFileLoader;
 import core.GlobalResources;
-import view.SplitPanel;
+import view.UICreationalPattern.UIBuilders.CustomLabelBuilder;
+import view.UICreationalPattern.UIBuilders.UIDirector;
+import view.UICreationalPattern.UIComponents.CustomLabel;
+import view.UICreationalPattern.UIFactories.CustomLabelFactory;
+import view.UICreationalPattern.UIFactories.UIComponentFactory;
 import view.panel.createPannel.CreatePanel;
 import view.panel.createPannel.FolderCreateDecorator;
 import view.panel.createPannel.TaskCreateDecorator;
@@ -41,6 +46,7 @@ public class DeskView extends JPanel {
         loadData();
         addCreateIcon();
         addPopupMenu();
+        splitPanel.addBackClickableLabel(new GoToLoginCommand());
 
         // Aggiungi lo SplitPanel al centro del layout
         add(splitPanel, BorderLayout.CENTER);
@@ -59,12 +65,12 @@ public class DeskView extends JPanel {
         // Recupera i task dal data provider e li aggiunge al pannello
         for (String task : databaseFileLoader.getTasks()) {
             splitPanel.getHomePanel().add(IconFactory.createIconPanel(
-                    "task", task, new GoToTaskViewCommand(task, databaseFileLoader.getStartFolder()))
+                    "task", task, new GoToTaskViewCommand(task, databaseFileLoader.getUser(), databaseFileLoader.getStartFolder()))
             );
         }
     }
 
-    private void addPopupMenu() {
+    protected void addPopupMenu() {
         // Creazione del menu a comparsa
         JPopupMenu popupMenu = new JPopupMenu();
 
@@ -84,24 +90,24 @@ public class DeskView extends JPanel {
         iconPanelAdd.setComponentPopupMenu(popupMenu);
     }
 
-    private void createTask() {
+    protected void createTask() {
         CreatePanel createPanel = new CreatePanel();
         createPanel = new TaskCreateDecorator(createPanel);
         ComponentManager.getInstance().setPanel(createPanel);
     }
 
-    private void createFolder() {
+    protected void createFolder() {
         CreatePanel createPanel = new CreatePanel();
         createPanel = new FolderCreateDecorator(createPanel);
         ComponentManager.getInstance().setPanel(createPanel);
     }
 
-    private void addCreateIcon() {
+    protected void addCreateIcon() {
         iconPanelAdd = IconFactory.createIconPanel("add", "new", null);
         splitPanel.getHomePanel().add(iconPanelAdd);
     }
 
-    private void addBackIcon() {
+    protected void addBackIcon() {
         if (!databaseFileLoader.getStartFolder().equals("/root")) {
             iconPanelBack = IconFactory.createIconPanel(
                     "back",

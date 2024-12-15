@@ -1,9 +1,8 @@
 package view.panel;
 
+import controller.commandPattern.GoToDeskViewCommand;
 import core.DatabaseTaskDataLoader;
 import core.GlobalResources;
-import jdk.jfr.ContentType;
-import view.SplitPanel;
 import view.UICreationalPattern.UIBuilders.*;
 import view.UICreationalPattern.UIComponents.CustomLabel;
 import view.UICreationalPattern.UIComponents.CustomTextPane;
@@ -17,9 +16,12 @@ import java.awt.*;
 public class TaskView extends JPanel {
     private final DatabaseTaskDataLoader databaseTaskDataLoader;
     private final SplitPanel splitPanel;
+    private final String user,startFolder;
 
-    public TaskView(DatabaseTaskDataLoader databaseTaskDataLoader) {
+    public TaskView(DatabaseTaskDataLoader databaseTaskDataLoader, String user, String startFolder) {
         this.databaseTaskDataLoader = databaseTaskDataLoader;
+        this.user = user;
+        this.startFolder = startFolder;
 
         // Imposta il layout principale per TaskView
         setLayout(new BorderLayout());
@@ -27,6 +29,8 @@ public class TaskView extends JPanel {
         // Inizializza lo SplitPanel e aggiungilo al centro
         splitPanel = new SplitPanel();
         add(splitPanel, BorderLayout.CENTER);
+
+        splitPanel.addBackClickableLabel(new GoToDeskViewCommand(user, startFolder));
 
         // Mostra i dati nel pannello
         showData();
