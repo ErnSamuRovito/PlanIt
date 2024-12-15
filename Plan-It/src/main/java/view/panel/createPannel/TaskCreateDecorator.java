@@ -34,8 +34,7 @@ public class TaskCreateDecorator extends CreatePanelDecorator {
 
         // Create task name text field using Builder and Factory ----------------
         UIBuilder nameTaskFieldBuilder = new CustomTextFieldBuilder();
-        UIDirector uiDirector = new UIDirector();
-        uiDirector.buildStandardTextField(nameTaskFieldBuilder);
+        UIDirector.buildStandardTextField(nameTaskFieldBuilder);
         nameTaskFieldBuilder.text("Task").size(FIELD_SIZE).placeholder("Insert name task");
 
         // Use factory to create the text field
@@ -44,10 +43,8 @@ public class TaskCreateDecorator extends CreatePanelDecorator {
 
         // Create "Create new task" button using Builder and Factory ----------------
         UIBuilder buttonBuilder = new CustomButtonBuilder();
-        uiDirector.buildStandardButton(buttonBuilder);
+        UIDirector.buildStandardButton(buttonBuilder);
         buttonBuilder.text("Create new task").size(BUTTON_SIZE);
-
-        // buttonBuilder.action(new SigninCommand(this));
 
         // Use factory to create the button
         UIComponentFactory buttonFactory = new CustomButtonFactory(buttonBuilder);

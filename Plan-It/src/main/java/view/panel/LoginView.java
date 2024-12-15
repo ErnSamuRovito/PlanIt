@@ -34,11 +34,9 @@ public class LoginView extends JPanel {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.CENTER;
 
-        UIDirector uiDirector = new UIDirector();
-
         // Creazione del campo di testo username usando il Builder e la Factory ----------------
         UIBuilder usernameFieldBuilder = new CustomTextFieldBuilder();
-        uiDirector.buildStandardTextField(usernameFieldBuilder);
+        UIDirector.buildStandardTextField(usernameFieldBuilder);
         usernameFieldBuilder.text("Username or Email").size(FIELD_SIZE).placeholder("Username or Email");
         // Usa la factory per creare il campo di testo username
         UIComponentFactory usernameFieldFactory = new CustomTextFieldFactory(usernameFieldBuilder);
@@ -46,7 +44,7 @@ public class LoginView extends JPanel {
 
         // Creazione del campo di testo password usando il Builder e la Factory ----------------
         UIBuilder passwordFieldBuilder = new CustomPasswordFieldBuilder();
-        uiDirector.buildStandardPasswordField(passwordFieldBuilder);
+        UIDirector.buildStandardPasswordField(passwordFieldBuilder);
         passwordFieldBuilder.text("Password").size(FIELD_SIZE).placeholder("Password");
         // Usa la factory per creare il campo di testo password
         UIComponentFactory passwordFieldFactory = new CustomTextFieldFactory(passwordFieldBuilder);
@@ -54,7 +52,7 @@ public class LoginView extends JPanel {
 
         // Creazione del pulsante di login usando il Builder e la Factory ----------------
         UIBuilder buttonBuilder =  new CustomButtonBuilder();
-        uiDirector.buildStandardButton(buttonBuilder);
+        UIDirector.buildStandardButton(buttonBuilder);
         buttonBuilder.text("Login").size(BUTTON_SIZE);
         buttonBuilder.action(new LoginCommand(this));
         // Usa la factory per creare il pulsante
@@ -64,7 +62,7 @@ public class LoginView extends JPanel {
 
         // Creazione del pulsante di login usando il Builder e la Factory ----------------
         UIBuilder labelBuilder =  new CustomLabelBuilder();
-        uiDirector.buildStandardClickableLabel(labelBuilder);
+        UIDirector.buildStandardClickableLabel(labelBuilder);
         labelBuilder.text("Don't have an account? Sign up!").size(BUTTON_SIZE);
         labelBuilder.action(new GoToSigninCommand());
         // Usa la factory per creare il pulsante

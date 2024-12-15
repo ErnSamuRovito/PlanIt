@@ -5,7 +5,7 @@ import core.GlobalResources;
 import java.awt.*;
 
 public class UIDirector {
-    public void buildStandardButton(UIBuilder builder) {
+    public static void buildStandardButton(UIBuilder builder) {
         builder .backgroundColor(GlobalResources.COLOR_GREEN_1)
                 .hoverBackgroundColor(GlobalResources.COLOR_GREEN_2)
                 .pressedBackgroundColor(GlobalResources.COLOR_GREEN_1)
@@ -16,7 +16,7 @@ public class UIDirector {
                 .opaque(true);
     }
 
-    public void buildStandardTextField(UIBuilder builder) {
+    public static void buildStandardTextField(UIBuilder builder) {
         builder .backgroundColor(GlobalResources.COLOR_CREMA)
                 .hoverBackgroundColor(GlobalResources.COLOR_WHITE)
                 .pressedBackgroundColor(GlobalResources.COLOR_GREEN_2)
@@ -28,7 +28,7 @@ public class UIDirector {
     }
 
     // Crea un campo di password standard
-    public void buildStandardPasswordField(UIBuilder builder) {
+    public static void buildStandardPasswordField(UIBuilder builder) {
         builder .backgroundColor(GlobalResources.COLOR_CREMA)
                 .hoverBackgroundColor(GlobalResources.COLOR_WHITE)
                 .pressedBackgroundColor(GlobalResources.COLOR_GREEN_2)
@@ -40,7 +40,7 @@ public class UIDirector {
     }
 
     // Crea una clickable label standard
-    public void buildStandardClickableLabel(UIBuilder builder) {
+    public static void buildStandardClickableLabel(UIBuilder builder) {
         builder .backgroundColor(GlobalResources.COLOR_CREMA)
                 .hoverBackgroundColor(GlobalResources.COLOR_GREEN_1)
                 .pressedBackgroundColor(GlobalResources.COLOR_GREEN_2)
@@ -52,7 +52,7 @@ public class UIDirector {
                 .clickable(true);
     }
 
-    public void buildStandardLabel(UIBuilder builder) {
+    public static void buildStandardLabel(UIBuilder builder) {
         builder .backgroundColor(GlobalResources.COLOR_CREMA)
                 .hoverBackgroundColor(GlobalResources.COLOR_GREEN_1)
                 .pressedBackgroundColor(GlobalResources.COLOR_GREEN_2)
@@ -62,5 +62,23 @@ public class UIDirector {
                 .contentAreaFilled(false)
                 .opaque(false)
                 .clickable(false);
+    }
+
+    public static void buildStandardTextPane(UIBuilder builder) {
+        builder .backgroundColor(Color.WHITE)
+                .textColor(Color.BLACK)
+                .size(new Dimension(500, 200))
+                .contentType("text/html")
+                .content("""
+                        <html>
+                            <h1>Ciao, questo è un task, completalo!</h1>
+                            <h2>prova prova prova prova prova prova</h2>
+                            <h3>prova prova prova prova prova prova</h3>
+                            <h1>Ciao, questo è un task, completalo!</h1>
+                            <h2>prova prova prova prova prova prova</h2>
+                            <h3>prova prova prova prova prova prova</h3>
+                        </html>
+                    """)
+                .editable(false);
     }
 }
