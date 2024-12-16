@@ -1,11 +1,14 @@
 package model.plant;
 
 import core.SqLiteConnection;
+import model.dao.avatarPlant.AvatarPlantDAOImpl;
+import model.dao.avatarPlant.AvatarPlantDB;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class AvatarPlant {
     private static AvatarPlant instance; // Singleton instance
@@ -93,24 +96,18 @@ public class AvatarPlant {
     }
 
     public void loadPlant(int id_owner) {
-        String query = "SELECT * FROM AvatarPlant WHERE owner = ?";
-        try (Connection connection = SqLiteConnection.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, id_owner);
+        ArrayList<AvatarPlantDB> avatarPlants;
+        try (Connection connection = SqLiteConnection.getInstance().getConnection()){
+            AvatarPlantDAOImpl avatarPlantDAO = new AvatarPlantDAOImpl(connection);
+            avatarPlants=avatarPlantDAO.getPlantsByOwner(id_owner);
+        } catch (SQLException e) {throw new RuntimeException(e);}
 
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    this.id = resultSet.getInt("id_plant");
-                    this.name = resultSet.getString("name");
-                    this.hp = resultSet.getInt("hp");
-                    this.owner = resultSet.getInt("owner");
-                }
-            }
-            System.out.println("Plant loaded: " + this.id + " " + this.name);
+        this.id = avatarPlants.get(0).getIdPlant();
+        this.name = avatarPlants.get(0).getName();
+        this.hp = avatarPlants.get(0).getHp();
+        this.owner = avatarPlants.get(0).getOwner();
 
-        } catch (SQLException e) {
-            System.err.println("Error loading plant: " + e.getMessage());
-        }
+        System.out.println("Plant loaded: " + this.id + " " + this.name);
     }
 
     public void addHP(int value) {
@@ -136,17 +133,11 @@ public class AvatarPlant {
 
     // Updates the HP in the database
     private void updateHPInDatabase(int delta) {
-        String query = "UPDATE AvatarPlant SET hp = hp + ? WHERE owner = ?";
-        try (Connection connection = SqLiteConnection.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-
-            preparedStatement.setInt(1, delta);
-            preparedStatement.setInt(2, owner);
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            System.err.println("Error updating HP in database: " + e.getMessage());
-        }
+        try (Connection connection = SqLiteConnection.getInstance().getConnection()){
+            AvatarPlantDAOImpl avatarPlantDAO = new AvatarPlantDAOImpl(connection);
+            AvatarPlantDB updatedPlant=new AvatarPlantDB(id,name,hp+delta,owner);
+            avatarPlantDAO.updatePlant(updatedPlant);
+        } catch (SQLException e) {throw new RuntimeException(e);}
     }
 
     // Updates the current state based on HP

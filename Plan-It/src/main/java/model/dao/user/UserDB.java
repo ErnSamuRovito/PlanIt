@@ -1,13 +1,13 @@
 package model.dao.user;
 
-public class User {
+public class UserDB {
     private int id;
     private String name;
     private String email;
     private String password;
 
     // Costruttori, getter e setter
-    public User(int id, String name, String email, String password) {
+    public UserDB(int id, String name, String email, String password) {
         this.id = id;
         this.name = name;
         this.email = email;

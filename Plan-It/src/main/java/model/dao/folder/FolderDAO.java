@@ -3,11 +3,11 @@ package model.dao.folder;
 import java.util.List;
 
 public interface FolderDAO {
-    void addFolder(Folder folder);
-    Folder getFolderById(int id);
-    List<Folder> getFoldersByOwner(int ownerId);
-    List<Folder> getSubfolders(int parentId);
-    void updateFolder(Folder folder);
+    void addFolder(FolderDB folder);
+    FolderDB getFolderById(int id);
+    List<FolderDB> getFoldersByOwner(int ownerId);
+    List<FolderDB> getSubfolders(int parentId);
+    void updateFolder(FolderDB folder);
     void deleteFolder(int id);
 
     List<String> getFoldersByFolderAndUser(String startFolder, String user);

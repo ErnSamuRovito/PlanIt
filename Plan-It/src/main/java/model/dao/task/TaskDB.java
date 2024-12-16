@@ -1,8 +1,6 @@
 package model.dao.task;
 
-import java.sql.Date;
-
-public class Task {
+public class TaskDB {
     private int idTask;
     private String title;
     private String description;
@@ -13,7 +11,7 @@ public class Task {
     private int type;
     private String extraInfo;
 
-    public Task(int idTask, String title, String description, String dueDate, int urgency, int folder, int state, int type, String extraInfo) {
+    public TaskDB(int idTask, String title, String description, String dueDate, int urgency, int folder, int state, int type, String extraInfo) {
         this.idTask = idTask;
         this.title = title;
         this.description = description;

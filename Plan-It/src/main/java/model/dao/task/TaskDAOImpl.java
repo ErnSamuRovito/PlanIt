@@ -1,7 +1,5 @@
 package model.dao.task;
 
-import model.dao.folder.Folder;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +15,7 @@ public class TaskDAOImpl implements TaskDAO {
     }
 
     @Override
-    public void addTask(Task task) {
+    public void addTask(TaskDB task) {
         String sql = "INSERT INTO Task (title,description,due_date,urgency,folder,state,type,extra_info) VALUES (?,?,?,?,?,?,?,?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, task.getTitle());
@@ -35,13 +33,13 @@ public class TaskDAOImpl implements TaskDAO {
     }
 
     @Override
-    public Task getTaskById(int id) {
+    public TaskDB getTaskById(int id) {
         String sql = "SELECT * FROM Task WHERE id_task = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new Task(
+                return new TaskDB(
                         rs.getInt("id_task"),
                         rs.getString("title"),
                         rs.getString("description"),
@@ -60,15 +58,15 @@ public class TaskDAOImpl implements TaskDAO {
     }
 
     @Override
-    public List<Task> getTasksByFolder(int folderId) {
-        List<Task> tasks = new ArrayList<>();
+    public List<TaskDB> getTasksByFolder(int folderId) {
+        List<TaskDB> tasks = new ArrayList<>();
         String sql = "SELECT * FROM Task WHERE folder = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, folderId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 tasks.add(
-                    new Task(
+                    new TaskDB(
                         rs.getInt("id_task"),
                         rs.getString("title"),
                         rs.getString("description"),
@@ -88,7 +86,7 @@ public class TaskDAOImpl implements TaskDAO {
     }
 
     @Override
-    public void updateTask(Task task) {
+    public void updateTask(TaskDB task) {
         String sql = "UPDATE Task SET title=?,description=?,due_date=?,urgency=?,folder=?,state=?,type=?,extra_info=?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, task.getTitle());

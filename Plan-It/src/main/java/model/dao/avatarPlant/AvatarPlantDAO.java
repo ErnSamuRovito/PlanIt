@@ -3,10 +3,10 @@ package model.dao.avatarPlant;
 import java.util.List;
 
 public interface AvatarPlantDAO {
-    void addPlant(AvatarPlant plant);
-    AvatarPlant getPlantById(int id);
-    List<AvatarPlant> getPlantsByOwner(int ownerId);
-    List<AvatarPlant> getAllPlants();
-    void updatePlant(AvatarPlant plant);
+    void addPlant(AvatarPlantDB plant);
+    AvatarPlantDB getPlantById(int id);
+    List<AvatarPlantDB> getPlantsByOwner(int ownerId);
+    List<AvatarPlantDB> getAllPlants();
+    void updatePlant(AvatarPlantDB plant);
     void deletePlant(int id);
 }

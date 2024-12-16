@@ -1,7 +1,5 @@
 package model.dao.folder;
 
-import model.dao.avatarPlant.AvatarPlant;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +15,7 @@ public class FolderDAOImpl implements FolderDAO {
     }
 
     @Override
-    public void addFolder(Folder folder) {
+    public void addFolder(FolderDB folder) {
         String sql = "INSERT INTO Folder (folder_name,owner,parent) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, folder.getFolderName());
@@ -30,13 +28,13 @@ public class FolderDAOImpl implements FolderDAO {
     }
 
     @Override
-    public Folder getFolderById(int id) {
+    public FolderDB getFolderById(int id) {
         String sql = "SELECT * FROM Folder WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new Folder(rs.getInt("id"), rs.getString("folder_name"), rs.getInt("owner"), rs.getInt("parent"));
+                return new FolderDB(rs.getInt("id"), rs.getString("folder_name"), rs.getInt("owner"), rs.getInt("parent"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -45,14 +43,14 @@ public class FolderDAOImpl implements FolderDAO {
     }
 
     @Override
-    public List<Folder> getFoldersByOwner(int ownerId) {
-        List<Folder> folders = new ArrayList<>();
+    public List<FolderDB> getFoldersByOwner(int ownerId) {
+        List<FolderDB> folders = new ArrayList<>();
         String sql = "SELECT * FROM Folder WHERE owner = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, ownerId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                folders.add(new Folder(rs.getInt("id"), rs.getString("folder_name"), rs.getInt("owner"), rs.getInt("parent")));
+                folders.add(new FolderDB(rs.getInt("id"), rs.getString("folder_name"), rs.getInt("owner"), rs.getInt("parent")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -61,14 +59,14 @@ public class FolderDAOImpl implements FolderDAO {
     }
 
     @Override
-    public List<Folder> getSubfolders(int parentId) {
-        List<Folder> folders = new ArrayList<>();
+    public List<FolderDB> getSubfolders(int parentId) {
+        List<FolderDB> folders = new ArrayList<>();
         String sql = "SELECT * FROM Folder WHERE parent = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, parentId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                folders.add(new Folder(rs.getInt("id"), rs.getString("folder_name"), rs.getInt("owner"), rs.getInt("parent")));
+                folders.add(new FolderDB(rs.getInt("id"), rs.getString("folder_name"), rs.getInt("owner"), rs.getInt("parent")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -77,7 +75,7 @@ public class FolderDAOImpl implements FolderDAO {
     }
 
     @Override
-    public void updateFolder(Folder folder) {
+    public void updateFolder(FolderDB folder) {
         String sql = "UPDATE Folder SET folder_name = ?, owner = ?, parent = ? WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, folder.getFolderName());

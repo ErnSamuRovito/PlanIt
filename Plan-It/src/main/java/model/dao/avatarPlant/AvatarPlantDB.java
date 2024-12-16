@@ -1,12 +1,12 @@
 package model.dao.avatarPlant;
 
-public class AvatarPlant {
+public class AvatarPlantDB {
     private int idPlant;
     private String name;
     private int hp;
     private int owner;
 
-    public AvatarPlant(int idPlant, String name, int hp, int owner) {
+    public AvatarPlantDB(int idPlant, String name, int hp, int owner) {
         this.idPlant = idPlant;
         this.name = name;
         this.hp = hp;

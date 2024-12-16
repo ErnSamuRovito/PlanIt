@@ -1,9 +1,9 @@
 package model;
 
-public class TaskOld implements SystemComponent {
+public class Task implements SystemComponent {
     private String name;
 
-    public TaskOld(String name) {
+    public Task(String name) {
         this.name = name;
     }
 

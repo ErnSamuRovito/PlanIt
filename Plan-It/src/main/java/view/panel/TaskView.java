@@ -42,10 +42,10 @@ public class TaskView extends JPanel {
         splitPanel.addBackClickableLabel(new GoToDeskViewCommand(user, startFolder));
 
         // Mostra i dati nel pannello
-        showData();
+        showTaskData();
     }
 
-    private void showData() {
+    private void showTaskData() {
         try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
             TaskDAOImpl taskDAO = new TaskDAOImpl(connection);
             ArrayList<String> result = taskDAO.getTaskDataByTitleAndFolderAndUsername(title, startFolder, user);

@@ -4,7 +4,7 @@ import core.ComponentManager;
 import core.SqLiteConnection;
 import model.FormatValidator;
 import model.plant.AvatarPlant;
-import model.UserOld;
+import model.User;
 import view.panel.SigninView;
 
 import java.sql.Connection;
@@ -53,8 +53,8 @@ public class SigninCommand implements ActionCommand {
 
         int userId = registerUserAndGetId(usernameInput, emailInput, passwordInput);
 
-        UserOld.getInstance().loadUser(userId);
-        System.out.println(UserOld.getInstance().toString());
+        User.getInstance().loadUser(userId);
+        System.out.println(User.getInstance().toString());
         AvatarPlant.getInstance().loadPlant(userId);
         System.out.println("HP PIANTINA : " + AvatarPlant.getInstance().getHp());
 

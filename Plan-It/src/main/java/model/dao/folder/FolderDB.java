@@ -1,12 +1,12 @@
 package model.dao.folder;
 
-public class Folder {
+public class FolderDB {
     private int id;
     private String folderName;
     private int owner;
     private int parent;
 
-    public Folder(int id, String folderName, int owner, int parent) {
+    public FolderDB(int id, String folderName, int owner, int parent) {
         this.id = id;
         this.folderName = folderName;
         this.owner = owner;
