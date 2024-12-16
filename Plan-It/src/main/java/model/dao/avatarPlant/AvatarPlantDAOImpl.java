@@ -12,15 +12,17 @@ public class AvatarPlantDAOImpl implements AvatarPlantDAO {
     }
 
     @Override
-    public void addPlant(AvatarPlantDB plant) {
+    public Boolean addPlant(AvatarPlantDB plant) {
         String sql = "INSERT INTO AvatarPlant (name,hp,owner) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, plant.getName());
             stmt.setInt(2, plant.getHp());
             stmt.setInt(3, plant.getOwner());
             stmt.executeUpdate();
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
 

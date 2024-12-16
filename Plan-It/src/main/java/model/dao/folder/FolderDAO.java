@@ -4,6 +4,7 @@ import java.util.List;
 
 public interface FolderDAO {
     void addFolder(FolderDB folder);
+    Boolean addRootFolder(int owner);
     FolderDB getFolderById(int id);
     List<FolderDB> getFoldersByOwner(int ownerId);
     List<FolderDB> getSubfolders(int parentId);

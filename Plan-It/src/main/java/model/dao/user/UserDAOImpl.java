@@ -93,4 +93,49 @@ public class UserDAOImpl implements UserDAO {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public int logUser(String user, String password) {
+        String query = "SELECT id FROM User WHERE (username = ? OR email = ?) AND password = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            // Imposta i parametri per il PreparedStatement
+            preparedStatement.setString(1, user); // username
+            preparedStatement.setString(2, user); // email
+            preparedStatement.setString(3, password); // password
+
+            // Esegui la query
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("id");
+                } else {
+                    return -1; // Nessun utente trovato
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error searching for user: " + e.getMessage());
+            throw new RuntimeException("Error searching for user", e);
+        }
+    }
+
+    @Override
+    public int registerUserAndGetId(String username, String email, String password) {
+        String query = "INSERT INTO User (username, password, email) VALUES (?, ?, ?)";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+            preparedStatement.setString(3, email);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        return generatedKeys.getInt(1); // Restituisci l'ID generato
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error inserting user: " + e.getMessage());
+        }
+        return -1;
+    }
 }

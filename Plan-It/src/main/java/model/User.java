@@ -1,6 +1,8 @@
 package model;
 
 import core.SqLiteConnection;
+import model.dao.user.UserDAOImpl;
+import model.dao.user.UserDB;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -58,17 +60,18 @@ public class User {
 
     // Method to load user data (Note: this can be adjusted based on how you want to handle Singleton data)
     public void loadUser(int id) {
-        String query = "SELECT * FROM User WHERE id = ?";
-        try (Connection connection = SqLiteConnection.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, id);
-
-            int rowsAffected = preparedStatement.executeUpdate();
-            System.out.println(rowsAffected);
-            System.out.println("Query executed successfully!");
+        UserDB user;
+        try (Connection connection = SqLiteConnection.getInstance().getConnection()){
+            UserDAOImpl userDAO = new UserDAOImpl(connection);
+            user= userDAO.getUserById(id);
         } catch (SQLException e) {
-            System.err.println("Error loading user: " + e.getMessage());
+            throw new RuntimeException(e);
         }
+
+        this.id=user.getId();
+        this.username=user.getUsername();
+        this.password=user.getPassword();
+        this.email=user.getEmail();
     }
 
     // Optional: toString() method for debugging

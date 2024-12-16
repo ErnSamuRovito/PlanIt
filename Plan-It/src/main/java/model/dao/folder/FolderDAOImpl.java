@@ -28,6 +28,21 @@ public class FolderDAOImpl implements FolderDAO {
     }
 
     @Override
+    public Boolean addRootFolder(int owner){
+        String sql = "INSERT INTO Folder (folder_name,owner,parent) VALUES (?, ?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, "/root");
+            stmt.setInt(2, owner);
+            stmt.setNull(3, java.sql.Types.INTEGER); //parent = null
+            stmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
     public FolderDB getFolderById(int id) {
         String sql = "SELECT * FROM Folder WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
