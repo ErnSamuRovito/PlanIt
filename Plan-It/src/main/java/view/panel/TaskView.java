@@ -1,12 +1,8 @@
 package view.panel;
 
-import controller.commandPattern.ExploreFolderCommand;
 import controller.commandPattern.GoToDeskViewCommand;
-import core.DatabaseTaskDataLoader;
 import core.GlobalResources;
 import core.SqLiteConnection;
-import model.dao.folder.FolderDAOImpl;
-import model.dao.task.TaskDAO;
 import model.dao.task.TaskDAOImpl;
 import view.UICreationalPattern.UIBuilders.*;
 import view.UICreationalPattern.UIComponents.CustomLabel;
@@ -14,7 +10,6 @@ import view.UICreationalPattern.UIComponents.CustomTextPane;
 import view.UICreationalPattern.UIFactories.CustomLabelFactory;
 import view.UICreationalPattern.UIFactories.CustomTextPaneFactory;
 import view.UICreationalPattern.UIFactories.UIComponentFactory;
-import view.panel.iconPanel.IconFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -54,7 +49,7 @@ public class TaskView extends JPanel {
         try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
             TaskDAOImpl taskDAO = new TaskDAOImpl(connection);
             ArrayList<String> result = taskDAO.getTaskDataByTitleAndFolder(startFolder, user);
-            
+
             if (!taskDAO.getTaskDataByTitleAndFolder(startFolder, user).isEmpty()) {
                 UIBuilder titleLabelBuilder = new CustomLabelBuilder();
                 UIDirector.buildStandardLabel(titleLabelBuilder);
