@@ -2,8 +2,6 @@ package model.Plant;
 
 import core.GlobalResources;
 
-import javax.swing.*;
-
 public class HappyState implements State {
     @Override
     public void becomeHappy() {

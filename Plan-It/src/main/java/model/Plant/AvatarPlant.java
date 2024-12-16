@@ -1,6 +1,5 @@
 package model.Plant;
 
-import core.GlobalResources;
 import core.SqLiteConnection;
 
 import java.sql.Connection;
@@ -15,8 +14,6 @@ public class AvatarPlant {
     private String name;
     private int hp;
     private int owner;
-
-    private String pathGifImage;
 
     private State happyState;
     private State sadState;
@@ -72,7 +69,7 @@ public class AvatarPlant {
     }
 
     public void setHp(int hp) {
-        this.hp = hp;
+        this.hp = clampHP(hp);
     }
 
     public int getOwner() {
@@ -109,10 +106,59 @@ public class AvatarPlant {
                     this.owner = resultSet.getInt("owner");
                 }
             }
-            System.out.println("Plant loaded " + this.id + " " + this.name);
+            System.out.println("Plant loaded: " + this.id + " " + this.name);
 
         } catch (SQLException e) {
-            System.err.println("Error loading user: " + e.getMessage());
+            System.err.println("Error loading plant: " + e.getMessage());
         }
+    }
+
+    public void addHP(int value) {
+        int newHP = clampHP(this.hp + value);
+        updateHPInDatabase(newHP - this.hp); // Update only the difference
+        this.hp = newHP;
+        System.out.println("HP added. Current HP: " + this.hp);
+        updateState();
+    }
+
+    public void subtractHP(int value) {
+        int newHP = clampHP(this.hp - value);
+        updateHPInDatabase(newHP - this.hp); // Update only the difference
+        this.hp = newHP;
+        System.out.println("HP subtracted. Current HP: " + this.hp);
+        updateState();
+    }
+
+    // Helper method to ensure HP is within bounds
+    private int clampHP(int value) {
+        return Math.max(0, Math.min(value, 100));
+    }
+
+    // Updates the HP in the database
+    private void updateHPInDatabase(int delta) {
+        String query = "UPDATE AvatarPlant SET hp = hp + ? WHERE owner = ?";
+        try (Connection connection = SqLiteConnection.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setInt(1, delta);
+            preparedStatement.setInt(2, owner);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            System.err.println("Error updating HP in database: " + e.getMessage());
+        }
+    }
+
+    // Updates the current state based on HP
+    public void updateState() {
+        if (this.hp > 80) {
+            setState(happyState);
+        } else if (this.hp > 30) {
+            setState(normalState);
+        } else {
+            setState(sadState);
+        }
+
+        System.out.println("Plant HP : " + this.hp);
     }
 }

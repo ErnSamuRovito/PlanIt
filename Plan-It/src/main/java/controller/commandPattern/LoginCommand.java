@@ -33,8 +33,10 @@ public class LoginCommand implements ActionCommand{
             int idLogged = searchUserAndGetId(userInput, passwordInput);
 
             if (idLogged != -1) {
-                ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView(userInput,"/root"));
                 AvatarPlant.getInstance().loadPlant(idLogged);
+                AvatarPlant.getInstance().updateState();
+                ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView(userInput,"/root"));
+
                 System.out.println("HP PIANTINA : " + AvatarPlant.getInstance().getHp());
             } else {
                 showMessageDialog(null, "Login failed. Try again.", "Plan-It", ERROR_MESSAGE);

@@ -16,10 +16,11 @@ public class SideMenu extends JPanel {
         setPreferredSize(new Dimension(200, 0)); // Larghezza fissa e altezza automatica
 
         // Aggiungi la GIF animata al side menu
+        AvatarPlant.getInstance().updateState();
+        System.out.println(AvatarPlant.getInstance().getState().getClass().getSimpleName());
         JLabel gifLabel = new JLabel(new ImageIcon(AvatarPlant.getInstance().getPathGifImage()));
         gifLabel.setAlignmentX(Component.CENTER_ALIGNMENT);  // Centra orizzontalmente il JLabel
         System.out.println("state pianta : " + AvatarPlant.getInstance().getState());
-        System.out.println("path pianta : " + AvatarPlant.getInstance().getPathGifImage());
         add(gifLabel);
 
         // Aggiungi uno spazio che spinge la ClickableLabel in basso
