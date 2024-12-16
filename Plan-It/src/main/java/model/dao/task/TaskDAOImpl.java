@@ -117,16 +117,17 @@ public class TaskDAOImpl implements TaskDAO {
     }
 
     @Override
-    public ArrayList<String> getTaskDataByTitleAndFolder(String taskTitle, String folderName) {
+    public ArrayList<String> getTaskDataByTitleAndFolderAndUsername(String taskTitle, String folderName, String username) {
         ArrayList<String> data = new ArrayList<>();
         String query = """
             SELECT title, description, due_date, urgency, folder, state, type, extra_info
             FROM Task
-            WHERE title = ? AND folder = (SELECT id FROM Folder WHERE folder_name = ?);
+            WHERE title = ? AND folder = (SELECT id FROM Folder WHERE folder_name = ? AND owner = (SELECT id FROM User WHERE username = ?));
         """;
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, taskTitle);
             statement.setString(2, folderName);
+            statement.setString(3, username);
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {

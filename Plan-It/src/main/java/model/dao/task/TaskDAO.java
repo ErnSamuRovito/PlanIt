@@ -10,6 +10,6 @@ public interface TaskDAO {
     void updateTask(Task task);
     void deleteTask(int id);
 
-    ArrayList<String> getTaskDataByTitleAndFolder(String taskTitle, String folderName);
+    ArrayList<String> getTaskDataByTitleAndFolderAndUsername(String taskTitle, String folderName, String username);
     List<String> getTasksByFolderAndUser(String startFolder, String user);
 }

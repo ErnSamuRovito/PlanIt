@@ -81,16 +81,6 @@ public class UIDirector {
                 .textColor(Color.BLACK)
                 .size(new Dimension(500, 200))
                 .contentType("text/html")
-                .content("""
-                        <html>
-                            <h1>Ciao, questo è un task, completalo!</h1>
-                            <h2>prova prova prova prova prova prova</h2>
-                            <h3>prova prova prova prova prova prova</h3>
-                            <h1>Ciao, questo è un task, completalo!</h1>
-                            <h2>prova prova prova prova prova prova</h2>
-                            <h3>prova prova prova prova prova prova</h3>
-                        </html>
-                    """)
                 .editable(false);
     }
 }

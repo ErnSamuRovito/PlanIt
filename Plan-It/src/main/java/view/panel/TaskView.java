@@ -7,6 +7,7 @@ import model.dao.task.TaskDAOImpl;
 import view.UICreationalPattern.UIBuilders.*;
 import view.UICreationalPattern.UIComponents.CustomLabel;
 import view.UICreationalPattern.UIComponents.CustomTextPane;
+import view.UICreationalPattern.UIComponents.UIComponent;
 import view.UICreationalPattern.UIFactories.CustomLabelFactory;
 import view.UICreationalPattern.UIFactories.CustomTextPaneFactory;
 import view.UICreationalPattern.UIFactories.UIComponentFactory;
@@ -19,9 +20,11 @@ import java.util.ArrayList;
 
 public class TaskView extends JPanel {
     private final SplitPanel splitPanel;
-    private final String user,startFolder;
+    private final String title,user,startFolder;
+    private final JPanel homePanel;
 
-    public TaskView(String user, String startFolder) {
+    public TaskView(String title, String user, String startFolder) {
+        this.title = title;
         this.user = user;
         this.startFolder = startFolder;
 
@@ -30,6 +33,10 @@ public class TaskView extends JPanel {
 
         // Inizializza lo SplitPanel e aggiungilo al centro
         splitPanel = new SplitPanel();
+        homePanel = splitPanel.getHomePanel();
+        homePanel.setLayout(new GridBagLayout());
+        homePanel.setBackground(GlobalResources.COLOR_PANNA);
+
         add(splitPanel, BorderLayout.CENTER);
 
         splitPanel.addBackClickableLabel(new GoToDeskViewCommand(user, startFolder));
@@ -39,53 +46,37 @@ public class TaskView extends JPanel {
     }
 
     private void showData() {
-        // Configura il layout per il pannello "HomePanel" dello SplitPanel
-        JPanel homePanel = splitPanel.getHomePanel();
-        homePanel.setLayout(new GridBagLayout());
-        homePanel.setBackground(GlobalResources.COLOR_PANNA);
-
-        GridBagConstraints gbc = setGridBagConstraints();
-
         try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
             TaskDAOImpl taskDAO = new TaskDAOImpl(connection);
-            ArrayList<String> result = taskDAO.getTaskDataByTitleAndFolder(startFolder, user);
+            ArrayList<String> result = taskDAO.getTaskDataByTitleAndFolderAndUsername(title, startFolder, user);
 
-            if (!taskDAO.getTaskDataByTitleAndFolder(startFolder, user).isEmpty()) {
-                UIBuilder titleLabelBuilder = new CustomLabelBuilder();
-                UIDirector.buildStandardLabel(titleLabelBuilder);
-                titleLabelBuilder.text(result.get(1)); // Imposta il testo del titolo
-
-                UIComponentFactory titleLabelFactory = new CustomLabelFactory(titleLabelBuilder);
-                CustomLabel titleLabel = (CustomLabel) titleLabelFactory.orderComponent(titleLabelBuilder);
-
-                // Aggiungi il titolo al pannello
-                gbc.gridy = 0;
-                homePanel.add(titleLabel, gbc);
+            if (!result.isEmpty()) {
+                createComponent(result);
             }
         } catch (SQLException e) {throw new RuntimeException(e);}
+    }
 
-        // Controlla se i dati del task sono disponibili
-        /*if (!databaseTaskDataLoader.getTaskData().isEmpty()) {
-            // Creazione del titolo del task usando il Builder e il Factory Pattern
-            UIBuilder titleLabelBuilder = new CustomLabelBuilder();
-            UIDirector.buildStandardLabel(titleLabelBuilder);
-            titleLabelBuilder.text(databaseTaskDataLoader.getTaskData().get(0)); // Imposta il testo del titolo
+    private void createComponent(ArrayList<String> result){
+        // Configura il layout per il pannello "HomePanel" dello SplitPanel
+        GridBagConstraints gbc = setGridBagConstraints();
 
-            UIComponentFactory titleLabelFactory = new CustomLabelFactory(titleLabelBuilder);
-            CustomLabel titleLabel = (CustomLabel) titleLabelFactory.orderComponent(titleLabelBuilder);
+        //CREAZIONE DELLA LABEL CONTENENTE IL TITOLO DEL TASK
+        UIBuilder titleLabelBuilder = new CustomLabelBuilder();
+        UIDirector.buildStandardLabel(titleLabelBuilder);
+        titleLabelBuilder.text(result.get(0)); // Imposta il testo del titolo
+        UIComponentFactory titleLabelFactory = new CustomLabelFactory(titleLabelBuilder);
+        CustomLabel titleLabel = (CustomLabel) titleLabelFactory.orderComponent(titleLabelBuilder);
 
-            // Aggiungi il titolo al pannello
-            gbc.gridy = 0;
-            homePanel.add(titleLabel, gbc);
-        }
-        */
-
-        // Creazione del pannello di testo per il contenuto del task usando il Builder e Factory Pattern
+        //CREAZIONE DEL PANNELLO CONTENENTE LA DESCRIZIONE DEL TASK
         CustomTextPaneBuilder textPaneBuilder = new CustomTextPaneBuilder();
         UIDirector.buildStandardTextPane(textPaneBuilder);
-
+        textPaneBuilder.content(result.get(1));
         UIComponentFactory textPaneFactory = new CustomTextPaneFactory(textPaneBuilder);
         CustomTextPane customTextPane = (CustomTextPane) textPaneFactory.createComponent();
+
+        // Aggiungi il titolo al pannello
+        gbc.gridy = 0;
+        homePanel.add(titleLabel, gbc);
 
         // Avvolgi il JTextPane in un JScrollPane
         JScrollPane scrollPane = new JScrollPane(customTextPane);
@@ -105,7 +96,6 @@ public class TaskView extends JPanel {
         gbc.weighty = 0.5; // Il riempitivo occupa il restante 50% dello spazio
         homePanel.add(Box.createVerticalGlue(), gbc);
     }
-
     public GridBagConstraints setGridBagConstraints() {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10); // Margini per i componenti
