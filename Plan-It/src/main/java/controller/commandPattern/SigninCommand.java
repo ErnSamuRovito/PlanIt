@@ -3,12 +3,8 @@ package controller.commandPattern;
 import core.ComponentManager;
 import core.SqLiteConnection;
 import model.FormatValidator;
-import model.Plant.AvatarPlant;
-import model.Plant.NormalState;
-import model.Plant.SadState;
-import model.User;
-import view.UICreationalPattern.UIComponents.CustomPasswordField;
-import view.UICreationalPattern.UIComponents.CustomTextField;
+import model.plant.AvatarPlant;
+import model.UserOld;
 import view.panel.SigninView;
 
 import java.sql.Connection;
@@ -57,8 +53,8 @@ public class SigninCommand implements ActionCommand {
 
         int userId = registerUserAndGetId(usernameInput, emailInput, passwordInput);
 
-        User.getInstance().loadUser(userId);
-        System.out.println(User.getInstance().toString());
+        UserOld.getInstance().loadUser(userId);
+        System.out.println(UserOld.getInstance().toString());
         AvatarPlant.getInstance().loadPlant(userId);
         System.out.println("HP PIANTINA : " + AvatarPlant.getInstance().getHp());
 

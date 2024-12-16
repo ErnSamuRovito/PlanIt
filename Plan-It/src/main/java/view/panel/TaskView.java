@@ -1,25 +1,32 @@
 package view.panel;
 
+import controller.commandPattern.ExploreFolderCommand;
 import controller.commandPattern.GoToDeskViewCommand;
 import core.DatabaseTaskDataLoader;
 import core.GlobalResources;
+import core.SqLiteConnection;
+import model.dao.folder.FolderDAOImpl;
+import model.dao.task.TaskDAO;
+import model.dao.task.TaskDAOImpl;
 import view.UICreationalPattern.UIBuilders.*;
 import view.UICreationalPattern.UIComponents.CustomLabel;
 import view.UICreationalPattern.UIComponents.CustomTextPane;
 import view.UICreationalPattern.UIFactories.CustomLabelFactory;
 import view.UICreationalPattern.UIFactories.CustomTextPaneFactory;
 import view.UICreationalPattern.UIFactories.UIComponentFactory;
+import view.panel.iconPanel.IconFactory;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class TaskView extends JPanel {
-    private final DatabaseTaskDataLoader databaseTaskDataLoader;
     private final SplitPanel splitPanel;
     private final String user,startFolder;
 
-    public TaskView(DatabaseTaskDataLoader databaseTaskDataLoader, String user, String startFolder) {
-        this.databaseTaskDataLoader = databaseTaskDataLoader;
+    public TaskView(String user, String startFolder) {
         this.user = user;
         this.startFolder = startFolder;
 
@@ -44,8 +51,26 @@ public class TaskView extends JPanel {
 
         GridBagConstraints gbc = setGridBagConstraints();
 
+        try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
+            TaskDAOImpl taskDAO = new TaskDAOImpl(connection);
+            ArrayList<String> result = taskDAO.getTaskDataByTitleAndFolder(startFolder, user);
+            
+            if (!taskDAO.getTaskDataByTitleAndFolder(startFolder, user).isEmpty()) {
+                UIBuilder titleLabelBuilder = new CustomLabelBuilder();
+                UIDirector.buildStandardLabel(titleLabelBuilder);
+                titleLabelBuilder.text(result.get(1)); // Imposta il testo del titolo
+
+                UIComponentFactory titleLabelFactory = new CustomLabelFactory(titleLabelBuilder);
+                CustomLabel titleLabel = (CustomLabel) titleLabelFactory.orderComponent(titleLabelBuilder);
+
+                // Aggiungi il titolo al pannello
+                gbc.gridy = 0;
+                homePanel.add(titleLabel, gbc);
+            }
+        } catch (SQLException e) {throw new RuntimeException(e);}
+
         // Controlla se i dati del task sono disponibili
-        if (!databaseTaskDataLoader.getTaskData().isEmpty()) {
+        /*if (!databaseTaskDataLoader.getTaskData().isEmpty()) {
             // Creazione del titolo del task usando il Builder e il Factory Pattern
             UIBuilder titleLabelBuilder = new CustomLabelBuilder();
             UIDirector.buildStandardLabel(titleLabelBuilder);
@@ -58,6 +83,7 @@ public class TaskView extends JPanel {
             gbc.gridy = 0;
             homePanel.add(titleLabel, gbc);
         }
+        */
 
         // Creazione del pannello di testo per il contenuto del task usando il Builder e Factory Pattern
         CustomTextPaneBuilder textPaneBuilder = new CustomTextPaneBuilder();

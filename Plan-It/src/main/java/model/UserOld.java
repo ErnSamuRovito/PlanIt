@@ -6,19 +6,19 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class User {
+public class UserOld {
     private int id;
     private String username;
     private String password;
     private String email;
 
     // Private static instance variable
-    private static User instance;
+    private static UserOld instance;
 
     // Public static method to get the instance of User
-    public static User getInstance() {
+    public static UserOld getInstance() {
         if (instance == null) {
-            instance = new User();
+            instance = new UserOld();
         }
         return instance;
     }

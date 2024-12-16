@@ -2,7 +2,7 @@ package controller.commandPattern;
 
 import core.ComponentManager;
 import core.SqLiteConnection;
-import model.Plant.AvatarPlant;
+import model.plant.AvatarPlant;
 import view.UICreationalPattern.UIComponents.CustomPasswordField;
 import view.UICreationalPattern.UIComponents.CustomTextField;
 import view.panel.LoginView;

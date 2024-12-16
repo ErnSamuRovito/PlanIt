@@ -1,6 +1,4 @@
-package model.Plant;
-
-import javax.swing.*;
+package model.plant;
 
 public interface State {
 //    public abstract String getPathGifImage();

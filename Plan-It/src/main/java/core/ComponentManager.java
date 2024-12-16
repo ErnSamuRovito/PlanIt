@@ -2,6 +2,7 @@
 
 package core;
 
+import model.dao.folder.FolderDAOImpl;
 import view.ApplicationWindow;
 import view.panel.TaskView;
 import view.panel.createPannel.CreatePanel;
@@ -28,13 +29,12 @@ public class ComponentManager {
     public SigninView getSigninView() {return new SigninView();}
     public CreatePanel getCreatePanel() {return new CreatePanel();}
     public DeskView getDeskView(String user, String startFolder) {
-        DatabaseFileLoader databaseFileLoader = new DatabaseFileLoader(user);
-        databaseFileLoader.setStartFolder(startFolder);
-        return new DeskView(databaseFileLoader);
+        //DatabaseFileLoader databaseFileLoader = new DatabaseFileLoader(user);
+        //databaseFileLoader.setStartFolder(startFolder);
+        return new DeskView(user,startFolder);
     }
     public TaskView getTaskView(String taskTitle, String user, String startFolder){
-        DatabaseTaskDataLoader databaseTaskDataLoader = new DatabaseTaskDataLoader(taskTitle,startFolder);
-        return new TaskView(databaseTaskDataLoader,user,startFolder);
+        return new TaskView(user,startFolder);
     }
 
     // Metodo per impostare il pannello attivo tramite ApplicationWindow

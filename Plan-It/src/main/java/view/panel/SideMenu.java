@@ -1,7 +1,7 @@
 package view.panel;
 
 import core.GlobalResources;
-import model.Plant.AvatarPlant;
+import model.plant.AvatarPlant;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,7 +1,6 @@
-package model.Plant;
+package model.plant;
 
 import core.GlobalResources;
-import javax.swing.*;
 
 public class SadState implements State {
     @Override

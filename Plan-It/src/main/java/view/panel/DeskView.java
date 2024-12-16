@@ -7,6 +7,9 @@ import controller.commandPattern.GoToTaskViewCommand;
 import core.ComponentManager;
 import core.DatabaseFileLoader;
 import core.GlobalResources;
+import core.SqLiteConnection;
+import model.dao.folder.FolderDAOImpl;
+import model.dao.task.TaskDAOImpl;
 import view.UICreationalPattern.UIBuilders.CustomLabelBuilder;
 import view.UICreationalPattern.UIBuilders.UIDirector;
 import view.UICreationalPattern.UIComponents.CustomLabel;
@@ -20,15 +23,17 @@ import view.panel.iconPanel.IconPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class DeskView extends JPanel {
     private SplitPanel splitPanel;
-    private DatabaseFileLoader databaseFileLoader;
-
     private IconPanel iconPanelAdd, iconPanelBack;
+    private final String user, startFolder;
 
-    public DeskView(DatabaseFileLoader databaseFileLoader) {
-        this.databaseFileLoader = databaseFileLoader;
+    public DeskView(String user, String startFolder) {
+        this.user = user;
+        this.startFolder = startFolder;
 
         // Imposta il layout principale
         setLayout(new BorderLayout());
@@ -54,19 +59,25 @@ public class DeskView extends JPanel {
 
     private void loadData() {
         // Recupera i folder dal data provider e li aggiunge al pannello
-        for (String folder : databaseFileLoader.getFolders()) {
-            splitPanel.getHomePanel().add(
-                    IconFactory.createIconPanel(
-                            "folder", folder, new ExploreFolderCommand(databaseFileLoader.getUser(), folder)
-                    )
-            );
-        }
+        try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
+            FolderDAOImpl folderDAO = new FolderDAOImpl(connection);
+            for (String folder : folderDAO.getFoldersByFolderAndUser(startFolder,user)){
+                splitPanel.getHomePanel().add(
+                        IconFactory.createIconPanel(
+                                "folder", folder, new ExploreFolderCommand(user, folder)
+                        )
+                );
+            }
 
-        // Recupera i task dal data provider e li aggiunge al pannello
-        for (String task : databaseFileLoader.getTasks()) {
-            splitPanel.getHomePanel().add(IconFactory.createIconPanel(
-                    "task", task, new GoToTaskViewCommand(task, databaseFileLoader.getUser(), databaseFileLoader.getStartFolder()))
-            );
+            TaskDAOImpl taskDAO = new TaskDAOImpl(connection);
+            for (String task : taskDAO.getTasksByFolderAndUser(startFolder,user)){
+                splitPanel.getHomePanel().add(IconFactory.createIconPanel(
+                        "task", task, new GoToTaskViewCommand(task, user, startFolder))
+                );
+            }
+
+        }catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -108,11 +119,11 @@ public class DeskView extends JPanel {
     }
 
     protected void addBackIcon() {
-        if (!databaseFileLoader.getStartFolder().equals("/root")) {
+        if (!startFolder.equals("/root")) {
             iconPanelBack = IconFactory.createIconPanel(
                     "back",
                     "back",
-                    new GoBackCommand(databaseFileLoader.getUser(), databaseFileLoader.getStartFolder())
+                    new GoBackCommand(user, startFolder)
             );
             splitPanel.getHomePanel().add(iconPanelBack);
         }

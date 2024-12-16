@@ -3,11 +3,11 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Folder implements SystemComponent{
+public class FolderOld implements SystemComponent{
     private String name;
     private List<SystemComponent> components = new ArrayList<>();
 
-    public Folder(String name) {
+    public FolderOld(String name) {
         this.name = name;
     }
 

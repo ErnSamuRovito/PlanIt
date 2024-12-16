@@ -1,4 +1,4 @@
-package model.Plant;
+package model.plant;
 
 import core.SqLiteConnection;
 
