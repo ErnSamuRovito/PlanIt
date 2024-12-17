@@ -112,7 +112,7 @@ public class AvatarPlant {
 
     public void addHP(int value) {
         int newHP = clampHP(this.hp + value);
-        updateHPInDatabase(newHP - this.hp); // Update only the difference
+        updateHPInDatabase(newHP - this.hp);
         this.hp = newHP;
         System.out.println("HP added. Current HP: " + this.hp);
         updateState();
@@ -120,18 +120,16 @@ public class AvatarPlant {
 
     public void subtractHP(int value) {
         int newHP = clampHP(this.hp - value);
-        updateHPInDatabase(newHP - this.hp); // Update only the difference
+        updateHPInDatabase(newHP - this.hp);
         this.hp = newHP;
         System.out.println("HP subtracted. Current HP: " + this.hp);
         updateState();
     }
 
-    // Helper method to ensure HP is within bounds
     private int clampHP(int value) {
         return Math.max(0, Math.min(value, 100));
     }
 
-    // Updates the HP in the database
     private void updateHPInDatabase(int delta) {
         try (Connection connection = SqLiteConnection.getInstance().getConnection()){
             AvatarPlantDAOImpl avatarPlantDAO = new AvatarPlantDAOImpl(connection);
@@ -140,7 +138,6 @@ public class AvatarPlant {
         } catch (SQLException e) {throw new RuntimeException(e);}
     }
 
-    // Updates the current state based on HP
     public void updateState() {
         if (this.hp > 80) {
             setState(happyState);

@@ -1,6 +1,8 @@
-package view.panel.createPannel;
+package view.panel.createPanel;
 
+import controller.commandPattern.CreateFolderCommand;
 import core.GlobalResources;
+import model.User;
 import view.UICreationalPattern.UIBuilders.CustomButtonBuilder;
 import view.UICreationalPattern.UIBuilders.CustomTextFieldBuilder;
 import view.UICreationalPattern.UIBuilders.UIBuilder;
@@ -11,11 +13,16 @@ import view.UICreationalPattern.UIFactories.CustomButtonFactory;
 import view.UICreationalPattern.UIFactories.CustomTextFieldFactory;
 import view.UICreationalPattern.UIFactories.UIComponentFactory;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class FolderCreateDecorator extends CreatePanelDecorator{
+public class FolderCreateDecorator extends CreatePanelDecorator {
     private static final Dimension FIELD_SIZE = new Dimension(200, 30);
     private static final Dimension BUTTON_SIZE = new Dimension(150, 50);
+
+    CustomTextField nameFolderField;
 
     public FolderCreateDecorator(CreatePanel createPanel) {
         super(createPanel);
@@ -32,29 +39,37 @@ public class FolderCreateDecorator extends CreatePanelDecorator{
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.CENTER;
 
-        // Create task name text field using Builder and Factory ----------------
-        UIBuilder nameTaskFieldBuilder = new CustomTextFieldBuilder();
-        UIDirector.buildStandardTextField(nameTaskFieldBuilder);
-        nameTaskFieldBuilder.text("Folder").size(FIELD_SIZE).placeholder("Insert name folder");
+        // Create folder name text field using Builder and Factory
+        UIBuilder nameFolderFieldBuilder = new CustomTextFieldBuilder();
+        UIDirector.buildStandardTextField(nameFolderFieldBuilder);
+
+        nameFolderFieldBuilder.text("Folder").size(FIELD_SIZE).placeholder("Insert folder name");
 
         // Use factory to create the text field
-        UIComponentFactory textFieldFactory = new CustomTextFieldFactory(nameTaskFieldBuilder);
-        CustomTextField nameTaskField = (CustomTextField) textFieldFactory.orderComponent(nameTaskFieldBuilder);
+        UIComponentFactory textFieldFactory = new CustomTextFieldFactory(nameFolderFieldBuilder);
+        nameFolderField = (CustomTextField) textFieldFactory.orderComponent(nameFolderFieldBuilder);
 
-        // Create "Create new task" button using Builder and Factory ----------------
+        // Create "Create new folder" button using Builder and Factory
         UIBuilder buttonBuilder = new CustomButtonBuilder();
         UIDirector.buildStandardButton(buttonBuilder);
-        buttonBuilder.text("Create new folder").size(BUTTON_SIZE);
+        buttonBuilder.text("Create new folder")
+                .size(BUTTON_SIZE)
+                .action(new CreateFolderCommand(this));
 
         // Use factory to create the button
         UIComponentFactory buttonFactory = new CustomButtonFactory(buttonBuilder);
         CustomButton createButton = (CustomButton) buttonFactory.orderComponent(buttonBuilder);
 
-        gbc.gridy = 0;
-        add(nameTaskField, gbc);
 
-        // Add button and text field to panel
+        // Add components to panel
+        gbc.gridy = 0;
+        add(nameFolderField, gbc);
+
         gbc.gridy = 1;
         add(createButton, gbc);
+    }
+
+    public String getTextFieldName() {
+        return nameFolderField.getText();
     }
 }

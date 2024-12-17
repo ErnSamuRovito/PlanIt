@@ -40,7 +40,7 @@ public class TaskDAOImpl implements TaskDAO {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return new TaskDB(
-                        rs.getInt("id_task"),
+                        //rs.getInt("id_task"),
                         rs.getString("title"),
                         rs.getString("description"),
                         rs.getString("due_date"),
@@ -67,7 +67,7 @@ public class TaskDAOImpl implements TaskDAO {
             if (rs.next()) {
                 tasks.add(
                     new TaskDB(
-                        rs.getInt("id_task"),
+                        //rs.getInt("id_task"),
                         rs.getString("title"),
                         rs.getString("description"),
                         rs.getString("due_date"),

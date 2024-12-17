@@ -1,4 +1,4 @@
-package view.panel.createPannel;
+package view.panel.createPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +10,6 @@ public class CreatePanel extends JPanel {
     }
 
     public void buildPanel() {
-        // Add default components or layout settings
         setLayout(new FlowLayout());
     }
 }

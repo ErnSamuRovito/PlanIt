@@ -6,8 +6,8 @@ public class FolderDB {
     private int owner;
     private int parent;
 
-    public FolderDB(int id, String folderName, int owner, int parent) {
-        this.id = id;
+    public FolderDB(String folderName, int owner, int parent) {
+        //this.id = id;
         this.folderName = folderName;
         this.owner = owner;
         this.parent = parent;

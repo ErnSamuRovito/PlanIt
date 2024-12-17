@@ -1,4 +1,4 @@
-package view.panel.createPannel;
+package view.panel.createPanel;
 
 public abstract class CreatePanelDecorator extends CreatePanel {
     protected CreatePanel createPanel;
@@ -8,8 +8,6 @@ public abstract class CreatePanelDecorator extends CreatePanel {
     }
 
     @Override
-    public void buildPanel() {
-        //createPanel.buildPanel();  // Calls the buildPanel of the original CreatePanel
-    }
+    public void buildPanel() {}
 }
 

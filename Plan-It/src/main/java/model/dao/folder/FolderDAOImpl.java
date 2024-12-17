@@ -49,7 +49,7 @@ public class FolderDAOImpl implements FolderDAO {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new FolderDB(rs.getInt("id"), rs.getString("folder_name"), rs.getInt("owner"), rs.getInt("parent"));
+                return new FolderDB(rs.getString("folder_name"), rs.getInt("owner"), rs.getInt("parent"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -65,7 +65,7 @@ public class FolderDAOImpl implements FolderDAO {
             stmt.setInt(1, ownerId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                folders.add(new FolderDB(rs.getInt("id"), rs.getString("folder_name"), rs.getInt("owner"), rs.getInt("parent")));
+                folders.add(new FolderDB(rs.getString("folder_name"), rs.getInt("owner"), rs.getInt("parent")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -81,7 +81,7 @@ public class FolderDAOImpl implements FolderDAO {
             stmt.setInt(1, parentId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                folders.add(new FolderDB(rs.getInt("id"), rs.getString("folder_name"), rs.getInt("owner"), rs.getInt("parent")));
+                folders.add(new FolderDB(rs.getString("folder_name"), rs.getInt("owner"), rs.getInt("parent")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -96,7 +96,7 @@ public class FolderDAOImpl implements FolderDAO {
             stmt.setString(1, folder.getFolderName());
             stmt.setInt(2, folder.getOwner());
             stmt.setInt(3, folder.getParent());
-            stmt.setInt(4, folder.getId());
+            //stmt.setInt(4, folder.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

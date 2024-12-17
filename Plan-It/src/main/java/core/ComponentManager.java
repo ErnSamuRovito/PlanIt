@@ -2,10 +2,9 @@
 
 package core;
 
-import model.dao.folder.FolderDAOImpl;
 import view.ApplicationWindow;
 import view.panel.TaskView;
-import view.panel.createPannel.CreatePanel;
+import view.panel.createPanel.CreatePanel;
 import view.panel.LoginView;
 import view.panel.DeskView;
 import view.panel.SigninView;

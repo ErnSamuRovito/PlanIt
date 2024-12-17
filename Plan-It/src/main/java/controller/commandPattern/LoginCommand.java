@@ -2,6 +2,7 @@ package controller.commandPattern;
 
 import core.ComponentManager;
 import core.SqLiteConnection;
+import model.User;
 import model.dao.user.UserDAOImpl;
 import model.plant.AvatarPlant;
 import view.UICreationalPattern.UIComponents.CustomPasswordField;
@@ -36,11 +37,10 @@ public class LoginCommand implements ActionCommand{
             } catch (SQLException e) {throw new RuntimeException(e);}
 
             if (idLogged != -1) {
-                AvatarPlant.getInstance().loadPlant(idLogged);
+                User.getInstance().loadUser(idLogged);
+                AvatarPlant.getInstance().loadPlant(User.getInstance().getId());
                 AvatarPlant.getInstance().updateState();
                 ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView(userInput,"/root"));
-
-                System.out.println("HP PIANTINA : " + AvatarPlant.getInstance().getHp());
             } else {
                 showMessageDialog(null, "Login failed. Try again.", "Plan-It", ERROR_MESSAGE);
             }
