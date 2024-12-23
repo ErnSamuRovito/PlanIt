@@ -58,7 +58,7 @@ public class CustomLabel extends JLabel implements UIComponent {
                 setForeground(hoverBackgroundColor);
             }
             @Override public void mouseExited(MouseEvent e) {
-                setForeground(backgroundColor);
+                setForeground(textColor);
             }
             @Override public void mousePressed(MouseEvent e) {
                 setForeground(pressedBackgroundColor);
