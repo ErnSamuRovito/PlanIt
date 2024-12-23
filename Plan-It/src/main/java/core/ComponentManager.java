@@ -13,7 +13,7 @@ import javax.swing.*;
 
 public class ComponentManager {
     private static ComponentManager instance;
-    private String user,path;
+    private String user, currFolder;
 
     // Costruttore privato per il singleton
     private ComponentManager() {}
@@ -29,17 +29,15 @@ public class ComponentManager {
     public SigninView getSigninView() {return new SigninView();}
     public CreatePanel getCreatePanel() {return new CreatePanel();}
     public DeskView getDeskView() {
-        return new DeskView(user,path);
+        return new DeskView(user, currFolder);
     }
     public TaskView getTaskView(String taskTitle){
-        return new TaskView(taskTitle,user,path);
+        return new TaskView(taskTitle,user, currFolder);
     }
     // Metodo per impostare il pannello attivo tramite ApplicationWindow
-    public void setPanel(JPanel panel) {
-        ApplicationWindow.getInstance().setPanel(panel);
-    }
+    public void setPanel(JPanel panel) {ApplicationWindow.getInstance().setPanel(panel);}
 
-    public void setUserAndPath(String user, String path){this.user=user; this.path=path;}
+    public void setPath(String user, String currFolder){this.user=user; this.currFolder=currFolder;}
     public String getUser() {return user;}
-    public String getPath() {return path;}
+    public String getCurrFolder() {return currFolder;}
 }

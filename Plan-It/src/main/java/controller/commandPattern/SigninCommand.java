@@ -76,7 +76,7 @@ public class SigninCommand implements ActionCommand {
                     System.err.println(ERROR_PLANT_CREATION);
                 }
 
-                ComponentManager.getInstance().setUserAndPath(usernameInput, "/root");
+                ComponentManager.getInstance().setPath(usernameInput, "/root");
                 ComponentManager.getInstance().setPanel(
                         ComponentManager.getInstance().getDeskView()
                 );

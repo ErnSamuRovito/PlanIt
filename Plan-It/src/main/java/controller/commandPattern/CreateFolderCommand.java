@@ -5,6 +5,7 @@ import core.SqLiteConnection;
 import model.User;
 import model.dao.folder.FolderDAOImpl;
 import model.dao.folder.FolderDB;
+import model.dao.user.UserDAOImpl;
 import view.panel.createPanel.FolderCreateDecorator;
 
 import java.sql.Connection;
@@ -20,17 +21,25 @@ public class CreateFolderCommand implements ActionCommand{
 
     @Override
     public void execute() {
-        newFolderDB = new FolderDB(createFolderDecorator.getTextFieldName(),
-                User.getInstance().getId(),
-                1); // test
-
         try (Connection connection = SqLiteConnection.getInstance().getConnection()){
+            UserDAOImpl userDAO = new UserDAOImpl(connection);
+            int userId=userDAO.getUserByUsername(ComponentManager.getInstance().getUser()).getId();
+            FolderDAOImpl folderDAO = new FolderDAOImpl(connection);
+            int parentId=folderDAO.getFolderIdByNameAndOwner(
+                    ComponentManager.getInstance().getCurrFolder(),ComponentManager.getInstance().getUser()
+            );
+
+            newFolderDB = new FolderDB(
+                    createFolderDecorator.getTextFieldName(),
+                    userId,
+                    parentId
+            ); // test
+
             FolderDAOImpl folderDAOimpl = new FolderDAOImpl(connection);
             folderDAOimpl.addFolder(newFolderDB);
             System.out.println("Folder created : " + newFolderDB.getFolderName());
-            ComponentManager.getInstance().setUserAndPath(User.getInstance().getUsername(),"/root");
-            ComponentManager.getInstance().setPanel(
-                    ComponentManager.getInstance().getDeskView());
+            //ComponentManager.getInstance().setPath(User.getInstance().getUsername(),"/root");
+            ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView());
         } catch (SQLException e) {throw new RuntimeException(e);}
     }
 }

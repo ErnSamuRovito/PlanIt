@@ -15,7 +15,7 @@ public class GoBackCommand implements ActionCommand{
     @Override public void execute() {
         try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
             FolderDAOImpl folderDAO = new FolderDAOImpl(connection);
-            ComponentManager.getInstance().setUserAndPath(user, folderDAO.findParentFolder(startFolder));
+            ComponentManager.getInstance().setPath(user, folderDAO.findParentFolder(startFolder));
             ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView());
         } catch (SQLException e) {throw new RuntimeException(e);}
     }

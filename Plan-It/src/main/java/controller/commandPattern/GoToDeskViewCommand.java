@@ -11,7 +11,7 @@ public class GoToDeskViewCommand implements ActionCommand{
     }
 
     @Override public void execute() {
-        ComponentManager.getInstance().setUserAndPath(user,folder);
+        ComponentManager.getInstance().setPath(user,folder);
         ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView());
     }
 }
