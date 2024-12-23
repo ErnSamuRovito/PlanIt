@@ -24,7 +24,7 @@ public class CreateFolderCommand implements ActionCommand{
 
     @Override
     public void execute() {
-        if (!createFolderDecorator.getTextFieldName().isEmpty() && createFolderDecorator.getTextFieldName().contains("/*.,?^")) {
+        if (!createFolderDecorator.getTextFieldName().isEmpty() && !createFolderDecorator.getTextFieldName().matches(".*[/*.,?^].*")) {
             try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
                 UserDAOImpl userDAO = new UserDAOImpl(connection);
                 int userId = userDAO.getUserByUsername(ComponentManager.getInstance().getUser()).getId();

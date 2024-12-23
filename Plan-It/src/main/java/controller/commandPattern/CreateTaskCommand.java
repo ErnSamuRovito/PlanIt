@@ -30,7 +30,7 @@ public class CreateTaskCommand implements ActionCommand{
         int urgencyTask = taskCreateDecorator.getComboBoxSelection();
         int typeTask = taskCreateDecorator.getComboBoxSelection();
 
-        if (!nameTask.isEmpty() && nameTask.contains("/*.,?^")) {
+        if (!nameTask.isEmpty() && !nameTask.matches(".*[/*.,?^].*")) {
             try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
                 FolderDAOImpl folderDAO = new FolderDAOImpl(connection);
                 newTaskDB = new TaskDB(
