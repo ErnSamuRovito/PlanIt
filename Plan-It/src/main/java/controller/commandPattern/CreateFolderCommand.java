@@ -33,7 +33,7 @@ public class CreateFolderCommand implements ActionCommand{
                     createFolderDecorator.getTextFieldName(),
                     userId,
                     parentId
-            ); // test
+            );
 
             FolderDAOImpl folderDAOimpl = new FolderDAOImpl(connection);
             folderDAOimpl.addFolder(newFolderDB);
