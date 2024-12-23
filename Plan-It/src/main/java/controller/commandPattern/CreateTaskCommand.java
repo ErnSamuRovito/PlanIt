@@ -3,6 +3,7 @@ package controller.commandPattern;
 import core.ComponentManager;
 import core.SqLiteConnection;
 import model.User;
+import model.dao.folder.FolderDAOImpl;
 import model.dao.task.TaskDAOImpl;
 import model.dao.task.TaskDB;
 import view.panel.createPanel.TaskCreateDecorator;
@@ -25,21 +26,31 @@ public class CreateTaskCommand implements ActionCommand{
         String descriptionTask = taskCreateDecorator.getDescriptionTaskField();
         String dateTask = taskCreateDecorator.getCustomDataPicker();
         int urgencyTask = taskCreateDecorator.getComboBoxSelection();
-
-        newTaskDB = new TaskDB(nameTask,
-                descriptionTask,
-                dateTask,
-                urgencyTask,
-                1, // test
-                1,   // test
-                1,   // test
-                "task extra info");  // test
+        int typeTask = taskCreateDecorator.getComboBoxSelection();
 
         try (Connection connection = SqLiteConnection.getInstance().getConnection()){
+            FolderDAOImpl folderDAO=new FolderDAOImpl(connection);
+            newTaskDB = new TaskDB(
+                    nameTask,
+                    descriptionTask,
+                    dateTask,
+                    urgencyTask,
+                    folderDAO.getFolderIdByNameAndOwner(
+                        ComponentManager.getInstance().getPath(),
+                        ComponentManager.getInstance().getUser()
+                    ),
+                    0,
+                    typeTask,
+                    "task extra info"
+            );
+
             TaskDAOImpl taskDAOimpl = new TaskDAOImpl(connection);
             taskDAOimpl.addTask(newTaskDB);
             System.out.println("task created : " + nameTask);
-            ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView(User.getInstance().getUsername(),"/root"));
+            ComponentManager.getInstance().setUserAndPath(
+                    ComponentManager.getInstance().getUser(),ComponentManager.getInstance().getPath()
+            );
+            ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView());
         } catch (SQLException e) {throw new RuntimeException(e);}
     }
 }

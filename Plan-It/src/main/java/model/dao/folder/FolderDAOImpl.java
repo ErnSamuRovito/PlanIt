@@ -58,6 +58,22 @@ public class FolderDAOImpl implements FolderDAO {
     }
 
     @Override
+    public int getFolderIdByNameAndOwner(String name,String owner){
+        String sql = "SELECT id FROM Folder WHERE folder_name = ? and owner in (SELECT id FROM User WHERE username=?)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, name);
+            stmt.setString(2, owner);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    @Override
     public List<FolderDB> getFoldersByOwner(int ownerId) {
         List<FolderDB> folders = new ArrayList<>();
         String sql = "SELECT * FROM Folder WHERE owner = ?";
@@ -112,6 +128,31 @@ public class FolderDAOImpl implements FolderDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String findParentFolder(String folderName) {
+        String parentName = null;
+        String query = """
+        SELECT folder_name FROM Folder WHERE id = (
+            SELECT parent
+            FROM Folder
+            WHERE folder_name = ?
+        );
+        """;
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, folderName); // Imposta il nome della cartella di cui cercare il parent
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) { // Se esiste un risultato
+                    parentName = resultSet.getString("folder_name");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error fetching parent folder from database", e);
+        }
+        return parentName; // Ritorna il nome della cartella genitore o null se non trovato
     }
 
     @Override

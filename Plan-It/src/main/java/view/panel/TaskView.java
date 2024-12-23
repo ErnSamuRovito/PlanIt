@@ -70,7 +70,7 @@ public class TaskView extends JPanel {
         //CREAZIONE DEL PANNELLO CONTENENTE LA DESCRIZIONE DEL TASK
         CustomTextPaneBuilder textPaneBuilder = new CustomTextPaneBuilder();
         UIDirector.buildStandardTextPane(textPaneBuilder);
-        textPaneBuilder.content(result.get(1));
+        textPaneBuilder.content(result.get(1)); // Imposta la descrizione
         UIComponentFactory textPaneFactory = new CustomTextPaneFactory(textPaneBuilder);
         CustomTextPane customTextPane = (CustomTextPane) textPaneFactory.createComponent();
 

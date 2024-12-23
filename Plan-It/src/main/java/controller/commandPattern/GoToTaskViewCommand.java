@@ -12,6 +12,7 @@ public class GoToTaskViewCommand implements ActionCommand{
     }
 
     @Override public void execute() {
-        ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getTaskView(taskTitle,user,startFolder));
+        ComponentManager.getInstance().setUserAndPath(user,startFolder);
+        ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getTaskView(taskTitle));
     }
 }

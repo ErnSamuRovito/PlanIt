@@ -28,8 +28,9 @@ public class CreateFolderCommand implements ActionCommand{
             FolderDAOImpl folderDAOimpl = new FolderDAOImpl(connection);
             folderDAOimpl.addFolder(newFolderDB);
             System.out.println("Folder created : " + newFolderDB.getFolderName());
+            ComponentManager.getInstance().setUserAndPath(User.getInstance().getUsername(),"/root");
             ComponentManager.getInstance().setPanel(
-                    ComponentManager.getInstance().getDeskView(User.getInstance().getUsername(),"/root"));
+                    ComponentManager.getInstance().getDeskView());
         } catch (SQLException e) {throw new RuntimeException(e);}
     }
 }

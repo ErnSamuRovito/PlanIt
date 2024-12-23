@@ -40,7 +40,8 @@ public class LoginCommand implements ActionCommand{
                 User.getInstance().loadUser(idLogged);
                 AvatarPlant.getInstance().loadPlant(User.getInstance().getId());
                 AvatarPlant.getInstance().updateState();
-                ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView(userInput,"/root"));
+                ComponentManager.getInstance().setUserAndPath(userInput,"/root");
+                ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView());
             } else {
                 showMessageDialog(null, "Login failed. Try again.", "Plan-It", ERROR_MESSAGE);
             }

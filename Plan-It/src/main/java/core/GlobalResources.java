@@ -2,7 +2,7 @@ package core;
 
 import java.awt.Color;
 
-public class GlobalResources {
+public abstract class GlobalResources {
     //Color's constants
     public static final Color COLOR_GREEN_1 = new Color(102, 117, 76, 255);
     public static final Color COLOR_GREEN_2 = new Color(142, 155, 109, 255);
