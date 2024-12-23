@@ -1,9 +1,6 @@
 package model.dao.task;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,7 +115,7 @@ public class TaskDAOImpl implements TaskDAO {
     public ArrayList<String> getTaskDataByTitleAndFolderAndUsername(String taskTitle, String folderName, String username) {
         ArrayList<String> data = new ArrayList<>();
         String query = """
-            SELECT title, description, due_date, urgency, folder, state, type, extra_info
+            SELECT id_task, title, description, due_date, urgency, folder, state, type, extra_info
             FROM Task
             WHERE title = ? AND folder = (SELECT id FROM Folder WHERE folder_name = ? AND owner = (SELECT id FROM User WHERE username = ?));
         """;
@@ -129,6 +126,7 @@ public class TaskDAOImpl implements TaskDAO {
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
+                    data.add(resultSet.getString("id_task"));
                     data.add(resultSet.getString("title"));
                     data.add(resultSet.getString("description"));
                     data.add(resultSet.getString("due_date"));
@@ -166,8 +164,8 @@ public class TaskDAOImpl implements TaskDAO {
         """;
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             if (startFolder.equals("/")) {
-                statement.setNull(1, java.sql.Types.VARCHAR); // folder name
-                statement.setNull(4, java.sql.Types.VARCHAR); // folder name
+                statement.setNull(1, Types.VARCHAR); // folder name
+                statement.setNull(4, Types.VARCHAR); // folder name
             } else {
                 statement.setString(1, startFolder); // folder name
                 statement.setString(4, startFolder); // folder name

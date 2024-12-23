@@ -1,13 +1,17 @@
 package view.panel;
 
+import controller.commandPattern.DoneCommand;
 import controller.commandPattern.GoToDeskViewCommand;
+import controller.commandPattern.LoginCommand;
 import core.GlobalResources;
 import core.SqLiteConnection;
 import model.dao.task.TaskDAOImpl;
 import view.UICreationalPattern.UIBuilders.*;
+import view.UICreationalPattern.UIComponents.CustomButton;
 import view.UICreationalPattern.UIComponents.CustomLabel;
 import view.UICreationalPattern.UIComponents.CustomTextPane;
 import view.UICreationalPattern.UIComponents.UIComponent;
+import view.UICreationalPattern.UIFactories.CustomButtonFactory;
 import view.UICreationalPattern.UIFactories.CustomLabelFactory;
 import view.UICreationalPattern.UIFactories.CustomTextPaneFactory;
 import view.UICreationalPattern.UIFactories.UIComponentFactory;
@@ -22,6 +26,10 @@ public class TaskView extends JPanel {
     private final SplitPanel splitPanel;
     private final String title,user,startFolder;
     private final JPanel homePanel;
+    private CustomButton doneButton;
+
+    private static final Dimension FIELD_SIZE = new Dimension(200, 30);
+    private static final Dimension BUTTON_SIZE = new Dimension(150, 50);
 
     public TaskView(String title, String user, String startFolder) {
         this.title = title;
@@ -63,16 +71,24 @@ public class TaskView extends JPanel {
         //CREAZIONE DELLA LABEL CONTENENTE IL TITOLO DEL TASK
         UIBuilder titleLabelBuilder = new CustomLabelBuilder();
         UIDirector.buildStandardLabel(titleLabelBuilder);
-        titleLabelBuilder.text(result.get(0)); // Imposta il testo del titolo
+        titleLabelBuilder.text(result.get(1)); // Imposta il testo del titolo
         UIComponentFactory titleLabelFactory = new CustomLabelFactory(titleLabelBuilder);
         CustomLabel titleLabel = (CustomLabel) titleLabelFactory.orderComponent(titleLabelBuilder);
 
         //CREAZIONE DEL PANNELLO CONTENENTE LA DESCRIZIONE DEL TASK
         CustomTextPaneBuilder textPaneBuilder = new CustomTextPaneBuilder();
         UIDirector.buildStandardTextPane(textPaneBuilder);
-        textPaneBuilder.content(result.get(1)); // Imposta la descrizione
+        textPaneBuilder.content(result.get(2)); // Imposta la descrizione
         UIComponentFactory textPaneFactory = new CustomTextPaneFactory(textPaneBuilder);
         CustomTextPane customTextPane = (CustomTextPane) textPaneFactory.createComponent();
+
+        // Creazione del pulsante di login usando il Builder e la Factory ----------------
+        UIBuilder buttonBuilder =  new CustomButtonBuilder();
+        UIDirector.buildStandardButton(buttonBuilder);
+        buttonBuilder.text("DONE!").size(BUTTON_SIZE).action(new DoneCommand(result.get(0)));
+        // Usa la factory per creare il pulsante
+        UIComponentFactory buttonFactory = new CustomButtonFactory(buttonBuilder);
+        doneButton = (CustomButton) buttonFactory.orderComponent(buttonBuilder);
 
         // Aggiungi il titolo al pannello
         gbc.gridy = 0;
@@ -95,6 +111,13 @@ public class TaskView extends JPanel {
         gbc.gridy = 2;
         gbc.weighty = 0.5; // Il riempitivo occupa il restante 50% dello spazio
         homePanel.add(Box.createVerticalGlue(), gbc);
+
+        // aggiungo doneButton
+        // Aggiungi lo JScrollPane al pannello
+        gbc.gridy = 3;
+        gbc.weighty = 0.15; // Assegna il 15% dello spazio verticale
+        //gbc.fill = GridBagConstraints.BOTH; // Permette al componente di espandersi in entrambe le direzioni
+        homePanel.add(doneButton, gbc);
     }
     public GridBagConstraints setGridBagConstraints() {
         GridBagConstraints gbc = new GridBagConstraints();

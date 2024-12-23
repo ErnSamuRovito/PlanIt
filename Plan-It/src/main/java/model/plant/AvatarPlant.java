@@ -110,7 +110,7 @@ public class AvatarPlant {
 
     public void addHP(int value) {
         int newHP = clampHP(this.hp + value);
-        updateHPInDatabase(newHP - this.hp);
+        updateHPInDatabase(newHP + this.hp);
         this.hp = newHP;
         System.out.println("HP added. Current HP: " + this.hp);
         updateState();
