@@ -10,6 +10,9 @@ import view.panel.createPanel.TaskCreateDecorator;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
+import static javax.swing.JOptionPane.showMessageDialog;
+
 public class CreateTaskCommand implements ActionCommand{
     private final TaskCreateDecorator taskCreateDecorator;
     TaskDB newTaskDB;
@@ -27,29 +30,35 @@ public class CreateTaskCommand implements ActionCommand{
         int urgencyTask = taskCreateDecorator.getComboBoxSelection();
         int typeTask = taskCreateDecorator.getComboBoxSelection();
 
-        try (Connection connection = SqLiteConnection.getInstance().getConnection()){
-            FolderDAOImpl folderDAO=new FolderDAOImpl(connection);
-            newTaskDB = new TaskDB(
-                    nameTask,
-                    descriptionTask,
-                    dateTask,
-                    urgencyTask,
-                    folderDAO.getFolderIdByNameAndOwner(
-                        ComponentManager.getInstance().getCurrFolder(),
-                        ComponentManager.getInstance().getUser()
-                    ),
-                    0,
-                    typeTask,
-                    "task extra info"
-            );
+        if (!nameTask.isEmpty() && nameTask.contains("/*.,?^")) {
+            try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
+                FolderDAOImpl folderDAO = new FolderDAOImpl(connection);
+                newTaskDB = new TaskDB(
+                        nameTask,
+                        descriptionTask,
+                        dateTask,
+                        urgencyTask,
+                        folderDAO.getFolderIdByNameAndOwner(
+                                ComponentManager.getInstance().getCurrFolder(),
+                                ComponentManager.getInstance().getUser()
+                        ),
+                        0,
+                        typeTask,
+                        "task extra info"
+                );
 
-            TaskDAOImpl taskDAOimpl = new TaskDAOImpl(connection);
-            taskDAOimpl.addTask(newTaskDB);
-            System.out.println("task created : " + nameTask);
+                TaskDAOImpl taskDAOimpl = new TaskDAOImpl(connection);
+                taskDAOimpl.addTask(newTaskDB);
+                System.out.println("task created : " + nameTask);
             /*ComponentManager.getInstance().setPath(
                     ComponentManager.getInstance().getUser(),ComponentManager.getInstance().getCurrFolder()
             );*/
-            ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView());
-        } catch (SQLException e) {throw new RuntimeException(e);}
+                ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }else{
+            showMessageDialog(null, "A name for the task is required and cannot include the following characters: '/*.,?^'.", "Plan-It", ERROR_MESSAGE);
+        }
     }
 }

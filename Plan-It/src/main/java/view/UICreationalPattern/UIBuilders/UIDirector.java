@@ -1,5 +1,6 @@
 package view.UICreationalPattern.UIBuilders;
 
+import controller.commandPattern.GoBackCommand;
 import core.GlobalResources;
 
 import java.awt.*;
@@ -65,15 +66,16 @@ public class UIDirector {
     }
 
     public static void buildBackClickableLabel(UIBuilder builder) {
-        builder .backgroundColor(GlobalResources.COLOR_PANNA)
+        builder .backgroundColor(GlobalResources.COLOR_WHITE)
                 .hoverBackgroundColor(GlobalResources.COLOR_GREEN_1)
                 .pressedBackgroundColor(GlobalResources.COLOR_GREEN_2)
-                .textColor(GlobalResources.COLOR_PANNA)
+                .textColor(GlobalResources.COLOR_WHITE)
                 .focusPainted(false)
                 .borderPainted(false)
                 .contentAreaFilled(false)
                 .opaque(false)
-                .clickable(true);
+                .clickable(true)
+                .text("Back");
     }
 
     public static void buildStandardTextPane(UIBuilder builder) {

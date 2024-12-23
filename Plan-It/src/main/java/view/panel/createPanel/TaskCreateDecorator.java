@@ -1,16 +1,13 @@
 package view.panel.createPanel;
 
 import controller.commandPattern.CreateTaskCommand;
+import controller.commandPattern.GoToDeskViewCommand;
+import core.ComponentManager;
 import core.GlobalResources;
-import view.UICreationalPattern.UIBuilders.CustomButtonBuilder;
-import view.UICreationalPattern.UIBuilders.CustomTextFieldBuilder;
-import view.UICreationalPattern.UIBuilders.UIBuilder;
-import view.UICreationalPattern.UIBuilders.UIDirector;
-import view.UICreationalPattern.UIComponents.CustomButton;
-import view.UICreationalPattern.UIComponents.CustomComboBox;
-import view.UICreationalPattern.UIComponents.CustomDataPicker;
-import view.UICreationalPattern.UIComponents.CustomTextField;
+import view.UICreationalPattern.UIBuilders.*;
+import view.UICreationalPattern.UIComponents.*;
 import view.UICreationalPattern.UIFactories.CustomButtonFactory;
+import view.UICreationalPattern.UIFactories.CustomLabelFactory;
 import view.UICreationalPattern.UIFactories.CustomTextFieldFactory;
 import view.UICreationalPattern.UIFactories.UIComponentFactory;
 
@@ -76,20 +73,21 @@ public class TaskCreateDecorator extends CreatePanelDecorator {
         UIComponentFactory buttonFactory = new CustomButtonFactory(buttonBuilder);
         createButton = (CustomButton) buttonFactory.orderComponent(buttonBuilder);
 
-        gbc.gridy = 0;
-        add(nameTaskField, gbc);
+        // Create "Back" clickable label
+        UIBuilder labelBuilder = new CustomLabelBuilder();
+        UIDirector.buildBackClickableLabel(labelBuilder);
+        labelBuilder.action(
+                new GoToDeskViewCommand(ComponentManager.getInstance().getUser(),ComponentManager.getInstance().getCurrFolder())
+        );
+        UIComponentFactory labelFactory = new CustomLabelFactory(labelBuilder);
+        CustomLabel backLabel = (CustomLabel) labelFactory.orderComponent(labelBuilder);
 
-        gbc.gridy = 1;
-        add(descriptionTaskField, gbc);
-
-        gbc.gridy = 2;
-        add(customDataPicker, gbc);
-
-        gbc.gridy = 3;
-        add(comboBox, gbc);
-
-        gbc.gridy = 4;
-        add(createButton, gbc);
+        gbc.gridy = 0; add(nameTaskField, gbc);
+        gbc.gridy = 1; add(descriptionTaskField, gbc);
+        gbc.gridy = 2; add(customDataPicker, gbc);
+        gbc.gridy = 3; add(comboBox, gbc);
+        gbc.gridy = 4; add(createButton, gbc);
+        gbc.gridy = 5; add(backLabel, gbc);
     }
 
     // Getters and Setters

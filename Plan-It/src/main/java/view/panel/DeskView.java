@@ -116,7 +116,7 @@ public class DeskView extends JPanel {
             iconPanelBack = IconFactory.createIconPanel(
                     "back",
                     "back",
-                    new GoBackCommand(user, startFolder)
+                    new GoBackCommand()
             );
             splitPanel.getHomePanel().add(iconPanelBack);
         }
