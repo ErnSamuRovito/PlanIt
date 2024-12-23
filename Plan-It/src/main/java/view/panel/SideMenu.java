@@ -53,7 +53,7 @@ public class SideMenu extends JPanel {
         System.out.println("Label width: "+settingsLabel.getWidth());
         add(settingsLabel);
 
-        // Aggiungi uno spazio che spinge la ClickableLabel in basso
+        // Aggiungi uno spazio che spinge la ClickableLabel in basso --------------------------------
         add(Box.createVerticalGlue());  // Questo spinge tutto verso il basso
     }
 
