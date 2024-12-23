@@ -39,8 +39,9 @@ public class CustomLabel extends JLabel implements UIComponent {
         setOpaque(opaque);
         setHorizontalAlignment(CENTER); // Centra il testo
         setVerticalAlignment(CENTER);
+        setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Aggiungi i listener per il comportamento del mouse se la lable è stata contrassegnata come clickable.
+        // Aggiungi i listener per il comportamento del mouse se la label è stata contrassegnata come clickable.
         if (clickable) {
             removeMouseListeners();
             addMouseListeners();

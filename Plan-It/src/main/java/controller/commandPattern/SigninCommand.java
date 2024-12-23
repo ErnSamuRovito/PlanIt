@@ -67,7 +67,7 @@ public class SigninCommand implements ActionCommand {
                 System.out.println(SUCCESS_PLANT_CREATION);
 
                 // Crea la piantina assocuata all'utente
-                if (createPlant("Piantina di " + usernameInput, userId)) {
+                if (createPlant(usernameInput+"'s Plant", userId)) {
                     System.out.println(SUCCESS_PLANT_CREATION);
                     AvatarPlant.getInstance().loadPlant(userId);
                     AvatarPlant.getInstance().updateState();

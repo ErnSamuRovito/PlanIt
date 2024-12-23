@@ -42,11 +42,28 @@ public class AvatarPlantDAOImpl implements AvatarPlantDAO {
     }
 
     @Override
-    public ArrayList<AvatarPlantDB> getPlantsByOwner(int ownerId) {
+    public ArrayList<AvatarPlantDB> getPlantsByOwnerId(int ownerId) {
         ArrayList<AvatarPlantDB> plants = new ArrayList<>();
         String sql = "SELECT * FROM AvatarPlant WHERE owner = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, ownerId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                plants.add(new AvatarPlantDB(rs.getInt("id_plant"), rs.getString("name"), rs.getInt("hp"), rs.getInt("owner")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return plants;
+    }
+
+
+    @Override
+    public ArrayList<AvatarPlantDB> getPlantsByOwnerName(String ownerName) {
+        ArrayList<AvatarPlantDB> plants = new ArrayList<>();
+        String sql = "SELECT * FROM AvatarPlant WHERE owner IN (SELECT id FROM User WHERE username=?)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, ownerName);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 plants.add(new AvatarPlantDB(rs.getInt("id_plant"), rs.getString("name"), rs.getInt("hp"), rs.getInt("owner")));

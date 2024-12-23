@@ -5,7 +5,8 @@ import java.util.List;
 public interface AvatarPlantDAO {
     Boolean addPlant(AvatarPlantDB plant);
     AvatarPlantDB getPlantById(int id);
-    List<AvatarPlantDB> getPlantsByOwner(int ownerId);
+    List<AvatarPlantDB> getPlantsByOwnerId(int ownerId);
+    List<AvatarPlantDB> getPlantsByOwnerName(String ownerName);
     List<AvatarPlantDB> getAllPlants();
     void updatePlant(AvatarPlantDB plant);
     void deletePlant(int id);

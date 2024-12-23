@@ -5,8 +5,6 @@ import model.dao.avatarPlant.AvatarPlantDAOImpl;
 import model.dao.avatarPlant.AvatarPlantDB;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -99,7 +97,7 @@ public class AvatarPlant {
         ArrayList<AvatarPlantDB> avatarPlants;
         try (Connection connection = SqLiteConnection.getInstance().getConnection()){
             AvatarPlantDAOImpl avatarPlantDAO = new AvatarPlantDAOImpl(connection);
-            avatarPlants=avatarPlantDAO.getPlantsByOwner(id_owner);
+            avatarPlants=avatarPlantDAO.getPlantsByOwnerId(id_owner);
         } catch (SQLException e) {throw new RuntimeException(e);}
 
         this.id = avatarPlants.get(0).getIdPlant();
