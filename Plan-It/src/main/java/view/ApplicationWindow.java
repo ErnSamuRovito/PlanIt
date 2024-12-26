@@ -3,7 +3,9 @@
 package view;
 
 import core.SqLiteConnection;
+import model.DateComparison;
 import model.DesktopNotifier;
+import model.plant.AvatarPlant;
 import view.panel.LoginView;
 
 import javax.swing.*;
@@ -32,9 +34,6 @@ public class ApplicationWindow {
 
         DesktopNotifier notifier = new DesktopNotifier();
         notifier.sendNotification("Titolo della Notifica", "Questo è un messaggio di notifica");
-
-        // connessione al DB
-        SqLiteConnection.getInstance().getConnection();
 
         // Non dimenticare di chiudere la connessione alla fine
         //SqLiteConnection.getInstance().closeConnection();
