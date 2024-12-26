@@ -35,7 +35,6 @@ public class AvatarPlant {
     private State normalState;
     private State currentState;
 
-    // Private constructor to prevent instantiation
     private AvatarPlant() {
         happyState = new HappyState();
         sadState = new SadState();
@@ -169,22 +168,19 @@ public class AvatarPlant {
         int totalPenance = 0;
         DateComparison dateComparison = new DateComparison();
 
-        // Map to track the urgency values and their corresponding penalties
         HashMap<Integer, Integer> urgencyMap = new HashMap<>();
         urgencyMap.put(1, PENANCE_LOW_TASK);
         urgencyMap.put(2, PENANCE_MEDIUM_TASK);
         urgencyMap.put(3, PENANCE_HIGH_TASK);
 
-        // Fixing the SQL query with correct syntax and table join
         String query = "SELECT Task.due_date, Task.urgency FROM Task "
                 + "JOIN Folder ON Task.folder = Folder.id "
                 + "JOIN User ON Folder.owner = User.id "
-                + "WHERE User.id = ?";  // Use parameterized query for security
+                + "WHERE User.id = ?";
 
         try (Connection connection = SqLiteConnection.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
-            // Set the owner parameter for the query
             statement.setInt(1, User.getInstance().getId());
 
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -192,15 +188,12 @@ public class AvatarPlant {
                     String dueDate = resultSet.getString("due_date");
                     int urgency = resultSet.getInt("urgency");
 
-                    // Check if the task is overdue
                     if (dateComparison.compareDate(dueDate) < 0) {
-                        // Add penance based on urgency
                         totalPenance += urgencyMap.getOrDefault(urgency, 0);
                     }
                 }
             }
 
-            // Apply total penance to the plant's HP
             subtractHP(totalPenance);
 
         } catch (SQLException e) {
