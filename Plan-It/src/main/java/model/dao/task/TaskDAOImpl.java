@@ -151,7 +151,8 @@ public class TaskDAOImpl implements TaskDAO {
         String query = """
             SELECT title
             FROM Task
-            WHERE (folder = (
+            WHERE Task.type != -1 AND
+                  (folder = (
                     SELECT id
                     FROM Folder
                     WHERE folder_name = ?
@@ -183,5 +184,31 @@ public class TaskDAOImpl implements TaskDAO {
             throw new RuntimeException("Error fetching tasks from database", e);
         }
         return tasks;
+    }
+
+    @Override
+    public boolean markTaskAsDone(int id_task) {
+        String sql = "UPDATE Task SET type = -1 WHERE id_task = ?;";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, id_task);
+            stmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean markTaskAsExpired(int id_task) {
+        String sql = "UPDATE Task SET state = -1 WHERE id_task = ?;";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, id_task);
+            stmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

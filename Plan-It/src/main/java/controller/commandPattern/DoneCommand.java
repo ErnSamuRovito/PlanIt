@@ -8,8 +8,6 @@ import model.plant.AvatarPlant;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import static javax.swing.JOptionPane.showMessageDialog;
-
 public class DoneCommand implements ActionCommand{
     int id_task_completed;
 
@@ -21,11 +19,12 @@ public class DoneCommand implements ActionCommand{
     public void execute() {
         try (Connection connection = SqLiteConnection.getInstance().getConnection()){
             TaskDAOImpl taskDAO = new TaskDAOImpl(connection);
-            taskDAO.deleteTask(id_task_completed);
+            if (taskDAO.markTaskAsDone(id_task_completed))
+            {
+                System.out.println("Task done!");
+            }
             AvatarPlant.getInstance().addHP(10);
             ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView());
         } catch (SQLException e) {throw new RuntimeException(e);}
-
-        AvatarPlant.getInstance().addHP(10);
     }
 }

@@ -1,52 +1,47 @@
 package model.plant;
 
-import controller.commandPattern.GoToTaskViewCommand;
 import core.SqLiteConnection;
 import model.DateComparison;
 import model.User;
 import model.dao.avatarPlant.AvatarPlantDAOImpl;
 import model.dao.avatarPlant.AvatarPlantDB;
+import model.dao.task.TaskDAO;
 import model.dao.task.TaskDAOImpl;
-import org.sqlite.SQLiteConnection;
-import view.panel.iconPanel.IconFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class AvatarPlant {
-    private static AvatarPlant instance; // Singleton instance
+    private static  AvatarPlant instance; // Thread-safe singleton
 
     private int id;
     private String name;
     private int hp;
     private int owner;
 
-    private final int PENANCE_LOW_TASK = 5;
-    private final int PENANCE_MEDIUM_TASK = 7;
-    private final int PENANCE_HIGH_TASK = 10;
 
-    private State happyState;
-    private State sadState;
-    private State normalState;
+    private static final int PENANCE_LOW_TASK = 5;
+    private static final int PENANCE_MEDIUM_TASK = 7;
+    private static final int PENANCE_HIGH_TASK = 10;
+
+    private final State happyState;
+    private final State sadState;
+    private final State normalState;
     private State currentState;
 
     private AvatarPlant() {
-        happyState = new HappyState();
-        sadState = new SadState();
-        normalState = new NormalState();
+        this.happyState = new HappyState();
+        this.sadState = new SadState();
+        this.normalState = new NormalState();
+        this.currentState = normalState;
 
-        currentState = normalState; // Default state
-
-        calculatePenance();
         System.out.println("Plant created");
     }
 
-    // Static method to get the singleton instance
     public static AvatarPlant getInstance() {
         if (instance == null) {
             synchronized (AvatarPlant.class) {
@@ -84,7 +79,7 @@ public class AvatarPlant {
     }
 
     public void setHp(int hp) {
-        this.hp = clampHP(hp);
+        this.hp = hp;
     }
 
     public int getOwner() {
@@ -107,21 +102,24 @@ public class AvatarPlant {
         return normalState;
     }
 
-    public void loadPlant(int id_owner) {
-        ArrayList<AvatarPlantDB> avatarPlants;
+    public void loadPlant(int idOwner) {
         try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
             AvatarPlantDAOImpl avatarPlantDAO = new AvatarPlantDAOImpl(connection);
-            avatarPlants = avatarPlantDAO.getPlantsByOwnerId(id_owner);
+            List<AvatarPlantDB> avatarPlants = avatarPlantDAO.getPlantsByOwnerId(idOwner);
+
+            if (!avatarPlants.isEmpty()) {
+                AvatarPlantDB plantData = avatarPlants.get(0);
+                this.id = plantData.getIdPlant();
+                this.name = plantData.getName();
+                this.hp = plantData.getHp();
+                this.owner = plantData.getOwner();
+                System.out.println("Plant loaded: " + this.id + " " + this.name);
+            } else {
+                throw new RuntimeException("No plants found for owner ID: " + idOwner);
+            }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error loading plant for owner ID: " + idOwner, e);
         }
-
-        this.id = avatarPlants.get(0).getIdPlant();
-        this.name = avatarPlants.get(0).getName();
-        this.hp = avatarPlants.get(0).getHp();
-        this.owner = avatarPlants.get(0).getOwner();
-
-        System.out.println("Plant loaded: " + this.id + " " + this.name);
     }
 
     public void addHP(int value) {
@@ -146,12 +144,12 @@ public class AvatarPlant {
             AvatarPlantDB updatedPlant = new AvatarPlantDB(id, name, newHP, owner);
             avatarPlantDAO.updatePlant(updatedPlant);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error updating plant HP in database", e);
         }
     }
 
     private int clampHP(int value) {
-        return Math.max(0, Math.min(value, 100));
+        return Math.max(0, Math.min(100, value));
     }
 
     public void updateState() {
@@ -164,7 +162,7 @@ public class AvatarPlant {
         }
     }
 
-    public void calculatePenance() {
+    public int getPenance() {
         int totalPenance = 0;
         DateComparison dateComparison = new DateComparison();
 
@@ -173,7 +171,7 @@ public class AvatarPlant {
         urgencyMap.put(2, PENANCE_MEDIUM_TASK);
         urgencyMap.put(3, PENANCE_HIGH_TASK);
 
-        String query = "SELECT Task.due_date, Task.urgency FROM Task "
+        String query = "SELECT Task.id_task, Task.state, Task.due_date, Task.urgency FROM Task "
                 + "JOIN Folder ON Task.folder = Folder.id "
                 + "JOIN User ON Folder.owner = User.id "
                 + "WHERE User.id = ?";
@@ -188,19 +186,20 @@ public class AvatarPlant {
                     String dueDate = resultSet.getString("due_date");
                     int urgency = resultSet.getInt("urgency");
 
-                    if (dateComparison.compareDate(dueDate) < 0) {
+                    if (dateComparison.compareDate(dueDate) < 0 && resultSet.getInt("state") != -1) {
                         totalPenance += urgencyMap.getOrDefault(urgency, 0);
+                        int taskId = resultSet.getInt("id_task");
+                        TaskDAO taskDAO = new TaskDAOImpl(connection);
+                        taskDAO.markTaskAsExpired(taskId);
                     }
                 }
             }
 
-            subtractHP(totalPenance);
-
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new RuntimeException("Error calculating penance for user with owner ID: " + owner, e);
         }
 
         System.out.println("Total Penance: " + totalPenance);
+        return totalPenance;
     }
 }

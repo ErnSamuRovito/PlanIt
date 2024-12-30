@@ -1,6 +1,7 @@
 package view.panel.iconPanel;
 
 import controller.commandPattern.ActionCommand;
+import controller.commandPattern.DeleteCommand;
 import core.GlobalResources;
 
 import javax.imageio.ImageIO;
@@ -42,7 +43,7 @@ public class IconPanel extends JPanel {
 
         // Aggiungi azioni ai menu item
         editItem.addActionListener(e -> System.out.println("Modifica selezionata"));
-        deleteItem.addActionListener(e -> System.out.println("Eliminazione selezionata"));
+        deleteItem.addActionListener(e -> new DeleteCommand());
 
         contextMenu.add(editItem);
         contextMenu.add(deleteItem);

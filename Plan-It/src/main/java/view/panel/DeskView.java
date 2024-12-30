@@ -8,6 +8,7 @@ import core.ComponentManager;
 import core.SqLiteConnection;
 import model.dao.folder.FolderDAOImpl;
 import model.dao.task.TaskDAOImpl;
+import model.plant.AvatarPlant;
 import view.panel.createPanel.CreatePanel;
 import view.panel.createPanel.FolderCreateDecorator;
 import view.panel.createPanel.TaskCreateDecorator;
@@ -30,6 +31,8 @@ public class DeskView extends JPanel {
 
         // Imposta il layout principale
         setLayout(new BorderLayout());
+
+        AvatarPlant.getInstance().subtractHP(AvatarPlant.getInstance().getPenance());
 
         // Inizializza l'interfaccia utente
         initializeUI();
