@@ -201,7 +201,7 @@ public class TaskDAOImpl implements TaskDAO {
 
     @Override
     public boolean markTaskAsExpired(int id_task) {
-        String sql = "UPDATE Task SET state = -1 WHERE id_task = ?;";
+        String sql = "UPDATE Task SET state = 100 WHERE id_task = ?;";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id_task);
             stmt.executeUpdate();

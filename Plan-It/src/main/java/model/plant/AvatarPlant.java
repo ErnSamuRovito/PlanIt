@@ -186,7 +186,7 @@ public class AvatarPlant {
                     String dueDate = resultSet.getString("due_date");
                     int urgency = resultSet.getInt("urgency");
 
-                    if (dateComparison.compareDate(dueDate) < 0 && resultSet.getInt("state") != -1) {
+                    if (dateComparison.compareDate(dueDate) < 0 && resultSet.getInt("state") != 100) {
                         totalPenance += urgencyMap.getOrDefault(urgency, 0);
                         int taskId = resultSet.getInt("id_task");
                         TaskDAO taskDAO = new TaskDAOImpl(connection);
