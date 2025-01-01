@@ -173,8 +173,6 @@ public class FolderDAOImpl implements FolderDAO {
         }
     }
 
-
-
     @Override
     public String findParentFolder(String folderName) {
         String parentName = null;
