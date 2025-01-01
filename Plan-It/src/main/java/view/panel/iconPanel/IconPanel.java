@@ -43,7 +43,7 @@ public class IconPanel extends JPanel {
 
         // Aggiungi azioni ai menu item
         editItem.addActionListener(e -> System.out.println("Modifica selezionata"));
-        deleteItem.addActionListener(e -> new DeleteCommand());
+        deleteItem.addActionListener(e -> new DeleteCommand(title,imagePath).execute()); //imagePath serve a capire se è una cartella o un task
 
         contextMenu.add(editItem);
         contextMenu.add(deleteItem);

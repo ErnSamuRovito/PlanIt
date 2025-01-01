@@ -17,4 +17,6 @@ public interface TaskDAO {
     boolean markTaskAsExpired(int id_task);
 
     int checkTaskByFolderAndTitle(String folder, String user, String title);
+
+    int getIdByFolderNameAndOwnerAndTitle(String folderName, String owner, String title);
 }

@@ -238,4 +238,38 @@ public class TaskDAOImpl implements TaskDAO {
             return -10000;
         }
     }
+
+    @Override
+    public int getIdByFolderNameAndOwnerAndTitle(String folderName, String owner, String title) {
+        String sql = """
+        SELECT id_task
+        FROM Task
+        WHERE title = ? AND folder = (
+            SELECT id
+            FROM Folder
+            WHERE folder_name = ? AND owner = (
+                SELECT id
+                FROM User
+                WHERE username = ?
+            )
+        )
+    """;
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, title);
+            stmt.setString(2, folderName);
+            stmt.setString(3, owner);
+
+            try (ResultSet resultSet = stmt.executeQuery()) {
+                if (resultSet.next()) { // Controlla se ci sono risultati
+                    return resultSet.getInt("id_task");
+                } else {
+                    System.out.println("Nessun risultato trovato per title: " + title + ", owner: " + owner + ", folderName: " + folderName);
+                    return -1; // Valore di default se nessun risultato trovato
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -10000; // Valore di errore
+        }
+    }
 }

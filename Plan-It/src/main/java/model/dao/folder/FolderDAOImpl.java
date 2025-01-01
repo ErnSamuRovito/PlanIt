@@ -121,14 +121,59 @@ public class FolderDAOImpl implements FolderDAO {
 
     @Override
     public void deleteFolder(int id) {
-        String sql = "DELETE FROM Folder WHERE id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
+        String deleteTasksSql = """
+        DELETE FROM Task 
+        WHERE folder IN (
+            WITH RECURSIVE subfolders AS (
+                SELECT id FROM Folder WHERE id = ?
+                UNION ALL
+                SELECT f.id FROM Folder f
+                INNER JOIN subfolders sf ON f.parent = sf.id
+            )
+            SELECT id FROM subfolders
+        )
+    """;
+
+        String deleteFoldersSql = """
+        DELETE FROM Folder 
+        WHERE id IN (
+            WITH RECURSIVE subfolders AS (
+                SELECT id FROM Folder WHERE id = ?
+                UNION ALL
+                SELECT f.id FROM Folder f
+                INNER JOIN subfolders sf ON f.parent = sf.id
+            )
+            SELECT id FROM subfolders
+        )
+    """;
+
+        try {
+            connection.setAutoCommit(false); // Inizia una transazione
+
+            try (PreparedStatement deleteTasksStmt = connection.prepareStatement(deleteTasksSql);
+                 PreparedStatement deleteFoldersStmt = connection.prepareStatement(deleteFoldersSql)) {
+
+                // Elimina i task associati a tutte le cartelle (compresa quella principale e le sottocartelle)
+                deleteTasksStmt.setInt(1, id);
+                deleteTasksStmt.executeUpdate();
+
+                // Elimina tutte le cartelle (compresa quella principale e le sottocartelle)
+                deleteFoldersStmt.setInt(1, id);
+                deleteFoldersStmt.executeUpdate();
+
+                connection.commit(); // Conferma la transazione
+            } catch (SQLException e) {
+                connection.rollback(); // Rollback in caso di errore
+                throw new RuntimeException("Errore durante l'eliminazione della folder e dei relativi task", e);
+            } finally {
+                connection.setAutoCommit(true); // Ripristina il comportamento di default
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Errore nella gestione della transazione", e);
         }
     }
+
+
 
     @Override
     public String findParentFolder(String folderName) {
