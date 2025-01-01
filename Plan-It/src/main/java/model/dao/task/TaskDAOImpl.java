@@ -151,8 +151,7 @@ public class TaskDAOImpl implements TaskDAO {
         String query = """
             SELECT title
             FROM Task
-            WHERE Task.type != -1 AND
-                  (folder = (
+            WHERE (folder = (
                     SELECT id
                     FROM Folder
                     WHERE folder_name = ?
@@ -188,7 +187,7 @@ public class TaskDAOImpl implements TaskDAO {
 
     @Override
     public boolean markTaskAsDone(int id_task) {
-        String sql = "UPDATE Task SET type = -1 WHERE id_task = ?;";
+        String sql = "UPDATE Task SET state = 100 WHERE id_task = ?;";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id_task);
             stmt.executeUpdate();
@@ -201,7 +200,7 @@ public class TaskDAOImpl implements TaskDAO {
 
     @Override
     public boolean markTaskAsExpired(int id_task) {
-        String sql = "UPDATE Task SET state = 100 WHERE id_task = ?;";
+        String sql = "UPDATE Task SET state = -1 WHERE id_task = ?;";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id_task);
             stmt.executeUpdate();
@@ -209,6 +208,34 @@ public class TaskDAOImpl implements TaskDAO {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    @Override
+    public int checkTaskByFolderAndTitle(String folder, String user, String title){
+        String sql="""
+                        SELECT state
+                        FROM Task
+                        WHERE folder = (
+                            SELECT id
+                            FROM Folder
+                            WHERE folder_name = ? AND owner = (
+                                SELECT id
+                                FROM User
+                                WHERE username = ?
+                            ) and title=?
+                        );
+                    """;
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, folder);
+            stmt.setString(2, user);
+            stmt.setString(3, title);
+            try (ResultSet resultSet = stmt.executeQuery()) {
+                return resultSet.getInt("state");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -10000;
         }
     }
 }

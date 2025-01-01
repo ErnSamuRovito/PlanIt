@@ -1,6 +1,11 @@
 package controller.commandPattern;
 
 import core.ComponentManager;
+import core.SqLiteConnection;
+import model.dao.task.TaskDAOImpl;
+
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class GoToTaskViewCommand implements ActionCommand{
     private final String taskTitle, user, startFolder;

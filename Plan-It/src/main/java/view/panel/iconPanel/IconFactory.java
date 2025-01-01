@@ -8,6 +8,10 @@ public class IconFactory {
         switch (type) {
             case "task":
                 return new IconPanel(title, GlobalResources.taskImage, command);
+            case "taskCompleted":
+                return new IconPanel(title, GlobalResources.taskCompletedImage, command);
+            case "taskExpired":
+                return new IconPanel(title, GlobalResources.taskExpiredImage, command);
             case "folder":
                 return new IconPanel(title, GlobalResources.folderImage, command);
             case "add":

@@ -27,6 +27,7 @@ public class TaskView extends JPanel {
     private final String title,user,startFolder;
     private final JPanel homePanel;
     private CustomButton doneButton;
+    private int taskState;
 
     private static final Dimension FIELD_SIZE = new Dimension(200, 30);
     private static final Dimension BUTTON_SIZE = new Dimension(150, 50);
@@ -35,6 +36,12 @@ public class TaskView extends JPanel {
         this.title = title;
         this.user = user;
         this.startFolder = startFolder;
+
+        //controlla lo stato del task.
+        try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
+            TaskDAOImpl taskDAO = new TaskDAOImpl(connection);
+            taskState=taskDAO.checkTaskByFolderAndTitle(startFolder,user,title);
+        }catch (SQLException e) {throw new RuntimeException(e);}
 
         // Imposta il layout principale per TaskView
         setLayout(new BorderLayout());
@@ -82,13 +89,15 @@ public class TaskView extends JPanel {
         UIComponentFactory textPaneFactory = new CustomTextPaneFactory(textPaneBuilder);
         CustomTextPane customTextPane = (CustomTextPane) textPaneFactory.createComponent();
 
-        // Creazione del pulsante di login usando il Builder e la Factory ----------------
-        UIBuilder buttonBuilder =  new CustomButtonBuilder();
-        UIDirector.buildStandardButton(buttonBuilder);
-        buttonBuilder.text("DONE!").size(BUTTON_SIZE).action(new DoneCommand(result.get(0)));
-        // Usa la factory per creare il pulsante
-        UIComponentFactory buttonFactory = new CustomButtonFactory(buttonBuilder);
-        doneButton = (CustomButton) buttonFactory.orderComponent(buttonBuilder);
+        // Creazione del pulsante DONE usando il Builder e la Factory ----------------
+        if (taskState!=-1 && taskState!=100) {
+            UIBuilder buttonBuilder = new CustomButtonBuilder();
+            UIDirector.buildStandardButton(buttonBuilder);
+            buttonBuilder.text("DONE!").size(BUTTON_SIZE).action(new DoneCommand(result.get(0)));
+            // Usa la factory per creare il pulsante
+            UIComponentFactory buttonFactory = new CustomButtonFactory(buttonBuilder);
+            doneButton = (CustomButton) buttonFactory.orderComponent(buttonBuilder);
+        }
 
         // Aggiungi il titolo al pannello
         gbc.gridy = 0;
@@ -114,10 +123,11 @@ public class TaskView extends JPanel {
 
         // aggiungo doneButton
         // Aggiungi lo JScrollPane al pannello
-        gbc.gridy = 3;
-        gbc.weighty = 0.15; // Assegna il 15% dello spazio verticale
-        //gbc.fill = GridBagConstraints.BOTH; // Permette al componente di espandersi in entrambe le direzioni
-        homePanel.add(doneButton, gbc);
+        if (taskState!=-1 && taskState!=100) {
+            gbc.gridy = 3;
+            gbc.weighty = 0.15; // Assegna il 15% dello spazio verticale
+            homePanel.add(doneButton, gbc);
+        }
     }
     public GridBagConstraints setGridBagConstraints() {
         GridBagConstraints gbc = new GridBagConstraints();

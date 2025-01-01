@@ -67,8 +67,12 @@ public class DeskView extends JPanel {
 
             TaskDAOImpl taskDAO = new TaskDAOImpl(connection);
             for (String task : taskDAO.getTasksByFolderAndUser(startFolder,user)){
+                System.out.println("title: "+task+" state: "+taskDAO.checkTaskByFolderAndTitle(startFolder,user,task));
+                String taskState="task";
+                if (taskDAO.checkTaskByFolderAndTitle(startFolder,user,task)==100) taskState = "taskCompleted";
+                else if (taskDAO.checkTaskByFolderAndTitle(startFolder,user,task)==-1) taskState = "taskExpired";
                 splitPanel.getHomePanel().add(IconFactory.createIconPanel(
-                        "task", task, new GoToTaskViewCommand(task, user, startFolder))
+                        taskState, task, new GoToTaskViewCommand(task, user, startFolder))
                 );
             }
 

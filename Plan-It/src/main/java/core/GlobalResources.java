@@ -14,6 +14,8 @@ public abstract class GlobalResources {
     public static final String folderImage="src/main/java/resources/images/folder.png";
     public static final String addImage ="src/main/java/resources/images/addIcon.png";
     public static final String taskImage="src/main/java/resources/images/task.png";
+    public static final String taskCompletedImage="src/main/java/resources/images/taskCompleted.png";
+    public static final String taskExpiredImage="src/main/java/resources/images/taskExpired.png";
     public static final String backImage="src/main/java/resources/images/back.png";
     public static final int xOffset=20, yOffset=35;
 
