@@ -25,7 +25,7 @@ public class CreateTaskCommand implements ActionCommand{
     @Override
     public void execute() {
         nameTask = taskCreateDecorator.getNameTaskField();
-        String descriptionTask = taskCreateDecorator.getDescriptionTaskField();
+        String descriptionTask = taskCreateDecorator.getDescriptionTaskPane();
         String dateTask = taskCreateDecorator.getCustomDataPicker();
         int urgencyTask = taskCreateDecorator.getComboBoxSelection();
         int typeTask = taskCreateDecorator.getComboBoxSelection();

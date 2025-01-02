@@ -6,10 +6,7 @@ import core.ComponentManager;
 import core.GlobalResources;
 import view.UICreationalPattern.UIBuilders.*;
 import view.UICreationalPattern.UIComponents.*;
-import view.UICreationalPattern.UIFactories.CustomButtonFactory;
-import view.UICreationalPattern.UIFactories.CustomLabelFactory;
-import view.UICreationalPattern.UIFactories.CustomTextFieldFactory;
-import view.UICreationalPattern.UIFactories.UIComponentFactory;
+import view.UICreationalPattern.UIFactories.*;
 
 import java.awt.*;
 import java.util.Objects;
@@ -19,7 +16,7 @@ public class TaskCreateDecorator extends CreatePanelDecorator {
     private static final Dimension BUTTON_SIZE = new Dimension(150, 50);
 
     private CustomTextField nameTaskField;
-    private CustomTextField descriptionTaskField;
+    private CustomTextPane descriptionTaskPane;
     private CustomDataPicker customDataPicker;
     private CustomButton createButton;
     private CustomComboBox<String> comboBox;
@@ -49,12 +46,15 @@ public class TaskCreateDecorator extends CreatePanelDecorator {
         nameTaskField = (CustomTextField) textFieldFactory.orderComponent(nameTaskFieldBuilder);
 
         // Task Description Field
-        UIBuilder descriptionTaskBuilder = new CustomTextFieldBuilder();
-        UIDirector.buildStandardTextField(descriptionTaskBuilder);
-        descriptionTaskBuilder.text("Description").size(FIELD_SIZE).placeholder("Insert task description");
-
-        UIComponentFactory descriptionFieldFactory = new CustomTextFieldFactory(descriptionTaskBuilder);
-        descriptionTaskField = (CustomTextField) descriptionFieldFactory.orderComponent(descriptionTaskBuilder);
+        UIBuilder descriptionTaskBuilder = new CustomTextPaneBuilder();
+        descriptionTaskBuilder  .text("Description")
+                .size(FIELD_SIZE)
+                .placeholder("Insert task description")
+                .editable(true)
+                .size(new Dimension(500, 200))
+                .backgroundColor(GlobalResources.COLOR_WHITE);
+        UIComponentFactory descriptionTextFieldFactory = new CustomTextPaneFactory(descriptionTaskBuilder);
+        descriptionTaskPane = (CustomTextPane) descriptionTextFieldFactory.orderComponent(descriptionTaskBuilder);
 
         // Date Picker
         customDataPicker = new CustomDataPicker();
@@ -69,7 +69,6 @@ public class TaskCreateDecorator extends CreatePanelDecorator {
         buttonBuilder.text("Create New Task")
                 .size(BUTTON_SIZE)
                 .action(new CreateTaskCommand(this));
-
         UIComponentFactory buttonFactory = new CustomButtonFactory(buttonBuilder);
         createButton = (CustomButton) buttonFactory.orderComponent(buttonBuilder);
 
@@ -83,7 +82,7 @@ public class TaskCreateDecorator extends CreatePanelDecorator {
         CustomLabel backLabel = (CustomLabel) labelFactory.orderComponent(labelBuilder);
 
         gbc.gridy = 0; add(nameTaskField, gbc);
-        gbc.gridy = 1; add(descriptionTaskField, gbc);
+        gbc.gridy = 1; add(descriptionTaskPane, gbc);
         gbc.gridy = 2; add(customDataPicker, gbc);
         gbc.gridy = 3; add(comboBox, gbc);
         gbc.gridy = 4; add(createButton, gbc);
@@ -95,8 +94,8 @@ public class TaskCreateDecorator extends CreatePanelDecorator {
         return nameTaskField.getText();
     }
 
-    public String getDescriptionTaskField() {
-        return descriptionTaskField.getText();
+    public String getDescriptionTaskPane() {
+        return descriptionTaskPane.getText();
     }
 
     public String getCustomDataPicker() {
