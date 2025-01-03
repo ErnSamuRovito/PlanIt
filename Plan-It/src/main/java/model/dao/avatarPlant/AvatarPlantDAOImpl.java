@@ -1,5 +1,7 @@
 package model.dao.avatarPlant;
 
+import model.plant.AvatarPlant;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -87,6 +89,18 @@ public class AvatarPlantDAOImpl implements AvatarPlantDAO {
             e.printStackTrace();
         }
         return plants;
+    }
+
+    @Override
+    public void setName(String name) {
+        String sql = "UPDATE AvatarPlant SET name = ? WHERE id_plant = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, name);
+            stmt.setInt(2, AvatarPlant.getInstance().getId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -7,6 +7,7 @@ public interface UserDAO {
     UserDB getUserByUsername(String username);
     List<UserDB> getAllUsers();
     void updateUser(UserDB user);
+    void setUsername(String username);
     void deleteUser(int id);
 
     int logUser(String user, String password);

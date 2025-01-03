@@ -1,5 +1,7 @@
 package model.dao.user;
 
+import model.User;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +33,7 @@ public class UserDAOImpl implements UserDAO {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new UserDB(rs.getInt("id"), rs.getString("password"), rs.getString("email"), rs.getString("username"));
+                return new UserDB(rs.getInt("id"), rs.getString("username"), rs.getString("email"), rs.getString("password"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -137,5 +139,19 @@ public class UserDAOImpl implements UserDAO {
             System.err.println("Error inserting user: " + e.getMessage());
         }
         return -1;
+    }
+
+    public void setUsername(String newUsername) {
+       String query = "UPDATE User SET username = ? WHERE id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            // Imposta i parametri per il PreparedStatement
+            preparedStatement.setString(1, newUsername); // username
+            preparedStatement.setInt(2, User.getInstance().getId()); // id
+            preparedStatement.executeUpdate();
+            System.out.println("Updating user: " + newUsername);
+        } catch (SQLException e) {
+            System.err.println("Error searching for user: " + e.getMessage());
+            throw new RuntimeException("Error searching for user", e);
+        }
     }
 }

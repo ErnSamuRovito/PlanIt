@@ -1,5 +1,6 @@
 package view.panel;
 
+import controller.commandPattern.GoToSettingsCommand;
 import core.ComponentManager;
 import core.GlobalResources;
 import core.SqLiteConnection;
@@ -46,11 +47,12 @@ public class SideMenu extends JPanel {
         UIBuilder labelBuilder =  new CustomLabelBuilder();
         UIDirector.buildStandardClickableLabel(labelBuilder);
         labelBuilder.text("Settings").size(new Dimension(100,30)).textColor(GlobalResources.COLOR_WHITE);
+        labelBuilder.action(new GoToSettingsCommand());
         UIComponentFactory labelFactory = new CustomLabelFactory(labelBuilder);
         CustomLabel settingsLabel = (CustomLabel) labelFactory.orderComponent(labelBuilder);
-        System.out.println("Label text: "+settingsLabel.getText());
-        System.out.println("Label height: "+settingsLabel.getHeight());
-        System.out.println("Label width: "+settingsLabel.getWidth());
+//        System.out.println("Label text: "+settingsLabel.getText());
+//        System.out.println("Label height: "+settingsLabel.getHeight());
+//        System.out.println("Label width: "+settingsLabel.getWidth());
         add(settingsLabel);
 
         // Aggiungi uno spazio che spinge la ClickableLabel in basso --------------------------------

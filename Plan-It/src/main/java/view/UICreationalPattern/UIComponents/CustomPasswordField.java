@@ -86,11 +86,11 @@ public class CustomPasswordField extends JPasswordField implements UIComponent {
 
     public String getPasswordString(){
         char[] password = getPassword();
-        String toReturn="";
-        for (int i = 0; i < password.length; i++) {
-            toReturn+=password[i];
+        StringBuilder toReturn= new StringBuilder();
+        for (char c : password) {
+            toReturn.append(c);
         }
         System.out.println("getPasswordString() --> "+toReturn);
-        return toReturn;
+        return toReturn.toString();
     }
 }

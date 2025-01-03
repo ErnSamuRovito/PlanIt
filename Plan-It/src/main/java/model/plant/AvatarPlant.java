@@ -54,6 +54,12 @@ public class AvatarPlant {
     }
 
     // Getters and setters
+
+
+    public int getId() {
+        return id;
+    }
+
     public void setState(State state) {
         this.currentState = state;
     }
