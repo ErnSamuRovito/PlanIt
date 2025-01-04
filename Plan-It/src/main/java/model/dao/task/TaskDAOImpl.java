@@ -112,6 +112,18 @@ public class TaskDAOImpl implements TaskDAO {
     }
 
     @Override
+    public void setPassword(int id, String password) {
+        String sql = "UPDATE User SET password = ? WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, password);
+            stmt.setInt(2, id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public ArrayList<String> getTaskDataByTitleAndFolderAndUsername(String taskTitle, String folderName, String username) {
         ArrayList<String> data = new ArrayList<>();
         String query = """
@@ -199,15 +211,13 @@ public class TaskDAOImpl implements TaskDAO {
     }
 
     @Override
-    public boolean markTaskAsExpired(int id_task) {
+    public void markTaskAsExpired(int id_task) {
         String sql = "UPDATE Task SET state = -1 WHERE id_task = ?;";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id_task);
             stmt.executeUpdate();
-            return true;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
     }
 

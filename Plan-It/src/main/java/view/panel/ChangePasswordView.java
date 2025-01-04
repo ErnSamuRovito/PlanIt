@@ -1,5 +1,6 @@
 package view.panel;
 
+import controller.commandPattern.ChangePasswordCommand;
 import core.GlobalResources;
 import view.UICreationalPattern.UIBuilders.*;
 import view.UICreationalPattern.UIComponents.CustomButton;
@@ -57,7 +58,10 @@ public class ChangePasswordView extends JPanel {
     private CustomButton createSaveButton() {
         UIBuilder buttonBuilder = new CustomButtonBuilder();
         UIDirector.buildStandardButton(buttonBuilder);
-        buttonBuilder.text("Save").size(BUTTON_SIZE);
+        buttonBuilder
+                .text("Save")
+                .size(BUTTON_SIZE)
+                .action(new ChangePasswordCommand(newPasswordTextField, confirmPasswordTextField));
 
         UIComponentFactory factory = new CustomButtonFactory(buttonBuilder);
         return (CustomButton) factory.orderComponent(buttonBuilder);
