@@ -7,7 +7,7 @@ public interface TaskDAO {
     void addTask(TaskDB task);
     TaskDB getTaskById(int id);
     List<TaskDB> getTasksByFolder(int folderId);
-    void updateTask(TaskDB task);
+    void updateTask(TaskDB task, int id);
     void deleteTask(int id);
     void setPassword(int id, String password);
 

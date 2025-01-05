@@ -1,7 +1,9 @@
 package view.panel.iconPanel;
 
 import controller.commandPattern.ActionCommand;
-import controller.commandPattern.DeleteCommand;
+import controller.commandPattern.DeleteComponentCommand;
+import controller.commandPattern.navigationCommands.GoToModifyFolderCommand;
+import controller.commandPattern.navigationCommands.GoToModifyTaskCommand;
 import core.GlobalResources;
 
 import javax.imageio.ImageIO;
@@ -42,8 +44,11 @@ public class IconPanel extends JPanel {
         JMenuItem deleteItem = new JMenuItem("Elimina");
 
         // Aggiungi azioni ai menu item
-        editItem.addActionListener(e -> System.out.println("Modifica selezionata"));
-        deleteItem.addActionListener(e -> new DeleteCommand(title,imagePath).execute()); //imagePath serve a capire se è una cartella o un task
+        if (imagePath.equals(GlobalResources.folderImage))
+            editItem.addActionListener(e -> new GoToModifyFolderCommand(title).execute());
+        else
+            editItem.addActionListener(e -> new GoToModifyTaskCommand(title).execute());
+        deleteItem.addActionListener(e -> new DeleteComponentCommand(title,imagePath).execute()); //imagePath serve a capire se è una cartella o un task
 
         contextMenu.add(editItem);
         contextMenu.add(deleteItem);

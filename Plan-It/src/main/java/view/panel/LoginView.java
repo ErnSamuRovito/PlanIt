@@ -1,7 +1,7 @@
 package view.panel;
 
-import controller.commandPattern.GoToSigninCommand;
-import controller.commandPattern.LoginCommand;
+import controller.commandPattern.navigationCommands.GoToSigninCommand;
+import controller.commandPattern.userCommand.LoginCommand;
 import core.GlobalResources;
 import view.UICreationalPattern.UIBuilders.*;
 import view.UICreationalPattern.UIComponents.*;
@@ -58,8 +58,7 @@ public class LoginView extends JPanel {
         // Creazione del campo di testo per lo username/Email
         UIBuilder usernameFieldBuilder = new CustomTextFieldBuilder();
         UIDirector.buildStandardTextField(usernameFieldBuilder);
-        usernameFieldBuilder.text("Username or Email")
-                .size(FIELD_SIZE)
+        usernameFieldBuilder.size(FIELD_SIZE)
                 .placeholder("Username or Email");
 
         // Usa la factory per creare il campo di testo

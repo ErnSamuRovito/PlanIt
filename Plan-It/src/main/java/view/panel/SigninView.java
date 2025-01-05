@@ -1,7 +1,7 @@
 package view.panel;
 
-import controller.commandPattern.GoToLoginCommand;
-import controller.commandPattern.SigninCommand;
+import controller.commandPattern.navigationCommands.GoToLoginCommand;
+import controller.commandPattern.userCommand.SigninCommand;
 import core.GlobalResources;
 import view.UICreationalPattern.UIBuilders.*;
 import view.UICreationalPattern.UIComponents.*;
@@ -68,7 +68,7 @@ public class SigninView extends JPanel {
         // Creazione del campo di testo per lo username
         UIBuilder textFieldBuilder = new CustomTextFieldBuilder();
         UIDirector.buildStandardTextField(textFieldBuilder);
-        textFieldBuilder.text("Username").size(FIELD_SIZE).placeholder("Username");
+        textFieldBuilder.size(FIELD_SIZE).placeholder("Username");
 
         UIComponentFactory textFieldFactory = new CustomTextFieldFactory(textFieldBuilder);
         usernameField = (CustomTextField) textFieldFactory.orderComponent(textFieldBuilder);
@@ -78,7 +78,7 @@ public class SigninView extends JPanel {
         // Creazione del campo di testo per l'email
         UIBuilder textFieldBuilder = new CustomTextFieldBuilder();
         UIDirector.buildStandardTextField(textFieldBuilder);
-        textFieldBuilder.text("Email").size(FIELD_SIZE).placeholder("Email");
+        textFieldBuilder.size(FIELD_SIZE).placeholder("Email");
 
         UIComponentFactory textFieldFactory = new CustomTextFieldFactory(textFieldBuilder);
         emailField = (CustomTextField) textFieldFactory.orderComponent(textFieldBuilder);
@@ -88,7 +88,7 @@ public class SigninView extends JPanel {
         // Creazione del campo di testo per la password
         UIBuilder passwordFieldBuilder = new CustomPasswordFieldBuilder();
         UIDirector.buildStandardPasswordField(passwordFieldBuilder);
-        passwordFieldBuilder.text("Password").size(FIELD_SIZE).placeholder("Password");
+        passwordFieldBuilder.size(FIELD_SIZE).placeholder("Password");
 
         UIComponentFactory passwordFieldFactory = new CustomTextFieldFactory(passwordFieldBuilder);
         passwordField = (CustomPasswordField) passwordFieldFactory.orderComponent(passwordFieldBuilder);
@@ -98,7 +98,7 @@ public class SigninView extends JPanel {
         // Creazione del campo di testo per la conferma della password
         UIBuilder confirmPasswordFieldBuilder = new CustomPasswordFieldBuilder();
         UIDirector.buildStandardPasswordField(confirmPasswordFieldBuilder);
-        confirmPasswordFieldBuilder.text("Confirm Password").size(FIELD_SIZE).placeholder("Confirm Password");
+        confirmPasswordFieldBuilder.size(FIELD_SIZE).placeholder("Confirm Password");
 
         UIComponentFactory confirmPasswordFieldFactory = new CustomTextFieldFactory(confirmPasswordFieldBuilder);
         confirmPasswordField = (CustomPasswordField) confirmPasswordFieldFactory.orderComponent(confirmPasswordFieldBuilder);

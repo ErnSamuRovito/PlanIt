@@ -9,12 +9,12 @@ import javax.swing.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class DeleteCommand implements ActionCommand {
+public class DeleteComponentCommand implements ActionCommand {
     private final String title, type;
     private final int id;
 
     // Costruttore per passare l'ID della folder da eliminare
-    public DeleteCommand(String title, String imagePath) {
+    public DeleteComponentCommand(String title, String imagePath) {
         this.title = title;
 
         try (Connection connection = SqLiteConnection.getInstance().getConnection()){

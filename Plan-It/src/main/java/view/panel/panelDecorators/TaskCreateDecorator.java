@@ -1,7 +1,7 @@
 package view.panel.panelDecorators;
 
 import controller.commandPattern.CreateTaskCommand;
-import controller.commandPattern.GoToDeskViewCommand;
+import controller.commandPattern.navigationCommands.GoToDeskViewCommand;
 import core.ComponentManager;
 import core.GlobalResources;
 import view.UICreationalPattern.UIBuilders.*;
@@ -40,15 +40,14 @@ public class TaskCreateDecorator extends CreatePanelDecorator {
         // Task Name Field
         UIBuilder nameTaskFieldBuilder = new CustomTextFieldBuilder();
         UIDirector.buildStandardTextField(nameTaskFieldBuilder);
-        nameTaskFieldBuilder.text("Task Name").size(FIELD_SIZE).placeholder("Insert task name");
+        nameTaskFieldBuilder.size(FIELD_SIZE).placeholder("Insert task name");
 
         UIComponentFactory textFieldFactory = new CustomTextFieldFactory(nameTaskFieldBuilder);
         nameTaskField = (CustomTextField) textFieldFactory.orderComponent(nameTaskFieldBuilder);
 
         // Task Description Field
         UIBuilder descriptionTaskBuilder = new CustomTextPaneBuilder();
-        descriptionTaskBuilder  .text("Description")
-                .size(FIELD_SIZE)
+        descriptionTaskBuilder.size(FIELD_SIZE)
                 .placeholder("Insert task description")
                 .editable(true)
                 .size(new Dimension(500, 200))

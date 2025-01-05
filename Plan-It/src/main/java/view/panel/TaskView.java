@@ -1,7 +1,7 @@
 package view.panel;
 
-import controller.commandPattern.DoneCommand;
-import controller.commandPattern.GoToDeskViewCommand;
+import controller.commandPattern.TaskDoneCommand;
+import controller.commandPattern.navigationCommands.GoToDeskViewCommand;
 import core.GlobalResources;
 import core.SqLiteConnection;
 import model.dao.task.TaskDAOImpl;
@@ -95,7 +95,7 @@ public class TaskView extends JPanel {
         if (taskState != -1 && taskState != 100) {
             UIBuilder buttonBuilder = new CustomButtonBuilder();
             UIDirector.buildStandardButton(buttonBuilder);
-            buttonBuilder.text("DONE!").size(BUTTON_SIZE).action(new DoneCommand(result.get(0)));
+            buttonBuilder.text("DONE!").size(BUTTON_SIZE).action(new TaskDoneCommand(result.get(0)));
             // Usa la factory per creare il pulsante
             UIComponentFactory buttonFactory = new CustomButtonFactory(buttonBuilder);
             doneButton = (CustomButton) buttonFactory.orderComponent(buttonBuilder);

@@ -1,7 +1,7 @@
 package view.panel;
 
-import controller.commandPattern.ChangePasswordCommand;
-import controller.commandPattern.GoToDeskViewCommand;
+import controller.commandPattern.userCommand.ChangePasswordCommand;
+import controller.commandPattern.navigationCommands.GoToDeskViewCommand;
 import core.GlobalResources;
 import view.UICreationalPattern.UIBuilders.*;
 import view.UICreationalPattern.UIComponents.CustomButton;

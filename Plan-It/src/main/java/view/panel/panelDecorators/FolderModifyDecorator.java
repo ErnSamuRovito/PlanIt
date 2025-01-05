@@ -1,74 +1,73 @@
 package view.panel.panelDecorators;
 
-import controller.commandPattern.CreateFolderCommand;
+//import controller.commandPattern.ModifyFolderCommand;
 import controller.commandPattern.navigationCommands.GoToDeskViewCommand;
 import core.ComponentManager;
 import core.GlobalResources;
 import view.UICreationalPattern.UIBuilders.*;
-import view.UICreationalPattern.UIComponents.CustomButton;
-import view.UICreationalPattern.UIComponents.CustomLabel;
-import view.UICreationalPattern.UIComponents.CustomTextField;
-import view.UICreationalPattern.UIFactories.CustomButtonFactory;
-import view.UICreationalPattern.UIFactories.CustomLabelFactory;
-import view.UICreationalPattern.UIFactories.CustomTextFieldFactory;
-import view.UICreationalPattern.UIFactories.UIComponentFactory;
+import view.UICreationalPattern.UIComponents.*;
+import view.UICreationalPattern.UIFactories.*;
 
 import java.awt.*;
 
-public class FolderCreateDecorator extends CreatePanelDecorator {
+public class FolderModifyDecorator extends CreatePanelDecorator {
     private static final Dimension FIELD_SIZE = new Dimension(200, 30);
     private static final Dimension BUTTON_SIZE = new Dimension(150, 50);
 
-    CustomTextField nameFolderField;
+    private CustomTextField nameFolderField;
+    private CustomButton modifyButton;
 
-    public FolderCreateDecorator(CreatePanel createPanel) {
+    private final String user, currFolder;
+
+    public FolderModifyDecorator(CreatePanel createPanel, String user, String currFolder) {
         super(createPanel);
+        this.user=user;
+        this.currFolder=currFolder;
     }
 
     @Override
     public void buildPanel() {
-        super.buildPanel(); // Call the buildPanel method of the base class
+        super.buildPanel();
 
         setLayout(new GridBagLayout());
         setBackground(GlobalResources.COLOR_PANNA);
+
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // Margins for components
+        gbc.insets = new Insets(10, 10, 10, 10); // Margini per i componenti
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.CENTER;
 
-        // Create folder name text field using Builder and Factory
+        // Creazione del campo per il nome della cartella
         UIBuilder nameFolderFieldBuilder = new CustomTextFieldBuilder();
         UIDirector.buildStandardTextField(nameFolderFieldBuilder);
-
         nameFolderFieldBuilder.size(FIELD_SIZE).placeholder("Insert folder name");
 
-        // Use factory to create the text field
         UIComponentFactory textFieldFactory = new CustomTextFieldFactory(nameFolderFieldBuilder);
         nameFolderField = (CustomTextField) textFieldFactory.orderComponent(nameFolderFieldBuilder);
 
-        // Create "Create new folder" button using Builder and Factory
+        // Creazione del pulsante per modificare la cartella
         UIBuilder buttonBuilder = new CustomButtonBuilder();
         UIDirector.buildStandardButton(buttonBuilder);
-        buttonBuilder.text("Create new folder")
-                .size(BUTTON_SIZE)
-                .action(new CreateFolderCommand(this));
+        buttonBuilder.text("Modify Folder")
+                .size(BUTTON_SIZE);
+                //.action(new ModifyFolderCommand(this));
 
-        // Use factory to create the button
+        // Uso della factory per creare il pulsante
         UIComponentFactory buttonFactory = new CustomButtonFactory(buttonBuilder);
-        CustomButton createButton = (CustomButton) buttonFactory.orderComponent(buttonBuilder);
+        modifyButton = (CustomButton) buttonFactory.orderComponent(buttonBuilder);
 
-        // Create "Back" clickable label
+        // Creazione del link "Back"
         UIBuilder labelBuilder = new CustomLabelBuilder();
         UIDirector.buildBackClickableLabel(labelBuilder);
         labelBuilder.action(
-            new GoToDeskViewCommand(ComponentManager.getInstance().getUser(),ComponentManager.getInstance().getCurrFolder())
+                new GoToDeskViewCommand(ComponentManager.getInstance().getUser(), ComponentManager.getInstance().getCurrFolder())
         );
         UIComponentFactory labelFactory = new CustomLabelFactory(labelBuilder);
         CustomLabel backLabel = (CustomLabel) labelFactory.orderComponent(labelBuilder);
 
-        // Add components to panel
+        // Aggiunta dei componenti al pannello
         gbc.gridy = 0; add(nameFolderField, gbc);
-        gbc.gridy = 1; add(createButton, gbc);
+        gbc.gridy = 1; add(modifyButton, gbc);
         gbc.gridy = 2; add(backLabel, gbc);
     }
 

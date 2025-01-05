@@ -1,6 +1,9 @@
 package view.panel;
 
-import controller.commandPattern.*;
+import controller.commandPattern.navigationCommands.GoToChangePasswordCommand;
+import controller.commandPattern.navigationCommands.GoToDeskViewCommand;
+import controller.commandPattern.userCommand.DeleteUserCommand;
+import controller.commandPattern.userCommand.SaveSettingsCommand;
 import core.GlobalResources;
 import model.User;
 import model.plant.AvatarPlant;

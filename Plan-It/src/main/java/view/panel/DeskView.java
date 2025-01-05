@@ -1,9 +1,9 @@
 package view.panel;
 
 import controller.commandPattern.ExploreFolderCommand;
-import controller.commandPattern.GoBackCommand;
-import controller.commandPattern.GoToLoginCommand;
-import controller.commandPattern.GoToTaskViewCommand;
+import controller.commandPattern.navigationCommands.GoBackCommand;
+import controller.commandPattern.navigationCommands.GoToLoginCommand;
+import controller.commandPattern.navigationCommands.GoToTaskViewCommand;
 import core.ComponentManager;
 import core.SqLiteConnection;
 import model.dao.folder.FolderDAOImpl;

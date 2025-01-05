@@ -33,6 +33,7 @@ public class CustomTextField extends JTextField implements UIComponent {
         this.contentAreaFilled = contentAreaFilled;
         this.opaque = (opaque != null) ? opaque : true;  // Se opaque è null, impostalo su true
 
+        setText(this.text);
         setPreferredSize(size);
         setBackground(backgroundColor);
         setForeground(textColor);

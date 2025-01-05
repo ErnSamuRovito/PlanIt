@@ -8,10 +8,10 @@ import model.plant.AvatarPlant;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class DoneCommand implements ActionCommand{
+public class TaskDoneCommand implements ActionCommand{
     int id_task_completed;
 
-    public DoneCommand(String id_task) {
+    public TaskDoneCommand(String id_task) {
         id_task_completed = Integer.parseInt(id_task);
     }
 

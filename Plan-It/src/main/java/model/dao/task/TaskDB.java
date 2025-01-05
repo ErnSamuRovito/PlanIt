@@ -37,7 +37,7 @@ public class TaskDB {
     public void setTitle(String title) {this.title = title;}
     public void setDescription(String description) {this.description = description;}
     public void setDueDate(String dueDate) {this.dueDate = dueDate;}
-    public void setPriority(int urgency) {this.urgency = urgency;}
+    public void setUrgency(int urgency) {this.urgency = urgency;}
     public void setFolder(int folder) {this.folder = folder;}
     public void setState(int state) {this.state = state;}
     public void setType(int type) {this.type = type;}

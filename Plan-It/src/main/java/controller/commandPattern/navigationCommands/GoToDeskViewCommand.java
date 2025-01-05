@@ -1,8 +1,9 @@
-package controller.commandPattern;
+package controller.commandPattern.navigationCommands;
 
+import controller.commandPattern.ActionCommand;
 import core.ComponentManager;
 
-public class GoToDeskViewCommand implements ActionCommand{
+public class GoToDeskViewCommand implements ActionCommand {
     private final String user,folder;
     public GoToDeskViewCommand(){
         this.user=ComponentManager.getInstance().getUser();

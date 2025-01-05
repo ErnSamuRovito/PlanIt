@@ -1,5 +1,6 @@
-package controller.commandPattern;
+package controller.commandPattern.userCommand;
 
+import controller.commandPattern.ActionCommand;
 import core.ComponentManager;
 import core.SqLiteConnection;
 import model.FormatValidator;
@@ -8,7 +9,6 @@ import model.dao.avatarPlant.AvatarPlantDB;
 import model.dao.folder.FolderDAOImpl;
 import model.dao.user.UserDAOImpl;
 import model.plant.AvatarPlant;
-import model.User;
 import view.panel.SigninView;
 
 import java.sql.Connection;

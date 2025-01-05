@@ -1,6 +1,6 @@
 package view.panel;
 
-import controller.commandPattern.GoToSettingsCommand;
+import controller.commandPattern.navigationCommands.GoToSettingsCommand;
 import core.ComponentManager;
 import core.GlobalResources;
 import core.SqLiteConnection;

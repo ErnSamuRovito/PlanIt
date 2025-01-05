@@ -83,8 +83,12 @@ public class TaskDAOImpl implements TaskDAO {
     }
 
     @Override
-    public void updateTask(TaskDB task) {
-        String sql = "UPDATE Task SET title=?,description=?,due_date=?,urgency=?,folder=?,state=?,type=?,extra_info=?";
+    public void updateTask(TaskDB task, int id) {
+        String sql = """
+                UPDATE Task
+                SET title = ?, description = ?, due_date = ?, urgency = ?, folder = ?, state = ?, type = ?, extra_info = ?
+                WHERE id_task = ?
+                """;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, task.getTitle());
             stmt.setString(2, task.getDescription());
@@ -94,7 +98,10 @@ public class TaskDAOImpl implements TaskDAO {
             stmt.setInt(6, task.getState());
             stmt.setInt(7, task.getType());
             stmt.setString(8, task.getExtraInfo());
+            stmt.setInt(9, id);  // ID del task
+            System.out.println("Sto per eseguire la query #######################");
             stmt.executeUpdate();
+            System.out.println("####################### Ho eseguito la query");
         } catch (SQLException e) {
             e.printStackTrace();
         }

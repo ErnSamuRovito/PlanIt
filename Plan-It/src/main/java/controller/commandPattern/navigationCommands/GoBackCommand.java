@@ -1,12 +1,13 @@
-package controller.commandPattern;
+package controller.commandPattern.navigationCommands;
 
+import controller.commandPattern.ActionCommand;
 import core.ComponentManager;
 import core.SqLiteConnection;
 import model.dao.folder.FolderDAOImpl;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class GoBackCommand implements ActionCommand{
+public class GoBackCommand implements ActionCommand {
     @Override public void execute() {
         try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
             FolderDAOImpl folderDAO = new FolderDAOImpl(connection);

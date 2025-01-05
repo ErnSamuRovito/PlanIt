@@ -1,7 +1,6 @@
 package view.panel;
 
 import controller.commandPattern.ActionCommand;
-import controller.commandPattern.GoToLoginCommand;
 import core.GlobalResources;
 import view.UICreationalPattern.UIBuilders.CustomLabelBuilder;
 import view.UICreationalPattern.UIBuilders.UIDirector;

@@ -1,5 +1,6 @@
-package controller.commandPattern;
+package controller.commandPattern.userCommand;
 
+import controller.commandPattern.ActionCommand;
 import core.ComponentManager;
 import core.SqLiteConnection;
 import model.User;
@@ -15,7 +16,7 @@ import java.sql.SQLException;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
 
-public class LoginCommand implements ActionCommand{
+public class LoginCommand implements ActionCommand {
     private final LoginView parentView;
 
     public LoginCommand(LoginView parentView) {

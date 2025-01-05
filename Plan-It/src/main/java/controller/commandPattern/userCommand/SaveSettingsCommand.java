@@ -1,5 +1,6 @@
-package controller.commandPattern;
+package controller.commandPattern.userCommand;
 
+import controller.commandPattern.ActionCommand;
 import core.ComponentManager;
 import core.SqLiteConnection;
 import model.User;
