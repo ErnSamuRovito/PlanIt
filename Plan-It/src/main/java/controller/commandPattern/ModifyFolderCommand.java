@@ -6,6 +6,7 @@ import model.dao.folder.FolderDAOImpl;
 import model.dao.folder.FolderDB;
 import view.panel.panelDecorators.FolderModifyDecorator;
 
+import javax.swing.*;
 import java.sql.Connection;
 
 public class ModifyFolderCommand implements ActionCommand {
@@ -36,7 +37,18 @@ public class ModifyFolderCommand implements ActionCommand {
             updatedFolder.setFolderName(panel.getTextFieldName());
 
             // Esegui l'aggiornamento nel DB
-            folderDAO.updateFolder(updatedFolder,folderId);
+            boolean success = folderDAO.updateFolder(updatedFolder, folderId);
+
+            if (!success) {
+                // Se l'aggiornamento non è riuscito, mostra un pop-up di errore
+                JOptionPane.showMessageDialog(panel,
+                        "Error: A folder with the same name already exists.",
+                        "Update Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
+                // Ricarica la vista della scrivania
+                ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView());
+            }
 
             // Ricarica la vista della scrivania
             ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView());

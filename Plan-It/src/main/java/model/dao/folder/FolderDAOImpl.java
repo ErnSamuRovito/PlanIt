@@ -15,17 +15,37 @@ public class FolderDAOImpl implements FolderDAO {
     }
 
     @Override
-    public void addFolder(FolderDB folder) {
-        String sql = "INSERT INTO Folder (folder_name,owner,parent) VALUES (?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, folder.getFolderName());
-            stmt.setInt(2, folder.getOwner());
-            stmt.setInt(3, folder.getParent());
-            stmt.executeUpdate();
+    public boolean addFolder(FolderDB folder) {
+        // Verifica se la cartella con lo stesso nome, owner e parent esiste già
+        String checkSql = "SELECT COUNT(*) FROM Folder WHERE folder_name = ? AND owner = ? AND parent = ?";
+        try (PreparedStatement checkStmt = connection.prepareStatement(checkSql)) {
+            checkStmt.setString(1, folder.getFolderName());
+            checkStmt.setInt(2, folder.getOwner());
+            checkStmt.setInt(3, folder.getParent());
+
+            try (ResultSet rs = checkStmt.executeQuery()) {
+                if (rs.next() && rs.getInt(1) > 0) {
+                    // Se esiste già una cartella con lo stesso nome, owner e parent, restituisce errore.
+                    return false;
+                }
+            }
+
+            // Se non esiste, esegui l'inserimento
+            String sql = "INSERT INTO Folder (folder_name, owner, parent) VALUES (?, ?, ?)";
+            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                stmt.setString(1, folder.getFolderName());
+                stmt.setInt(2, folder.getOwner());
+                stmt.setInt(3, folder.getParent());
+                stmt.executeUpdate();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
+            // Gestisci l'eccezione come appropriato
         }
+        return true;
     }
+
 
     @Override
     public Boolean addRootFolder(int owner){
@@ -106,17 +126,36 @@ public class FolderDAOImpl implements FolderDAO {
     }
 
     @Override
-    public void updateFolder(FolderDB folder, int id) {
-        String sql = "UPDATE Folder SET folder_name = ?, owner = ?, parent = ? WHERE id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, folder.getFolderName());
-            stmt.setInt(2, folder.getOwner());
-            stmt.setInt(3, folder.getParent());
-            stmt.setInt(4, id);
-            stmt.executeUpdate();
+    public boolean updateFolder(FolderDB folder, int id) {
+        // Verifica se esiste già una cartella con lo stesso nome, owner e parent, ma con ID diverso
+        String checkSql = "SELECT COUNT(*) FROM Folder WHERE folder_name = ? AND owner = ? AND parent = ? AND id != ?";
+        try (PreparedStatement checkStmt = connection.prepareStatement(checkSql)) {
+            checkStmt.setString(1, folder.getFolderName());
+            checkStmt.setInt(2, folder.getOwner());
+            checkStmt.setInt(3, folder.getParent());
+            checkStmt.setInt(4, id);
+
+            try (ResultSet rs = checkStmt.executeQuery()) {
+                if (rs.next() && rs.getInt(1) > 0) {
+                    // Se esiste già una cartella con lo stesso nome, owner e parent (ma con ID diverso), restituisce falso.
+                    return false;
+                }
+            }
+
+            // Se non esiste, esegui l'aggiornamento
+            String sql = "UPDATE Folder SET folder_name = ?, owner = ?, parent = ? WHERE id = ?";
+            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                stmt.setString(1, folder.getFolderName());
+                stmt.setInt(2, folder.getOwner());
+                stmt.setInt(3, folder.getParent());
+                stmt.setInt(4, id);
+                stmt.executeUpdate();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     @Override

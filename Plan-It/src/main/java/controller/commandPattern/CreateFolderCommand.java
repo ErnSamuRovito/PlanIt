@@ -7,6 +7,7 @@ import model.dao.folder.FolderDB;
 import model.dao.user.UserDAOImpl;
 import view.panel.panelDecorators.FolderCreateDecorator;
 
+import javax.swing.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -39,7 +40,19 @@ public class CreateFolderCommand implements ActionCommand{
                 );
 
                 FolderDAOImpl folderDAOimpl = new FolderDAOImpl(connection);
-                folderDAOimpl.addFolder(newFolderDB);
+                boolean success=folderDAOimpl.addFolder(newFolderDB);
+
+                if (!success) {
+                    // Se l'aggiornamento non è riuscito, mostra un pop-up di errore
+                    JOptionPane.showMessageDialog(createFolderDecorator,
+                            "Error: A folder with the same name already exists.",
+                            "Creation error",
+                            JOptionPane.ERROR_MESSAGE);
+                } else {
+                    // Ricarica la vista della scrivania
+                    ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView());
+                }
+
                 ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView());
             } catch (SQLException e) {throw new RuntimeException(e);}
         }else{
