@@ -1,10 +1,9 @@
-package view.panel.createPanel;
+package view.panel.panelDecorators;
 
 import controller.commandPattern.CreateFolderCommand;
 import controller.commandPattern.GoToDeskViewCommand;
 import core.ComponentManager;
 import core.GlobalResources;
-import model.User;
 import view.UICreationalPattern.UIBuilders.*;
 import view.UICreationalPattern.UIComponents.CustomButton;
 import view.UICreationalPattern.UIComponents.CustomLabel;
@@ -14,10 +13,7 @@ import view.UICreationalPattern.UIFactories.CustomLabelFactory;
 import view.UICreationalPattern.UIFactories.CustomTextFieldFactory;
 import view.UICreationalPattern.UIFactories.UIComponentFactory;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class FolderCreateDecorator extends CreatePanelDecorator {
     private static final Dimension FIELD_SIZE = new Dimension(200, 30);

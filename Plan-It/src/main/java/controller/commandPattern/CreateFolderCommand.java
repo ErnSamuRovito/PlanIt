@@ -2,11 +2,10 @@ package controller.commandPattern;
 
 import core.ComponentManager;
 import core.SqLiteConnection;
-import model.User;
 import model.dao.folder.FolderDAOImpl;
 import model.dao.folder.FolderDB;
 import model.dao.user.UserDAOImpl;
-import view.panel.createPanel.FolderCreateDecorator;
+import view.panel.panelDecorators.FolderCreateDecorator;
 
 import java.sql.Connection;
 import java.sql.SQLException;

@@ -1,4 +1,4 @@
-package view.panel.createPanel;
+package view.panel.panelDecorators;
 
 import javax.swing.*;
 import java.awt.*;

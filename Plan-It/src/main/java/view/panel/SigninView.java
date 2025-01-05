@@ -13,7 +13,7 @@ import java.awt.*;
 public class SigninView extends JPanel {
     private static final Dimension FIELD_SIZE = new Dimension(200, 30);
     private static final Dimension BUTTON_SIZE = new Dimension(150, 50);
-    private static final Dimension LABEL_SIZE = new Dimension(150, 20);
+    private static final Dimension LABEL_SIZE = new Dimension(150, 15);
 
     private CustomTextField usernameField;
     private CustomTextField emailField;

@@ -4,7 +4,7 @@ package core;
 
 import view.ApplicationWindow;
 import view.panel.TaskView;
-import view.panel.createPanel.CreatePanel;
+import view.panel.panelDecorators.CreatePanel;
 import view.panel.LoginView;
 import view.panel.DeskView;
 import view.panel.SigninView;

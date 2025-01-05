@@ -5,7 +5,7 @@ import core.SqLiteConnection;
 import model.dao.folder.FolderDAOImpl;
 import model.dao.task.TaskDAOImpl;
 import model.dao.task.TaskDB;
-import view.panel.createPanel.TaskCreateDecorator;
+import view.panel.panelDecorators.TaskCreateDecorator;
 
 import java.sql.Connection;
 import java.sql.SQLException;

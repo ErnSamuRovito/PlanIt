@@ -9,9 +9,9 @@ import core.SqLiteConnection;
 import model.dao.folder.FolderDAOImpl;
 import model.dao.task.TaskDAOImpl;
 import model.plant.AvatarPlant;
-import view.panel.createPanel.CreatePanel;
-import view.panel.createPanel.FolderCreateDecorator;
-import view.panel.createPanel.TaskCreateDecorator;
+import view.panel.panelDecorators.CreatePanel;
+import view.panel.panelDecorators.FolderCreateDecorator;
+import view.panel.panelDecorators.TaskCreateDecorator;
 import view.panel.iconPanel.IconFactory;
 import view.panel.iconPanel.IconPanel;
 
