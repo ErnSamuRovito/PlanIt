@@ -1,77 +1,135 @@
 package view.panel.panelDecorators;
 
-//import controller.commandPattern.ModifyFolderCommand;
+import controller.commandPattern.ModifyFolderCommand;
 import controller.commandPattern.navigationCommands.GoToDeskViewCommand;
 import core.ComponentManager;
 import core.GlobalResources;
+import core.SqLiteConnection;
+import model.dao.folder.FolderDAOImpl;
+import model.dao.task.TaskDAOImpl;
 import view.UICreationalPattern.UIBuilders.*;
 import view.UICreationalPattern.UIComponents.*;
 import view.UICreationalPattern.UIFactories.*;
 
 import java.awt.*;
+import java.sql.Connection;
+import java.util.ArrayList;
 
 public class FolderModifyDecorator extends CreatePanelDecorator {
+
     private static final Dimension FIELD_SIZE = new Dimension(200, 30);
     private static final Dimension BUTTON_SIZE = new Dimension(150, 50);
 
     private CustomTextField nameFolderField;
     private CustomButton modifyButton;
+    private final String user;
+    private final String folder;
 
-    private final String user, currFolder;
+    private int id;
+    private String title;
 
-    public FolderModifyDecorator(CreatePanel createPanel, String user, String currFolder) {
+    public FolderModifyDecorator(CreatePanel createPanel, String user, String folder) {
         super(createPanel);
-        this.user=user;
-        this.currFolder=currFolder;
+        this.user = user;
+        this.folder = folder;
+
+        setupPanelLayout();
+        loadFolderData();
+        addComponentsToPanel();
     }
 
     @Override
     public void buildPanel() {
         super.buildPanel();
+    }
 
+    // imposta il layout
+    private void setupPanelLayout() {
         setLayout(new GridBagLayout());
         setBackground(GlobalResources.COLOR_PANNA);
+    }
 
+    private void loadFolderData() {
+        if ((folder == null || folder.isEmpty()) || (user == null || user.isEmpty())) {
+            System.out.println("Error: title or user are null or empty.");
+            return;
+        }
+
+        try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
+            FolderDAOImpl folderDAO = new FolderDAOImpl(connection);
+            id = folderDAO.getFolderIdByNameAndOwner(folder,user);
+
+            title=folderDAO.getFolderById(id).getFolderName();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //aggiungi i componenti al pannello
+    private void addComponentsToPanel() {
+        GridBagConstraints gbc = createGridBagConstraints();
+
+        // Add folder name field to the panel
+        nameFolderField = createNameFolderField();
+        gbc.gridy = 0;
+        add(nameFolderField, gbc);
+
+        // Add modify folder button to the panel
+        modifyButton = createModifyButton();
+        gbc.gridy = 1;
+        add(modifyButton, gbc);
+
+        // Add back label to the panel
+        CustomLabel backLabel = createBackLabel();
+        gbc.gridy = 2;
+        add(backLabel, gbc);
+    }
+
+    // grid bag
+    private GridBagConstraints createGridBagConstraints() {
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // Margini per i componenti
+        gbc.insets = new Insets(10, 10, 10, 10); // Margins for the components
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.CENTER;
+        return gbc;
+    }
 
-        // Creazione del campo per il nome della cartella
+    // text field per il nome della cartella
+    private CustomTextField createNameFolderField() {
         UIBuilder nameFolderFieldBuilder = new CustomTextFieldBuilder();
         UIDirector.buildStandardTextField(nameFolderFieldBuilder);
-        nameFolderFieldBuilder.size(FIELD_SIZE).placeholder("Insert folder name");
+        nameFolderFieldBuilder.text(title).placeholder("").size(FIELD_SIZE);
 
         UIComponentFactory textFieldFactory = new CustomTextFieldFactory(nameFolderFieldBuilder);
-        nameFolderField = (CustomTextField) textFieldFactory.orderComponent(nameFolderFieldBuilder);
+        return (CustomTextField) textFieldFactory.orderComponent(nameFolderFieldBuilder);
+    }
 
-        // Creazione del pulsante per modificare la cartella
+    // crea il bottone per modificare il folder
+    private CustomButton createModifyButton() {
         UIBuilder buttonBuilder = new CustomButtonBuilder();
         UIDirector.buildStandardButton(buttonBuilder);
         buttonBuilder.text("Modify Folder")
-                .size(BUTTON_SIZE);
-                //.action(new ModifyFolderCommand(this));
+                .size(BUTTON_SIZE)
+                .action(new ModifyFolderCommand(this));
 
-        // Uso della factory per creare il pulsante
         UIComponentFactory buttonFactory = new CustomButtonFactory(buttonBuilder);
-        modifyButton = (CustomButton) buttonFactory.orderComponent(buttonBuilder);
+        return (CustomButton) buttonFactory.orderComponent(buttonBuilder);
+    }
 
-        // Creazione del link "Back"
+    // crea il bottone per tornare indietro
+    private CustomLabel createBackLabel() {
         UIBuilder labelBuilder = new CustomLabelBuilder();
         UIDirector.buildBackClickableLabel(labelBuilder);
         labelBuilder.action(
                 new GoToDeskViewCommand(ComponentManager.getInstance().getUser(), ComponentManager.getInstance().getCurrFolder())
         );
-        UIComponentFactory labelFactory = new CustomLabelFactory(labelBuilder);
-        CustomLabel backLabel = (CustomLabel) labelFactory.orderComponent(labelBuilder);
 
-        // Aggiunta dei componenti al pannello
-        gbc.gridy = 0; add(nameFolderField, gbc);
-        gbc.gridy = 1; add(modifyButton, gbc);
-        gbc.gridy = 2; add(backLabel, gbc);
+        UIComponentFactory labelFactory = new CustomLabelFactory(labelBuilder);
+        return (CustomLabel) labelFactory.orderComponent(labelBuilder);
     }
 
     public String getTextFieldName() {
         return nameFolderField.getText();
     }
+    public int getFolderId(){return id;}
 }

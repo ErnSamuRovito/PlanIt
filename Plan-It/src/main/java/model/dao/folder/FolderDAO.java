@@ -9,7 +9,7 @@ public interface FolderDAO {
     int getFolderIdByNameAndOwner(String folderName,String owner);
     List<FolderDB> getFoldersByOwner(int ownerId);
     List<FolderDB> getSubfolders(int parentId);
-    void updateFolder(FolderDB folder);
+    void updateFolder(FolderDB folder, int id);
     void deleteFolder(int id);
     String findParentFolder(String name);
 
