@@ -86,13 +86,59 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public void deleteUser(int id) {
-        String sql = "DELETE FROM User WHERE id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
+    public boolean deleteUser(int id) {
+        // Prima cancelliamo tutti i task associati all'utente
+        String deleteTasksSql = "DELETE FROM Task WHERE folder IN (SELECT id FROM Folder WHERE owner = ?)";
+
+        // Poi cancelliamo tutte le cartelle associate all'utente
+        String deleteFoldersSql = "DELETE FROM Folder WHERE owner = ?";
+
+        // Infine, cancelliamo l'utente
+        String deleteUserSql = "DELETE FROM User WHERE id = ?";
+
+        try {
+            // Disabilita il commit automatico per migliorare le performance
+            connection.setAutoCommit(false);
+
+            // Cancella i task associati all'utente
+            try (PreparedStatement stmt = connection.prepareStatement(deleteTasksSql)) {
+                stmt.setInt(1, id);
+                stmt.executeUpdate();
+            }
+
+            // Cancella le cartelle dell'utente
+            try (PreparedStatement stmt = connection.prepareStatement(deleteFoldersSql)) {
+                stmt.setInt(1, id);
+                stmt.executeUpdate();
+            }
+
+            // Cancella l'utente
+            try (PreparedStatement stmt = connection.prepareStatement(deleteUserSql)) {
+                stmt.setInt(1, id);
+                stmt.executeUpdate();
+            }
+
+            // Esegui il commit delle modifiche
+            connection.commit();
+
+            return true; // Tutto è andato a buon fine
+
         } catch (SQLException e) {
+            // In caso di errore, annulla tutte le modifiche
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
             e.printStackTrace();
+            return false; // C'è stato un errore, ritorniamo false
+        } finally {
+            // Ripristina il comportamento predefinito del commit
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 

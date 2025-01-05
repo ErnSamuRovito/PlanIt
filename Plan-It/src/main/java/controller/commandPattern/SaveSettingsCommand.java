@@ -1,5 +1,6 @@
 package controller.commandPattern;
 
+import core.ComponentManager;
 import core.SqLiteConnection;
 import model.User;
 import model.dao.avatarPlant.AvatarPlantDAO;
@@ -24,6 +25,7 @@ public class SaveSettingsCommand implements ActionCommand {
         String newPlantName = namePlantField.getText();
         setNewUsername(newName);
         setNewPlantUsername(newPlantName);
+        ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getLoginView());
     }
 
     private void setNewUsername(String newUsername) {

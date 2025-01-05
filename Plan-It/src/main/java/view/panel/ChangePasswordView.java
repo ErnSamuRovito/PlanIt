@@ -1,11 +1,14 @@
 package view.panel;
 
 import controller.commandPattern.ChangePasswordCommand;
+import controller.commandPattern.GoToDeskViewCommand;
 import core.GlobalResources;
 import view.UICreationalPattern.UIBuilders.*;
 import view.UICreationalPattern.UIComponents.CustomButton;
+import view.UICreationalPattern.UIComponents.CustomLabel;
 import view.UICreationalPattern.UIComponents.CustomPasswordField;
 import view.UICreationalPattern.UIFactories.CustomButtonFactory;
+import view.UICreationalPattern.UIFactories.CustomLabelFactory;
 import view.UICreationalPattern.UIFactories.CustomTextFieldFactory;
 import view.UICreationalPattern.UIFactories.UIComponentFactory;
 
@@ -19,6 +22,7 @@ public class ChangePasswordView extends JPanel {
     private CustomPasswordField newPasswordTextField;
     private CustomPasswordField confirmPasswordTextField;
     private CustomButton savePasswordButton;
+    private CustomLabel backLabel;
 
     public ChangePasswordView() {
         initializeLayout();
@@ -35,6 +39,7 @@ public class ChangePasswordView extends JPanel {
         newPasswordTextField = createNewPasswordTextField();
         confirmPasswordTextField = createConfirmPasswordButton();
         savePasswordButton = createSaveButton();
+        backLabel = createBackLabel();
     }
 
     private CustomPasswordField createNewPasswordTextField() {
@@ -67,6 +72,14 @@ public class ChangePasswordView extends JPanel {
         return (CustomButton) factory.orderComponent(buttonBuilder);
     }
 
+    private CustomLabel createBackLabel(){
+        UIBuilder labelBuilder = new CustomLabelBuilder();
+        UIDirector.buildBackClickableLabel(labelBuilder);
+        labelBuilder.action(new GoToDeskViewCommand());
+        UIComponentFactory factory = new CustomLabelFactory(labelBuilder);
+        return (CustomLabel) factory.orderComponent(labelBuilder);
+    }
+
     private void addComponentsToPanel() {
         GridBagConstraints gbc = createGridBagConstraints();
 
@@ -78,6 +91,9 @@ public class ChangePasswordView extends JPanel {
 
         gbc.gridy = 2;
         add(savePasswordButton, gbc);
+
+        gbc.gridy = 3;
+        add(backLabel, gbc);
     }
 
     private GridBagConstraints createGridBagConstraints() {

@@ -2,7 +2,6 @@
 
 package core;
 
-import model.dao.task.TaskDAOImpl;
 import view.ApplicationWindow;
 import view.panel.TaskView;
 import view.panel.createPanel.CreatePanel;
@@ -11,8 +10,6 @@ import view.panel.DeskView;
 import view.panel.SigninView;
 
 import javax.swing.*;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 public class ComponentManager {
     private static ComponentManager instance;

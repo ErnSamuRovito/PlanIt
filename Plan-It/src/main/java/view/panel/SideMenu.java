@@ -21,52 +21,79 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class SideMenu extends JPanel {
+
     public SideMenu() {
         super();
 
-        // Impostiamo il layout su BoxLayout verticale
+        // Imposta il layout verticale (BoxLayout) per il menu laterale
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(GlobalResources.COLOR_CREMA);
         setPreferredSize(new Dimension(200, 0)); // Larghezza fissa e altezza automatica
 
-        // Aggiungi la GIF animata al side menu ------------------------------------------------
-        AvatarPlant.getInstance().updateState();
-        System.out.println(AvatarPlant.getInstance().getState().getClass().getSimpleName());
-        JLabel gifLabel = new JLabel(new ImageIcon(AvatarPlant.getInstance().getPathGifImage()));
-        gifLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        System.out.println("state pianta : " + AvatarPlant.getInstance().getState());
-        add(gifLabel);
+        // Aggiungi la GIF animata al menu laterale
+        addAvatarPlantGif();
 
-        // Creazione della plantNameLabel ------------------------------------------
-        JLabel plantNameLabel = new JLabel(getPlantName());
-        plantNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        plantNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        add(plantNameLabel);
+        // Aggiungi la label del nome della pianta
+        addPlantNameLabel();
 
-        // Creazione del pulsante delle impostazioni --------------------------
-        UIBuilder labelBuilder =  new CustomLabelBuilder();
-        UIDirector.buildStandardClickableLabel(labelBuilder);
-        labelBuilder.text("Settings").size(new Dimension(100,30)).textColor(GlobalResources.COLOR_WHITE);
-        labelBuilder.action(new GoToSettingsCommand());
-        UIComponentFactory labelFactory = new CustomLabelFactory(labelBuilder);
-        CustomLabel settingsLabel = (CustomLabel) labelFactory.orderComponent(labelBuilder);
-//        System.out.println("Label text: "+settingsLabel.getText());
-//        System.out.println("Label height: "+settingsLabel.getHeight());
-//        System.out.println("Label width: "+settingsLabel.getWidth());
-        add(settingsLabel);
+        // Aggiungi il pulsante per le impostazioni
+        addSettingsButton();
 
-        // Aggiungi uno spazio che spinge la ClickableLabel in basso --------------------------------
-        add(Box.createVerticalGlue());  // Questo spinge tutto verso il basso
+        // Aggiungi uno spazio per spingere l'elemento in basso
+        add(Box.createVerticalGlue());  // Spinge tutto verso il basso
     }
 
-    public String getPlantName() {
+    private void addAvatarPlantGif() {
+        // Aggiorna lo stato della pianta e visualizza la GIF corrispondente
+        AvatarPlant.getInstance().updateState();
+        System.out.println(AvatarPlant.getInstance().getState().getClass().getSimpleName());
+
+        // Crea una JLabel con la GIF
+        JLabel gifLabel = new JLabel(new ImageIcon(AvatarPlant.getInstance().getPathGifImage()));
+        gifLabel.setAlignmentX(Component.CENTER_ALIGNMENT);  // Centra l'immagine
+        System.out.println("State della pianta: " + AvatarPlant.getInstance().getState());
+
+        // Aggiungi la JLabel al menu laterale
+        add(gifLabel);
+    }
+
+    private void addPlantNameLabel() {
+        // Crea e imposta la label con il nome della pianta
+        JLabel plantNameLabel = new JLabel(getPlantName());
+        plantNameLabel.setHorizontalAlignment(SwingConstants.CENTER);  // Centra il testo
+        plantNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);  // Centra la label
+        add(plantNameLabel);  // Aggiungi la label al menu laterale
+    }
+
+    private void addSettingsButton() {
+        // Costruisci il pulsante delle impostazioni utilizzando il builder
+        UIBuilder labelBuilder = new CustomLabelBuilder();
+        UIDirector.buildStandardClickableLabel(labelBuilder);
+        labelBuilder.text("Settings").size(new Dimension(100, 30));
+        labelBuilder.action(new GoToSettingsCommand());  // Aggiungi l'azione al pulsante
+
+        // Crea il componente della label personalizzata
+        UIComponentFactory labelFactory = new CustomLabelFactory(labelBuilder);
+        CustomLabel settingsLabel = (CustomLabel) labelFactory.orderComponent(labelBuilder);
+
+        // Aggiungi la label al menu laterale
+        add(settingsLabel);
+    }
+
+    private String getPlantName() {
+        // Recupera il nome della pianta dal database
         try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
-            AvatarPlantDAOImpl avatarPlantDAO=new AvatarPlantDAOImpl(connection);
-            ArrayList<AvatarPlantDB> avatarPlantDBList= avatarPlantDAO.getPlantsByOwnerName(ComponentManager.getInstance().getUser());
+            AvatarPlantDAOImpl avatarPlantDAO = new AvatarPlantDAOImpl(connection);
+            ArrayList<AvatarPlantDB> avatarPlantDBList = avatarPlantDAO.getPlantsByOwnerName(ComponentManager.getInstance().getUser());
+
             if (!avatarPlantDBList.isEmpty()) {
-                return avatarPlantDBList.get(0).getName();
+                return avatarPlantDBList.get(0).getName();  // Restituisce il nome della pianta
             }
-        } catch (SQLException e) {throw new RuntimeException(e);}
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Se non ci sono piante, restituisce un nome di fallback
         return "Plant";
     }
 }

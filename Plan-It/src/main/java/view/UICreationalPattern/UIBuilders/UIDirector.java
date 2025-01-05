@@ -1,8 +1,6 @@
 package view.UICreationalPattern.UIBuilders;
 
-import controller.commandPattern.GoBackCommand;
 import core.GlobalResources;
-
 import java.awt.*;
 
 public class UIDirector {
@@ -42,10 +40,10 @@ public class UIDirector {
 
     // Crea una clickable label standard
     public static void buildStandardClickableLabel(UIBuilder builder) {
-        builder .backgroundColor(GlobalResources.COLOR_CREMA)
+        builder .backgroundColor(GlobalResources.COLOR_GREEN_2)
                 .hoverBackgroundColor(GlobalResources.COLOR_GREEN_1)
                 .pressedBackgroundColor(GlobalResources.COLOR_GREEN_2)
-                .textColor(GlobalResources.COLOR_CREMA)
+                .textColor(GlobalResources.COLOR_GREEN_2)
                 .focusPainted(false)
                 .borderPainted(false)
                 .contentAreaFilled(false)
@@ -66,10 +64,10 @@ public class UIDirector {
     }
 
     public static void buildBackClickableLabel(UIBuilder builder) {
-        builder .backgroundColor(GlobalResources.COLOR_WHITE)
+        builder .backgroundColor(GlobalResources.COLOR_GREEN_2)
                 .hoverBackgroundColor(GlobalResources.COLOR_GREEN_1)
                 .pressedBackgroundColor(GlobalResources.COLOR_GREEN_2)
-                .textColor(GlobalResources.COLOR_WHITE)
+                .textColor(GlobalResources.COLOR_GREEN_2)
                 .focusPainted(false)
                 .borderPainted(false)
                 .contentAreaFilled(false)

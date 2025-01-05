@@ -1,5 +1,6 @@
 package controller.commandPattern;
 
+import core.ComponentManager;
 import core.SqLiteConnection;
 import model.FormatValidator;
 import model.User;
@@ -37,6 +38,8 @@ public class ChangePasswordCommand implements ActionCommand {
 
             TaskDAOImpl taskDAO = new TaskDAOImpl(SqLiteConnection.getInstance().getConnection());
             taskDAO.setPassword(User.getInstance().getId(), passwordString);
+
+            ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getLoginView());
 
             System.out.println("Password cambiata con successo.");
         } catch (Exception e) {

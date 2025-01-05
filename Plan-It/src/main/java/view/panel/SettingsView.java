@@ -1,18 +1,15 @@
 package view.panel;
 
-import controller.commandPattern.DeleteUserCommand;
-import controller.commandPattern.GoToChangePasswordCommand;
-import controller.commandPattern.SaveSettingsCommand;
+import controller.commandPattern.*;
 import core.GlobalResources;
 import model.User;
 import model.plant.AvatarPlant;
-import view.UICreationalPattern.UIBuilders.CustomButtonBuilder;
-import view.UICreationalPattern.UIBuilders.CustomTextFieldBuilder;
-import view.UICreationalPattern.UIBuilders.UIBuilder;
-import view.UICreationalPattern.UIBuilders.UIDirector;
+import view.UICreationalPattern.UIBuilders.*;
 import view.UICreationalPattern.UIComponents.CustomButton;
+import view.UICreationalPattern.UIComponents.CustomLabel;
 import view.UICreationalPattern.UIComponents.CustomTextField;
 import view.UICreationalPattern.UIFactories.CustomButtonFactory;
+import view.UICreationalPattern.UIFactories.CustomLabelFactory;
 import view.UICreationalPattern.UIFactories.CustomTextFieldFactory;
 import view.UICreationalPattern.UIFactories.UIComponentFactory;
 
@@ -23,11 +20,9 @@ public class SettingsView extends JPanel {
     private static final Dimension FIELD_SIZE = new Dimension(200, 30);
     private static final Dimension BUTTON_SIZE = new Dimension(150, 50);
 
-    private CustomTextField usernameField;
-    private CustomButton changePasswordButton;
-    private CustomTextField namePlantField;
-    private CustomButton saveButton;
-    private CustomButton deleteUserButton;
+    private CustomTextField usernameField, namePlantField;
+    private CustomButton changePasswordButton, saveButton, deleteUserButton;
+    private CustomLabel usernameLabel, namePlantLabel, backLabel;
 
     public SettingsView() {
         initializeLayout();
@@ -46,6 +41,10 @@ public class SettingsView extends JPanel {
         namePlantField = createCustomTextField(AvatarPlant.getInstance().getName());
         saveButton = createSaveButton();
         deleteUserButton = createDeleteUserButton();
+
+        usernameLabel = createCustomLabel("Username:");
+        namePlantLabel = createCustomLabel("Plant name:");
+        backLabel = createBackLabel();
     }
 
     private CustomTextField createCustomTextField(String placeholder) {
@@ -69,6 +68,14 @@ public class SettingsView extends JPanel {
         return (CustomButton) factory.orderComponent(buttonBuilder);
     }
 
+    private CustomLabel createCustomLabel(String text){
+        UIBuilder labelBuilder = new CustomLabelBuilder();
+        UIDirector.buildStandardLabel(labelBuilder);
+        labelBuilder.size(FIELD_SIZE).text(text);
+        UIComponentFactory factory = new CustomLabelFactory(labelBuilder);
+        return (CustomLabel) factory.orderComponent(labelBuilder);
+    }
+
     private CustomButton createSaveButton() {
         UIBuilder buttonBuilder = new CustomButtonBuilder();
         UIDirector.buildStandardButton(buttonBuilder);
@@ -89,29 +96,43 @@ public class SettingsView extends JPanel {
         buttonBuilder
                 .text("Delete User")
                 .size(BUTTON_SIZE)
+                .backgroundColor(GlobalResources.COLOR_RED1)
+                .hoverBackgroundColor(GlobalResources.COLOR_RED2)
+                .pressedBackgroundColor(GlobalResources.COLOR_RED1)
                 .action(new DeleteUserCommand(User.getInstance().getId()));
 
         UIComponentFactory factory = new CustomButtonFactory(buttonBuilder);
         return (CustomButton) factory.orderComponent(buttonBuilder);
     }
 
+    private CustomLabel createBackLabel(){
+        UIBuilder labelBuilder = new CustomLabelBuilder();
+        UIDirector.buildBackClickableLabel(labelBuilder);
+        labelBuilder.action(new GoToDeskViewCommand());
+        UIComponentFactory factory = new CustomLabelFactory(labelBuilder);
+        return (CustomLabel) factory.orderComponent(labelBuilder);
+    }
+
     private void addComponentsToPanel() {
         GridBagConstraints gbc = createGridBagConstraints();
 
         gbc.gridy = 0;
-        add(usernameField, gbc);
-
+        add(usernameLabel, gbc);
         gbc.gridy = 1;
-        add(changePasswordButton, gbc);
-
+        add(usernameField, gbc);
         gbc.gridy = 2;
-        add(namePlantField, gbc);
-
+        add(namePlantLabel, gbc);
         gbc.gridy = 3;
-        add(saveButton, gbc);
-
+        add(namePlantField, gbc);
         gbc.gridy = 4;
+        add(changePasswordButton, gbc);
+        gbc.gridy = 5;
+        add(saveButton, gbc);
+        gbc.gridy = 6;
         add(deleteUserButton, gbc);
+
+        gbc.gridy = 7;
+        add(backLabel, gbc);
     }
 
     private GridBagConstraints createGridBagConstraints() {

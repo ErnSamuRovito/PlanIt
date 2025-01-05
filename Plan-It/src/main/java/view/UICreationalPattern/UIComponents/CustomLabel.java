@@ -15,7 +15,6 @@ public class CustomLabel extends JLabel implements UIComponent {
     private final Color textColor;
     private final Dimension size;
     private final boolean opaque, clickable;
-    //private final ControlAction controlAction;
     private final ActionCommand command;
 
     // Costruttore

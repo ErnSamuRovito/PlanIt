@@ -21,6 +21,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public class DeskView extends JPanel {
+
     private SplitPanel splitPanel;
     private IconPanel iconPanelAdd, iconPanelBack;
     private final String user, startFolder;
@@ -32,6 +33,7 @@ public class DeskView extends JPanel {
         // Imposta il layout principale
         setLayout(new BorderLayout());
 
+        // Modifica punti salute Avatar
         AvatarPlant.getInstance().subtractHP(AvatarPlant.getInstance().getPenance());
 
         // Inizializza l'interfaccia utente
@@ -44,20 +46,23 @@ public class DeskView extends JPanel {
 
         // Configura icone e dati
         addBackIcon();
-        loadData();
+        displayFoldersAndTasks();
         addCreateIcon();
         addPopupMenu();
+
+        // Aggiungi il comando per il ritorno alla schermata di login
         splitPanel.addBackClickableLabel(new GoToLoginCommand());
 
         // Aggiungi lo SplitPanel al centro del layout
         add(splitPanel, BorderLayout.CENTER);
     }
 
-    private void loadData() {
-        // Recupera i folder dal data provider e li aggiunge al pannello
+    private void displayFoldersAndTasks() {
+        // Recupera i folder e i task dal data provider e li aggiunge al pannello
         try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
+
             FolderDAOImpl folderDAO = new FolderDAOImpl(connection);
-            for (String folder : folderDAO.getFoldersByFolderAndUser(startFolder,user)){
+            for (String folder : folderDAO.getFoldersByFolderAndUser(startFolder, user)) {
                 splitPanel.getHomePanel().add(
                         IconFactory.createIconPanel(
                                 "folder", folder, new ExploreFolderCommand(user, folder)
@@ -66,17 +71,26 @@ public class DeskView extends JPanel {
             }
 
             TaskDAOImpl taskDAO = new TaskDAOImpl(connection);
-            for (String task : taskDAO.getTasksByFolderAndUser(startFolder,user)){
-                System.out.println("title: "+task+" state: "+taskDAO.checkTaskByFolderAndTitle(startFolder,user,task));
-                String taskState="task";
-                if (taskDAO.checkTaskByFolderAndTitle(startFolder,user,task)==100) taskState = "taskCompleted";
-                else if (taskDAO.checkTaskByFolderAndTitle(startFolder,user,task)==-1) taskState = "taskExpired";
-                splitPanel.getHomePanel().add(IconFactory.createIconPanel(
-                        taskState, task, new GoToTaskViewCommand(task, user, startFolder))
+            for (String task : taskDAO.getTasksByFolderAndUser(startFolder, user)) {
+                System.out.println("title: " + task + " state: " + taskDAO.checkTaskByFolderAndTitle(startFolder, user, task));
+
+                String taskState = "task";
+                int taskStatus = taskDAO.checkTaskByFolderAndTitle(startFolder, user, task);
+
+                if (taskStatus == 100) {
+                    taskState = "taskCompleted";
+                } else if (taskStatus == -1) {
+                    taskState = "taskExpired";
+                }
+
+                splitPanel.getHomePanel().add(
+                        IconFactory.createIconPanel(
+                                taskState, task, new GoToTaskViewCommand(task, user, startFolder)
+                        )
                 );
             }
 
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
@@ -102,28 +116,30 @@ public class DeskView extends JPanel {
     }
 
     protected void createTask() {
+        // Crea e imposta il pannello per la creazione di un task
         CreatePanel createPanel = new CreatePanel();
         createPanel = new TaskCreateDecorator(createPanel);
         ComponentManager.getInstance().setPanel(createPanel);
     }
 
     protected void createFolder() {
+        // Crea e imposta il pannello per la creazione di una cartella
         CreatePanel createPanel = new CreatePanel();
         createPanel = new FolderCreateDecorator(createPanel);
         ComponentManager.getInstance().setPanel(createPanel);
     }
 
     protected void addCreateIcon() {
+        // Aggiungi l'icona per la creazione
         iconPanelAdd = IconFactory.createIconPanel("add", "new", null);
         splitPanel.getHomePanel().add(iconPanelAdd);
     }
 
     protected void addBackIcon() {
+        // Aggiungi l'icona per il ritorno, se non siamo nella cartella root
         if (!startFolder.equals("/root")) {
             iconPanelBack = IconFactory.createIconPanel(
-                    "back",
-                    "back",
-                    new GoBackCommand()
+                    "back", "back", new GoBackCommand()
             );
             splitPanel.getHomePanel().add(iconPanelBack);
         }
