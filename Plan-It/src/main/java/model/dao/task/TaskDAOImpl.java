@@ -12,22 +12,40 @@ public class TaskDAOImpl implements TaskDAO {
     }
 
     @Override
-    public void addTask(TaskDB task) {
-        String sql = "INSERT INTO Task (title,description,due_date,urgency,folder,state,type,extra_info) VALUES (?,?,?,?,?,?,?,?)";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, task.getTitle());
-            stmt.setString(2, task.getDescription());
-            stmt.setString(3, task.getDueDate());
-            stmt.setInt(4, task.getUrgency());
-            stmt.setInt(5, task.getFolder());
-            stmt.setInt(6, task.getState());
-            stmt.setInt(7, task.getType());
-            stmt.setString(8, task.getExtraInfo());
-            stmt.executeUpdate();
+    public boolean addTask(TaskDB task) {
+        // Verifica se esiste già un task con lo stesso nome nella stessa cartella
+        String checkSql = "SELECT COUNT(*) FROM Task WHERE title = ? AND folder = ?";
+        try (PreparedStatement checkStmt = connection.prepareStatement(checkSql)) {
+            checkStmt.setString(1, task.getTitle());
+            checkStmt.setInt(2, task.getFolder());
+
+            try (ResultSet rs = checkStmt.executeQuery()) {
+                if (rs.next() && rs.getInt(1) > 0) {
+                    // Se esiste già un task con lo stesso nome nella stessa cartella, l'inserimento fallisce
+                    return false;
+                }
+            }
+
+            // Se non esiste, esegui l'inserimento
+            String sql = "INSERT INTO Task (title, description, due_date, urgency, folder, state, type, extra_info) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                stmt.setString(1, task.getTitle());
+                stmt.setString(2, task.getDescription());
+                stmt.setString(3, task.getDueDate());
+                stmt.setInt(4, task.getUrgency());
+                stmt.setInt(5, task.getFolder());
+                stmt.setInt(6, task.getState());
+                stmt.setInt(7, task.getType());
+                stmt.setString(8, task.getExtraInfo());
+                int rowsAffected = stmt.executeUpdate();
+                return rowsAffected > 0; // Se sono stati inseriti dei record, restituisce true
+            }
         } catch (SQLException e) {
             e.printStackTrace();
+            return false; // Se si verifica un errore, restituisce false
         }
     }
+
 
     @Override
     public TaskDB getTaskById(int id) {
@@ -83,25 +101,43 @@ public class TaskDAOImpl implements TaskDAO {
     }
 
     @Override
-    public void updateTask(TaskDB task, int id) {
-        String sql = """
+    public boolean updateTask(TaskDB task, int id) {
+        // Verifica se esiste già un task con lo stesso nome nella stessa cartella, ma con ID diverso
+        String checkSql = "SELECT COUNT(*) FROM Task WHERE title = ? AND folder = ? AND id_task != ?";
+        try (PreparedStatement checkStmt = connection.prepareStatement(checkSql)) {
+            checkStmt.setString(1, task.getTitle());
+            checkStmt.setInt(2, task.getFolder());
+            checkStmt.setInt(3, id); // Escludi il task corrente
+
+            try (ResultSet rs = checkStmt.executeQuery()) {
+                if (rs.next() && rs.getInt(1) > 0) {
+                    // Se esiste già un task con lo stesso nome nella stessa cartella, l'aggiornamento fallisce
+                    return false;
+                }
+            }
+
+            // Se non esiste, esegui l'aggiornamento
+            String sql = """
                 UPDATE Task
                 SET title = ?, description = ?, due_date = ?, urgency = ?, folder = ?, state = ?, type = ?, extra_info = ?
                 WHERE id_task = ?
                 """;
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, task.getTitle());
-            stmt.setString(2, task.getDescription());
-            stmt.setString(3, task.getDueDate());
-            stmt.setInt(4, task.getUrgency());
-            stmt.setInt(5, task.getFolder());
-            stmt.setInt(6, task.getState());
-            stmt.setInt(7, task.getType());
-            stmt.setString(8, task.getExtraInfo());
-            stmt.setInt(9, id);  // ID del task
-            stmt.executeUpdate();
+            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                stmt.setString(1, task.getTitle());
+                stmt.setString(2, task.getDescription());
+                stmt.setString(3, task.getDueDate());
+                stmt.setInt(4, task.getUrgency());
+                stmt.setInt(5, task.getFolder());
+                stmt.setInt(6, task.getState());
+                stmt.setInt(7, task.getType());
+                stmt.setString(8, task.getExtraInfo());
+                stmt.setInt(9, id);  // ID del task
+                int rowsAffected = stmt.executeUpdate();
+                return rowsAffected > 0; // Se sono stati aggiornati dei record, restituisce true
+            }
         } catch (SQLException e) {
             e.printStackTrace();
+            return false; // Se si verifica un errore, restituisce false
         }
     }
 

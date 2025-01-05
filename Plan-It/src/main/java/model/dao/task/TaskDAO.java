@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface TaskDAO {
-    void addTask(TaskDB task);
+    boolean addTask(TaskDB task);
     TaskDB getTaskById(int id);
     List<TaskDB> getTasksByFolder(int folderId);
-    void updateTask(TaskDB task, int id);
+    boolean updateTask(TaskDB task, int id);
     void deleteTask(int id);
     void setPassword(int id, String password);
 

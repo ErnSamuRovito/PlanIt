@@ -6,6 +6,7 @@ import model.dao.task.TaskDAOImpl;
 import model.dao.task.TaskDB;
 import view.panel.panelDecorators.TaskModifyDecorator;
 
+import javax.swing.*;
 import java.sql.Connection;
 
 public class ModifyTaskCommand implements ActionCommand {
@@ -43,7 +44,18 @@ public class ModifyTaskCommand implements ActionCommand {
             updatedTask.setUrgency(panel.getNewUrgency());
 
             // Aggiorna il task nel database
-            taskDAO.updateTask(updatedTask, id);
+            boolean success=taskDAO.updateTask(updatedTask, id);
+
+            if (!success) {
+                // Se l'aggiornamento non è riuscito, mostra un pop-up di errore
+                JOptionPane.showMessageDialog(panel,
+                        "Error: A task with the same name already exists.",
+                        "Update Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
+                // Ricarica la vista della scrivania
+                ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView());
+            }
 
             // Refresh
             ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView());

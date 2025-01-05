@@ -7,6 +7,7 @@ import model.dao.task.TaskDAOImpl;
 import model.dao.task.TaskDB;
 import view.panel.panelDecorators.TaskCreateDecorator;
 
+import javax.swing.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -48,7 +49,20 @@ public class CreateTaskCommand implements ActionCommand{
                 );
 
                 TaskDAOImpl taskDAOimpl = new TaskDAOImpl(connection);
-                taskDAOimpl.addTask(newTaskDB);
+
+                boolean success=taskDAOimpl.addTask(newTaskDB);
+
+                if (!success) {
+                    // Se l'aggiornamento non è riuscito, mostra un pop-up di errore
+                    JOptionPane.showMessageDialog(taskCreateDecorator,
+                            "Error: A task with the same name already exists.",
+                            "Creation Error",
+                            JOptionPane.ERROR_MESSAGE);
+                } else {
+                    // Ricarica la vista della scrivania
+                    ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView());
+                }
+
                 ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
