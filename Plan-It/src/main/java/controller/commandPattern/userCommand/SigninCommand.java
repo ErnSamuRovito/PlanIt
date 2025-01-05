@@ -74,7 +74,6 @@ public class SigninCommand implements ActionCommand {
                     System.out.println(SUCCESS_PLANT_CREATION);
                     AvatarPlant.getInstance().loadPlant(userId);
                     AvatarPlant.getInstance().updateState();
-                    System.out.println("HP PIANTINA : " + AvatarPlant.getInstance().getHp());
                 } else {
                     System.err.println(ERROR_PLANT_CREATION);
                 }

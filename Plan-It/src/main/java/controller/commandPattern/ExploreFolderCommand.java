@@ -11,7 +11,6 @@ public class ExploreFolderCommand implements ActionCommand {
     }
 
     @Override public void execute() {
-        System.out.println("Explore folder: " + folderName + " ("+userInput+")");
         ComponentManager.getInstance().setPath(userInput, folderName);
         ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView());
     }

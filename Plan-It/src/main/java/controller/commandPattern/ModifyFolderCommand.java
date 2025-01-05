@@ -23,19 +23,16 @@ public class ModifyFolderCommand implements ActionCommand {
             // Ottieni l'ID della cartella a partire dal nome e dall'utente
             int folderId = panel.getFolderId();
             if (folderId == -1) {
-                System.out.println("Folder not found!");
                 return;
             }
 
             // Recupera la cartella dal DB per aggiornarla
             FolderDB updatedFolder = folderDAO.getFolderById(folderId);
             if (updatedFolder == null) {
-                System.out.println("Folder not retrieved from DB.");
                 return;
             }
 
             // Imposta il nuovo nome della cartella
-            System.out.println("NUOVO NOME CARTELLA: "+panel.getTextFieldName());
             updatedFolder.setFolderName(panel.getTextFieldName());
 
             // Esegui l'aggiornamento nel DB

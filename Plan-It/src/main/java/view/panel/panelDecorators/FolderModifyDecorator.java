@@ -51,7 +51,6 @@ public class FolderModifyDecorator extends CreatePanelDecorator {
 
     private void loadFolderData() {
         if ((folder == null || folder.isEmpty()) || (user == null || user.isEmpty())) {
-            System.out.println("Error: title or user are null or empty.");
             return;
         }
 

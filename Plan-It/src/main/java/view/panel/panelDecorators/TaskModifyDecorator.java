@@ -31,7 +31,6 @@ public class TaskModifyDecorator extends CreatePanelDecorator {
     public TaskModifyDecorator(CreatePanel createPanel, String taskTitle, String user, String folder) {
         super(createPanel);
         this.taskTitle = taskTitle;
-        System.out.println("Costruttore di TaskModifyDecorator --> taskTitle: " + this.taskTitle);
         this.user = user;
         this.folder = folder;
 
@@ -89,7 +88,6 @@ public class TaskModifyDecorator extends CreatePanelDecorator {
         CustomDataPicker picker = new CustomDataPicker();
 
         // Verifica se dueDate è nullo e imposta una data predefinita se necessario
-        System.out.println("\tbuildCustomDataPicker --> dueDate: " + dueDate);
         if (dueDate != null && !dueDate.isEmpty()) {
             picker.setSelectedDate(dueDate);
         } else {
@@ -140,7 +138,6 @@ public class TaskModifyDecorator extends CreatePanelDecorator {
 
     private void loadTaskData() {
         if (taskTitle == null || taskTitle.isEmpty()) {
-            System.out.println("Error: Task title is null or empty.");
             return;
         }
 
@@ -153,8 +150,6 @@ public class TaskModifyDecorator extends CreatePanelDecorator {
                 description = task.get(2);
                 dueDate = task.get(3);
                 urgency = Integer.parseInt(task.get(4));
-            } else {
-                System.out.println("Task data not found or incomplete for task: " + taskTitle);
             }
         } catch (Exception e) {
             e.printStackTrace();

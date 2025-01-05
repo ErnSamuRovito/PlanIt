@@ -30,7 +30,6 @@ public class ComponentManager {
     public CreatePanel getCreatePanel() {return new CreatePanel();}
 
     public TaskModifyDecorator getModifyTask(String taskTitle) {
-        System.out.println("GET_MODIFY_TASK CALLED: " + taskTitle);
         return new TaskModifyDecorator(new CreatePanel(), taskTitle, user, currFolder);
     }
     public FolderModifyDecorator getModifyFolder(String folderTitle) {

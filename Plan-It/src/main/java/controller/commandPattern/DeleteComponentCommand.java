@@ -52,19 +52,15 @@ public class DeleteComponentCommand implements ActionCommand {
                 if (type.equals("folder")) {
                     FolderDAOImpl folderDAO = new FolderDAOImpl(connection);
                     folderDAO.deleteFolder(id);
-                    System.out.println("Folder '" + title + "' con ID " + id + " eliminata con successo.");
                 } else if (type.equals("task")) {
                     TaskDAOImpl taskDAO = new TaskDAOImpl(connection);
                     taskDAO.deleteTask(id);
-                    System.out.println("Task '" + title + "' con ID " + id + " eliminata con successo.");
                 }
             } catch (Exception e) {
                 System.err.println("Errore durante l'eliminazione della " + (type.equals("folder") ? "folder" : "task") + " con ID " + id);
                 e.printStackTrace();
             }
             ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView());
-        } else {
-            System.out.println("Eliminazione annullata.");
         }
     }
 }

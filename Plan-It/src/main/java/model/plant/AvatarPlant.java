@@ -38,8 +38,6 @@ public class AvatarPlant {
         this.sadState = new SadState();
         this.normalState = new NormalState();
         this.currentState = normalState;
-
-        System.out.println("Plant created");
     }
 
     public static AvatarPlant getInstance() {
@@ -119,7 +117,6 @@ public class AvatarPlant {
                 this.name = plantData.getName();
                 this.hp = plantData.getHp();
                 this.owner = plantData.getOwner();
-                System.out.println("Plant loaded: " + this.id + " " + this.name);
             } else {
                 throw new RuntimeException("No plants found for owner ID: " + idOwner);
             }
@@ -132,7 +129,6 @@ public class AvatarPlant {
         int newHP = clampHP(this.hp + value);
         updateHPInDatabase(newHP);
         this.hp = newHP;
-        System.out.println("HP added. Current HP: " + this.hp);
         updateState();
     }
 
@@ -140,7 +136,6 @@ public class AvatarPlant {
         int newHP = clampHP(this.hp - value);
         updateHPInDatabase(newHP);
         this.hp = newHP;
-        System.out.println("HP subtracted. Current HP: " + this.hp);
         updateState();
     }
 
@@ -205,7 +200,6 @@ public class AvatarPlant {
             throw new RuntimeException("Error calculating penance for user with owner ID: " + owner, e);
         }
 
-        System.out.println("Total Penance: " + totalPenance);
         return totalPenance;
     }
 }

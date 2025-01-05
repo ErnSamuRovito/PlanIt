@@ -19,10 +19,7 @@ public class TaskDoneCommand implements ActionCommand{
     public void execute() {
         try (Connection connection = SqLiteConnection.getInstance().getConnection()){
             TaskDAOImpl taskDAO = new TaskDAOImpl(connection);
-            if (taskDAO.markTaskAsDone(id_task_completed))
-            {
-                System.out.println("Task done!");
-            }
+            taskDAO.markTaskAsDone(id_task_completed);
             AvatarPlant.getInstance().addHP(10);
             ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView());
         } catch (SQLException e) {throw new RuntimeException(e);}

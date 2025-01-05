@@ -33,7 +33,6 @@ public class SaveSettingsCommand implements ActionCommand {
         UserDAO userDAO = new UserDAOImpl(SqLiteConnection.getInstance().getConnection());
         if (newUsername != null && !newUsername.isEmpty() && !newUsername.equals(User.getInstance().getUsername())) {
             userDAO.setUsername(newUsername);
-            System.out.println("New Username : " + newUsername);
         }
     }
 
@@ -41,8 +40,6 @@ public class SaveSettingsCommand implements ActionCommand {
         AvatarPlantDAO avatarPlantDAO = new AvatarPlantDAOImpl(SqLiteConnection.getInstance().getConnection());
         if (newPlantName != null && !newPlantName.isEmpty() && !newPlantName.equals(AvatarPlant.getInstance().getName())) {
             avatarPlantDAO.setName(newPlantName);
-            System.out.println("New PlantName : " + newPlantName);
-
         }
     }
 }

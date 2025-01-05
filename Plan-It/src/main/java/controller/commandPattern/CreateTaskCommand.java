@@ -49,7 +49,6 @@ public class CreateTaskCommand implements ActionCommand{
 
                 TaskDAOImpl taskDAOimpl = new TaskDAOImpl(connection);
                 taskDAOimpl.addTask(newTaskDB);
-                System.out.println("task created : " + nameTask);
                 ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView());
             } catch (SQLException e) {
                 throw new RuntimeException(e);

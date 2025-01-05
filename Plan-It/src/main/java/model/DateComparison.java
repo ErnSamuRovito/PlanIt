@@ -13,8 +13,6 @@ public class DateComparison {
         currentDate = LocalDate.now();
         formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         currentDateString = currentDate.format(formatter);
-
-        System.out.println("Data corrente: " + currentDateString);
     }
 
     public int compareDate(String date) {

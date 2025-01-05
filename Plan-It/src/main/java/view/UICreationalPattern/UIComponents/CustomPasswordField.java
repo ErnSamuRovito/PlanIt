@@ -90,7 +90,7 @@ public class CustomPasswordField extends JPasswordField implements UIComponent {
         for (char c : password) {
             toReturn.append(c);
         }
-        System.out.println("getPasswordString() --> "+toReturn);
+
         return toReturn.toString();
     }
 }

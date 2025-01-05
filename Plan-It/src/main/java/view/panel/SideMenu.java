@@ -51,7 +51,6 @@ public class SideMenu extends JPanel {
         // Crea una JLabel con la GIF
         JLabel gifLabel = new JLabel(new ImageIcon(AvatarPlant.getInstance().getPathGifImage()));
         gifLabel.setAlignmentX(Component.CENTER_ALIGNMENT);  // Centra l'immagine
-        System.out.println("State della pianta: " + AvatarPlant.getInstance().getState());
 
         // Aggiungi la JLabel al menu laterale
         add(gifLabel);

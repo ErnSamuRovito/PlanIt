@@ -72,8 +72,6 @@ public class DeskView extends JPanel {
 
             TaskDAOImpl taskDAO = new TaskDAOImpl(connection);
             for (String task : taskDAO.getTasksByFolderAndUser(startFolder, user)) {
-                System.out.println("title: " + task + " state: " + taskDAO.checkTaskByFolderAndTitle(startFolder, user, task));
-
                 String taskState = "task";
                 int taskStatus = taskDAO.checkTaskByFolderAndTitle(startFolder, user, task);
 

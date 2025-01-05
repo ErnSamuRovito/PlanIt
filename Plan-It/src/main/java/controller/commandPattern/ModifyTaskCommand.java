@@ -25,17 +25,14 @@ public class ModifyTaskCommand implements ActionCommand {
                     ComponentManager.getInstance().getUser(),
                     panel.getTitle()
             );
-            System.out.println("Task ID found: " + id);
 
             if (id == -1) {
-                System.out.println("Task not found!");
                 return;
             }
 
             // Cerca il task dal database usando l'id
             TaskDB updatedTask = taskDAO.getTaskById(id);
             if (updatedTask == null) {
-                System.out.println("Task not retrieved from DB.");
                 return;
             }
 

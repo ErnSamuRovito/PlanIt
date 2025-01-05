@@ -110,11 +110,9 @@ public class FolderDAOImpl implements FolderDAO {
         String sql = "UPDATE Folder SET folder_name = ?, owner = ?, parent = ? WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, folder.getFolderName());
-            System.out.println("@@@@@@@@@@@@@@ SIAMO NEL DAO FOLDER: "+folder.getFolderName());
             stmt.setInt(2, folder.getOwner());
             stmt.setInt(3, folder.getParent());
             stmt.setInt(4, id);
-            System.out.println("Executing query: " + stmt.toString());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

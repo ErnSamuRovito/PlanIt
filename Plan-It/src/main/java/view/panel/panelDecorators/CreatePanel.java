@@ -5,7 +5,6 @@ import java.awt.*;
 
 public class CreatePanel extends JPanel {
     public CreatePanel() {
-        System.out.println("CreatePanel constructor called");
         buildPanel();
     }
 

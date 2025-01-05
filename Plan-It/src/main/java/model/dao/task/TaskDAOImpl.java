@@ -99,9 +99,7 @@ public class TaskDAOImpl implements TaskDAO {
             stmt.setInt(7, task.getType());
             stmt.setString(8, task.getExtraInfo());
             stmt.setInt(9, id);  // ID del task
-            System.out.println("Sto per eseguire la query #######################");
             stmt.executeUpdate();
-            System.out.println("####################### Ho eseguito la query");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -280,7 +278,6 @@ public class TaskDAOImpl implements TaskDAO {
                 if (resultSet.next()) { // Controlla se ci sono risultati
                     return resultSet.getInt("id_task");
                 } else {
-                    System.out.println("Nessun risultato trovato per title: " + title + ", owner: " + owner + ", folderName: " + folderName);
                     return -1; // Valore di default se nessun risultato trovato
                 }
             }
