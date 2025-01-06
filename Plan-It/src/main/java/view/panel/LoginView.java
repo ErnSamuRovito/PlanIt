@@ -18,7 +18,9 @@ public class LoginView extends JPanel {
     private CustomTextField userField;
     private CustomPasswordField passwordField;
     private CustomButton loginButton;
-    private CustomLabel signinLabel, usernameLabel, passwordLabel;
+    private CustomLabel signinLabel;
+    private final CustomLabel usernameLabel;
+    private final CustomLabel passwordLabel;
 
     public LoginView() {
         // Impostazioni di layout e margini

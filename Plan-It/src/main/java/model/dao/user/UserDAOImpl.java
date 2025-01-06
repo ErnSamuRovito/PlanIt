@@ -1,29 +1,18 @@
 package model.dao.user;
 
+import model.PasswordUtils;
 import model.User;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class UserDAOImpl implements UserDAO {
-    private Connection connection;
+    private final Connection connection;
 
     public UserDAOImpl(Connection connection) {
         this.connection = connection;
-    }
-
-    @Override
-    public void addUser(UserDB user) {
-        String sql = "INSERT INTO User (password, email, username) VALUES (?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, user.getPassword());
-            stmt.setString(2, user.getEmail());
-            stmt.setString(3, user.getUsername());
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -143,34 +132,49 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public int logUser(String user, String password) {
-        String query = "SELECT id FROM User WHERE (username = ? OR email = ?) AND password = ?";
+    public int logUser(String usernameOrEmail, String plainPassword) {
+        String query = "SELECT id, username, password FROM User WHERE username = ? OR email = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            // Imposta i parametri per il PreparedStatement
-            preparedStatement.setString(1, user); // username
-            preparedStatement.setString(2, user); // email
-            preparedStatement.setString(3, password); // password
+            preparedStatement.setString(1, usernameOrEmail);
+            preparedStatement.setString(2, usernameOrEmail);
 
-            // Esegui la query
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    return resultSet.getInt("id");
-                } else {
-                    return -1; // Nessun utente trovato
+                    String hashedPassword = resultSet.getString("password");
+
+                    // Verifica la password usando il metodo verifyPassword
+                    if (PasswordUtils.verifyPassword(plainPassword, hashedPassword)) {
+                        return resultSet.getInt("id");
+                    }
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error searching for user: " + e.getMessage());
-            throw new RuntimeException("Error searching for user", e);
+            e.printStackTrace();
         }
+        return -1; // Nessun utente trovato o password errata
+    }
+
+    public String getHashedPassword(int userId) {
+        String sql = "SELECT password FROM User WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("password"); // Restituisce la password hashed
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // Se non trovato, restituisce null
     }
 
     @Override
     public int registerUserAndGetId(String username, String email, String password) {
         String query = "INSERT INTO User (username, password, email) VALUES (?, ?, ?)";
+        String hashedPassword = PasswordUtils.hashPassword(password);
         try (PreparedStatement preparedStatement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, username);
-            preparedStatement.setString(2, password);
+            preparedStatement.setString(2, hashedPassword);
             preparedStatement.setString(3, email);
 
             int rowsAffected = preparedStatement.executeUpdate();

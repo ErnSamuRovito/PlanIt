@@ -4,9 +4,7 @@ import core.GlobalResources;
 
 public class SadState implements State {
     @Override
-    public void becomeHappy() {
-        System.out.println("Sad can't becomes Happy");
-    }
+    public void becomeHappy() {System.out.println("Sad can't becomes Happy");}
 
     @Override
     public void becomeSad() {

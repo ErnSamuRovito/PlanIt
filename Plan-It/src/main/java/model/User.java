@@ -5,7 +5,6 @@ import model.dao.user.UserDAOImpl;
 import model.dao.user.UserDB;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class User {
@@ -42,8 +41,8 @@ public class User {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public char[] getPassword() {
+        return password.toCharArray();
     }
 
     public void setPassword(String password) {

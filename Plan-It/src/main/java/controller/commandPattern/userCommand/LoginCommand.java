@@ -3,6 +3,7 @@ package controller.commandPattern.userCommand;
 import controller.commandPattern.ActionCommand;
 import core.ComponentManager;
 import core.SqLiteConnection;
+import model.PasswordUtils;
 import model.User;
 import model.dao.user.UserDAOImpl;
 import model.plant.AvatarPlant;
@@ -27,14 +28,18 @@ public class LoginCommand implements ActionCommand {
         if (parentView != null) {
             CustomTextField usernameField = parentView.getUserField();
             String userInput = usernameField.getText();
+            int idLogged = -1;
 
             CustomPasswordField passwordField = parentView.getPasswordField();
             String passwordInput = passwordField.getPasswordString();
 
-            int idLogged;
             try (Connection connection = SqLiteConnection.getInstance().getConnection()){
                 UserDAOImpl userDAO = new UserDAOImpl(connection);
-                idLogged=userDAO.logUser(userInput, passwordInput);
+
+                // verify hashed password
+                idLogged = userDAO.logUser(userInput, passwordInput);
+
+
             } catch (SQLException e) {throw new RuntimeException(e);}
 
             if (idLogged != -1) {

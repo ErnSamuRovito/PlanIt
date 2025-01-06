@@ -20,6 +20,4 @@ public class DateComparison {
 
         return (int) ChronoUnit.DAYS.between(currentDate, otherDateString);
     }
-
-
 }

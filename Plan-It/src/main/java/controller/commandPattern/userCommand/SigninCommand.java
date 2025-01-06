@@ -4,6 +4,7 @@ import controller.commandPattern.ActionCommand;
 import core.ComponentManager;
 import core.SqLiteConnection;
 import model.FormatValidator;
+import model.PasswordUtils;
 import model.dao.avatarPlant.AvatarPlantDAOImpl;
 import model.dao.avatarPlant.AvatarPlantDB;
 import model.dao.folder.FolderDAOImpl;
@@ -43,7 +44,7 @@ public class SigninCommand implements ActionCommand {
         String usernameInput = parentView.getUsernameField().getText();
         String emailInput = parentView.getEmailField().getText();
         String passwordInput = parentView.getPasswordField().getPasswordString();
-        String confirmPasswordInput = parentView.getConfirmPasswordField().getPasswordString(); // Recupera la conferma della password
+        String confirmPasswordInput = parentView.getConfirmPasswordField().getPasswordString();
 
         // Controlla la validità dell'email
         if (!FormatValidator.isValidEmail(emailInput)) {
