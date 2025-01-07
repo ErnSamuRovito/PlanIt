@@ -40,8 +40,8 @@ public class IconPanel extends JPanel {
 
     private JPopupMenu createContextMenu(){
         JPopupMenu contextMenu = new JPopupMenu();
-        JMenuItem editItem = new JMenuItem("Modifica");
-        JMenuItem deleteItem = new JMenuItem("Elimina");
+        JMenuItem editItem = new JMenuItem("Edit");
+        JMenuItem deleteItem = new JMenuItem("Delete");
 
         // Aggiungi azioni ai menu item
         if (imagePath.equals(GlobalResources.folderImage))

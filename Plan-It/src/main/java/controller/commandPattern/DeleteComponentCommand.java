@@ -41,8 +41,7 @@ public class DeleteComponentCommand implements ActionCommand {
         // Mostra la finestra di conferma prima di procedere con la cancellazione
         int confirm = JOptionPane.showConfirmDialog(
                 null,
-                "Sei sicuro di voler eliminare " + (type.equals("folder") ? "la cartella" : "il task") + " '" + title + "'?",
-                "Conferma Eliminazione",
+                "Are you sure you want to delete the " + (type.equals("folder") ? "folder" : "task") + " '" + title + "'?", "Delete Confirmation",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.WARNING_MESSAGE
         );

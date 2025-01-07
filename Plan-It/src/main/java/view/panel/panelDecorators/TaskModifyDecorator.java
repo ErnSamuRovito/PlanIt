@@ -9,6 +9,7 @@ import view.UICreationalPattern.UIBuilders.*;
 import view.UICreationalPattern.UIComponents.*;
 import view.UICreationalPattern.UIFactories.*;
 
+import javax.swing.*;
 import java.awt.*;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -113,7 +114,7 @@ public class TaskModifyDecorator extends CreatePanelDecorator {
         return (CustomButton) factory.orderComponent(builder);
     }
 
-    private CustomLabel createBackLabel(){
+    private CustomLabel createBackLabel() {
         UIBuilder labelBuilder = new CustomLabelBuilder();
         UIDirector.buildBackClickableLabel(labelBuilder);
         labelBuilder.action(new GoToDeskViewCommand());
@@ -125,7 +126,14 @@ public class TaskModifyDecorator extends CreatePanelDecorator {
         gbc.gridy = 0;
         add(nameTaskField, gbc);
         gbc.gridy = 1;
-        add(descriptionTaskPane, gbc);
+
+        // Wrap the description task pane with a JScrollPane to make it scrollable
+        JScrollPane scrollPane = new JScrollPane(descriptionTaskPane);
+        scrollPane.setPreferredSize(new Dimension(500, 200)); // Set the size of the scrollable pane
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER); // Disable horizontal scroll
+
+        add(scrollPane, gbc); // Add the scrollable description panel
         gbc.gridy = 2;
         add(customDataPicker, gbc);
         gbc.gridy = 3;
@@ -165,13 +173,35 @@ public class TaskModifyDecorator extends CreatePanelDecorator {
         };
     }
 
-    public String getTitle() {return title;}
-    public String getDescription() {return description;}
-    public String getDueDate() {return dueDate;}
-    public int getUrgency() {return urgency;}
+    public String getTitle() {
+        return title;
+    }
 
-    public String getNewTitle() {return nameTaskField.getText();}
-    public String getNewDescription() {return descriptionTaskPane.getText();}
-    public String getNewDueDate() {return customDataPicker.getSelectedDate();}
-    public int getNewUrgency() {return comboBox.getSelectedIndex();}
+    public String getDescription() {
+        return description;
+    }
+
+    public String getDueDate() {
+        return dueDate;
+    }
+
+    public int getUrgency() {
+        return urgency;
+    }
+
+    public String getNewTitle() {
+        return nameTaskField.getText();
+    }
+
+    public String getNewDescription() {
+        return descriptionTaskPane.getText();
+    }
+
+    public String getNewDueDate() {
+        return customDataPicker.getSelectedDate();
+    }
+
+    public int getNewUrgency() {
+        return comboBox.getSelectedIndex();
+    }
 }

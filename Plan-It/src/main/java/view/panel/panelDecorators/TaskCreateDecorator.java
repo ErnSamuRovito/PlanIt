@@ -8,6 +8,7 @@ import view.UICreationalPattern.UIBuilders.*;
 import view.UICreationalPattern.UIComponents.*;
 import view.UICreationalPattern.UIFactories.*;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
 
@@ -45,7 +46,7 @@ public class TaskCreateDecorator extends CreatePanelDecorator {
         UIComponentFactory textFieldFactory = new CustomTextFieldFactory(nameTaskFieldBuilder);
         nameTaskField = (CustomTextField) textFieldFactory.orderComponent(nameTaskFieldBuilder);
 
-        // Task Description Field
+        // Task Description Field (Scrollable TextPane)
         UIBuilder descriptionTaskBuilder = new CustomTextPaneBuilder();
         descriptionTaskBuilder.size(FIELD_SIZE)
                 .placeholder("Insert task description")
@@ -54,6 +55,12 @@ public class TaskCreateDecorator extends CreatePanelDecorator {
                 .backgroundColor(GlobalResources.COLOR_WHITE);
         UIComponentFactory descriptionTextFieldFactory = new CustomTextPaneFactory(descriptionTaskBuilder);
         descriptionTaskPane = (CustomTextPane) descriptionTextFieldFactory.orderComponent(descriptionTaskBuilder);
+
+        // Wrap the description task pane with a JScrollPane to make it scrollable
+        JScrollPane scrollPane = new JScrollPane(descriptionTaskPane);
+        scrollPane.setPreferredSize(new Dimension(500, 200)); // Set the size of the scrollable pane
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER); // Disable horizontal scroll
 
         // Date Picker
         customDataPicker = new CustomDataPicker();
@@ -75,17 +82,23 @@ public class TaskCreateDecorator extends CreatePanelDecorator {
         UIBuilder labelBuilder = new CustomLabelBuilder();
         UIDirector.buildBackClickableLabel(labelBuilder);
         labelBuilder.action(
-                new GoToDeskViewCommand(ComponentManager.getInstance().getUser(),ComponentManager.getInstance().getCurrFolder())
+                new GoToDeskViewCommand(ComponentManager.getInstance().getUser(), ComponentManager.getInstance().getCurrFolder())
         );
         UIComponentFactory labelFactory = new CustomLabelFactory(labelBuilder);
         CustomLabel backLabel = (CustomLabel) labelFactory.orderComponent(labelBuilder);
 
-        gbc.gridy = 0; add(nameTaskField, gbc);
-        gbc.gridy = 1; add(descriptionTaskPane, gbc);
-        gbc.gridy = 2; add(customDataPicker, gbc);
-        gbc.gridy = 3; add(comboBox, gbc);
-        gbc.gridy = 4; add(createButton, gbc);
-        gbc.gridy = 5; add(backLabel, gbc);
+        gbc.gridy = 0;
+        add(nameTaskField, gbc);
+        gbc.gridy = 1;
+        add(scrollPane, gbc); // Add the scrollable description panel
+        gbc.gridy = 2;
+        add(customDataPicker, gbc);
+        gbc.gridy = 3;
+        add(comboBox, gbc);
+        gbc.gridy = 4;
+        add(createButton, gbc);
+        gbc.gridy = 5;
+        add(backLabel, gbc);
     }
 
     // Getters and Setters
