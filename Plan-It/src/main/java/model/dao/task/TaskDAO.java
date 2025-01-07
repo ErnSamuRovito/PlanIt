@@ -9,7 +9,6 @@ public interface TaskDAO {
     List<TaskDB> getTasksByFolder(int folderId);
     boolean updateTask(TaskDB task, int id);
     void deleteTask(int id);
-    void setPassword(int id, String password);
 
     ArrayList<String> getTaskDataByTitleAndFolderAndUsername(String taskTitle, String folderName, String username);
     List<String> getTasksByFolderAndUser(String startFolder, String user);

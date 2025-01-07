@@ -19,11 +19,12 @@ public interface UIComponent {
 
     default void drawPlaceholder(Graphics2D g2, JComponent component, Boolean isPlaceholderVisible,
                                  String placeholder, int xOffset) {
-        if (isPlaceholderVisible) {
+        if (isPlaceholderVisible && placeholder != null) { // Verifica se il placeholder non è null
             g2.setColor(Color.DARK_GRAY);
             FontMetrics metrics = g2.getFontMetrics();
             int yOffset = (component.getHeight() + metrics.getAscent()) / 2 - metrics.getDescent();  // Posiziona il testo verticalmente al centro
             g2.drawString(placeholder, xOffset, yOffset);
         }
     }
+
 }

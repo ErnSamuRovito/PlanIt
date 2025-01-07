@@ -203,4 +203,18 @@ public class UserDAOImpl implements UserDAO {
             throw new RuntimeException("Error searching for user", e);
         }
     }
+
+    @Override
+    public void setPassword(int id, String password) {
+        String sql = "UPDATE User SET password = ? WHERE id = ?";
+        String hashedPassword = PasswordUtils.hashPassword(password); // Hash della password
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, hashedPassword); // Usa la password hashata
+            stmt.setInt(2, id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

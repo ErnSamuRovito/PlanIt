@@ -6,12 +6,11 @@ import core.SqLiteConnection;
 import model.FormatValidator;
 import model.PasswordUtils;
 import model.User;
-import model.dao.task.TaskDAOImpl;
 import model.dao.user.UserDAO;
 import model.dao.user.UserDAOImpl;
 import view.UICreationalPattern.UIComponents.CustomPasswordField;
 
-import java.security.MessageDigest;
+import javax.swing.*;
 import java.util.Arrays;
 
 public class ChangePasswordCommand implements ActionCommand {
@@ -34,42 +33,45 @@ public class ChangePasswordCommand implements ActionCommand {
         char[] confirmPassword = confirmPasswordField.getPassword();
 
         try {
+            // Ottieni la password hashata dal database
             UserDAO userDAO = new UserDAOImpl(SqLiteConnection.getInstance().getConnection());
             String hashedPassword = userDAO.getHashedPassword(User.getInstance().getId());
 
-            if (PasswordUtils.verifyPassword(Arrays.toString(currentPassword), hashedPassword)) {
-                System.out.println("La password attuale non è corretta.");
-                return;
-            } else if (PasswordUtils.verifyPassword(Arrays.toString(newPassword), hashedPassword)) {
-                System.out.println("La nuova password deve essere diversa dalla password attuale.");
+            // Verifica se la password corrente è corretta (usando verifyPassword con la password in chiaro)
+            if (!PasswordUtils.verifyPassword(new String(currentPassword), hashedPassword)) {
+                JOptionPane.showMessageDialog(null, "The current password is incorrect.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
+            // Verifica che la nuova password sia diversa dalla corrente
+            if (Arrays.equals(currentPassword, newPassword)) {
+                JOptionPane.showMessageDialog(null, "The new password must be different from the current password.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Verifica se le password corrispondono
             if (!Arrays.equals(newPassword, confirmPassword)) {
-                System.out.println("Le password non corrispondono.");
+                JOptionPane.showMessageDialog(null, "The passwords do not match.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             String newPasswordString = new String(newPassword);
 
+            // Verifica che la nuova password sia valida
             if (FormatValidator.isValidEmail(newPasswordString) &&
                     !FormatValidator.isValidPassword(newPasswordString)) {
-                System.out.println("La nuova password non è valida.");
+                JOptionPane.showMessageDialog(null, "The new password is not valid.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            if (!Arrays.equals(newPassword, confirmPassword)) {
-                System.out.println("Non hai confermato correttamente la password.");
-                return;
-            }
+            // Imposta la nuova password (esegui l'hashing della nuova password)
+            userDAO.setPassword(User.getInstance().getId(), newPasswordString);
 
-            TaskDAOImpl taskDAO = new TaskDAOImpl(SqLiteConnection.getInstance().getConnection());
-            taskDAO.setPassword(User.getInstance().getId(), newPasswordString);
-
+            // Cambia il pannello della vista
             ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getLoginView());
-            System.out.println("Password cambiata con successo.");
+            JOptionPane.showMessageDialog(null, "Password changed successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
-            System.err.println("Errore durante il cambio della password: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error changing password: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

@@ -9,6 +9,7 @@ public interface UserDAO {
     void setUsername(String username);
     boolean deleteUser(int id);
     String getHashedPassword(int id);
+    void setPassword(int id, String password);
 
     int logUser(String user, String password);
     int registerUserAndGetId(String username, String email, String password);
