@@ -4,6 +4,7 @@ import controller.commandPattern.ActionCommand;
 import core.ComponentManager;
 import core.SqLiteConnection;
 import model.FormatValidator;
+import model.User;
 import model.dao.avatarPlant.AvatarPlantDAOImpl;
 import model.dao.avatarPlant.AvatarPlantDB;
 import model.dao.folder.FolderDAOImpl;
@@ -65,6 +66,7 @@ public class SigninCommand implements ActionCommand {
 
         // Registrazione dell'utente nel database
         int userId = registerUser(usernameInput, emailInput, passwordInput);
+        User.getInstance().loadUser(userId);
 
         if (userId != -1) {
             // Crea la cartella 'root' associata all'utente

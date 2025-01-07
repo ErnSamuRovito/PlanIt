@@ -217,4 +217,18 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 
+    @Override
+    public void setEmail(String newEmail) {
+        String sql = "UPDATE User SET email = ? WHERE id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            // Imposta i parametri per il PreparedStatement
+            preparedStatement.setString(1, newEmail); // nuova email
+            preparedStatement.setInt(2, User.getInstance().getId()); // id dell'utente
+            preparedStatement.executeUpdate(); // Esegui l'aggiornamento
+        } catch (SQLException e) {
+            System.err.println("Error updating email: " + e.getMessage());
+            throw new RuntimeException("Error updating email", e); // Rilancia l'errore se qualcosa va storto
+        }
+    }
+
 }

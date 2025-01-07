@@ -23,9 +23,9 @@ public class SettingsView extends JPanel {
     private static final Dimension FIELD_SIZE = new Dimension(200, 30);
     private static final Dimension BUTTON_SIZE = new Dimension(150, 50);
 
-    private CustomTextField usernameField, namePlantField;
+    private CustomTextField usernameField, namePlantField, emailField; // Aggiunta la field per l'email
     private CustomButton changePasswordButton, saveButton, deleteUserButton;
-    private CustomLabel usernameLabel, namePlantLabel, backLabel;
+    private CustomLabel usernameLabel, namePlantLabel, emailLabel, backLabel; // Aggiunta l'etichetta per l'email
 
     public SettingsView() {
         initializeLayout();
@@ -40,12 +40,14 @@ public class SettingsView extends JPanel {
 
     private void initializeComponents() {
         usernameField = createCustomTextField(User.getInstance().getUsername());
+        emailField = createCustomTextField(User.getInstance().getEmail()); // Inizializza il campo per l'email
         changePasswordButton = createCustomButton("Change password");
         namePlantField = createCustomTextField(AvatarPlant.getInstance().getName());
         saveButton = createSaveButton();
         deleteUserButton = createDeleteUserButton();
 
         usernameLabel = createCustomLabel("Username:");
+        emailLabel = createCustomLabel("Email:"); // Etichetta per l'email
         namePlantLabel = createCustomLabel("Plant name:");
         backLabel = createBackLabel();
     }
@@ -85,9 +87,7 @@ public class SettingsView extends JPanel {
         buttonBuilder
                 .text("Save")
                 .size(BUTTON_SIZE)
-                .action(new SaveSettingsCommand(usernameField, namePlantField));
-
-
+                .action(new SaveSettingsCommand(usernameField, namePlantField, emailField)); // Passiamo anche emailField
 
         UIComponentFactory factory = new CustomButtonFactory(buttonBuilder);
         return (CustomButton) factory.orderComponent(buttonBuilder);
@@ -123,18 +123,25 @@ public class SettingsView extends JPanel {
         add(usernameLabel, gbc);
         gbc.gridy = 1;
         add(usernameField, gbc);
+
+        // Aggiungiamo i nuovi componenti
         gbc.gridy = 2;
-        add(namePlantLabel, gbc);
+        add(emailLabel, gbc); // Aggiungiamo l'etichetta per l'email
         gbc.gridy = 3;
-        add(namePlantField, gbc);
+        add(emailField, gbc); // Aggiungiamo il campo per l'email
+
         gbc.gridy = 4;
-        add(changePasswordButton, gbc);
+        add(namePlantLabel, gbc);
         gbc.gridy = 5;
-        add(saveButton, gbc);
+        add(namePlantField, gbc);
         gbc.gridy = 6;
+        add(changePasswordButton, gbc);
+        gbc.gridy = 7;
+        add(saveButton, gbc);
+        gbc.gridy = 8;
         add(deleteUserButton, gbc);
 
-        gbc.gridy = 7;
+        gbc.gridy = 9;
         add(backLabel, gbc);
     }
 
