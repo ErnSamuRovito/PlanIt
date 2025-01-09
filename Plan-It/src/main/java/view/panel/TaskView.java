@@ -5,14 +5,9 @@ import controller.commandPattern.navigationCommands.GoToDeskViewCommand;
 import core.GlobalResources;
 import core.SqLiteConnection;
 import model.dao.task.TaskDAOImpl;
-import view.UICreationalPattern.UIBuilders.*;
 import view.UICreationalPattern.UIComponents.CustomButton;
 import view.UICreationalPattern.UIComponents.CustomLabel;
 import view.UICreationalPattern.UIComponents.CustomTextPane;
-import view.UICreationalPattern.UIFactories.CustomButtonFactory;
-import view.UICreationalPattern.UIFactories.CustomLabelFactory;
-import view.UICreationalPattern.UIFactories.CustomTextPaneFactory;
-import view.UICreationalPattern.UIFactories.UIComponentFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,14 +16,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class TaskView extends JPanel {
-    private final SplitPanel splitPanel;
+    private SplitPanel splitPanel;
     private final String title, user, startFolder;
-    private final JPanel homePanel;
+    private JPanel homePanel;
     private CustomButton doneButton;
     private int taskState;
-
-    private static final Dimension FIELD_SIZE = new Dimension(200, 30);
-    private static final Dimension BUTTON_SIZE = new Dimension(150, 50);
 
     public TaskView(String title, String user, String startFolder) {
         this.title = title;
@@ -36,14 +28,25 @@ public class TaskView extends JPanel {
         this.startFolder = startFolder;
 
         // Controlla lo stato del task.
+        initializeTaskState();
+
+        // Imposta il layout principale per TaskView
+        setupMainLayout();
+
+        // Mostra i dati nel pannello
+        showTaskData();
+    }
+
+    private void initializeTaskState() {
         try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
             TaskDAOImpl taskDAO = new TaskDAOImpl(connection);
             taskState = taskDAO.checkTaskByFolderAndTitle(startFolder, user, title);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
 
-        // Imposta il layout principale per TaskView
+    private void setupMainLayout() {
         setLayout(new BorderLayout());
 
         // Inizializza lo SplitPanel e aggiungilo al centro
@@ -54,10 +57,8 @@ public class TaskView extends JPanel {
 
         add(splitPanel, BorderLayout.CENTER);
 
+        // Aggiungi il link per tornare alla vista principale
         splitPanel.addBackClickableLabel(new GoToDeskViewCommand(user, startFolder));
-
-        // Mostra i dati nel pannello
-        showTaskData();
     }
 
     private void showTaskData() {
@@ -66,71 +67,50 @@ public class TaskView extends JPanel {
             ArrayList<String> result = taskDAO.getTaskDataByTitleAndFolderAndUsername(title, startFolder, user);
 
             if (!result.isEmpty()) {
-                createComponent(result);
+                createTaskComponents(result);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void createComponent(ArrayList<String> result) {
-        // Configura il layout per il pannello "HomePanel" dello SplitPanel
+    private void createTaskComponents(ArrayList<String> result) {
+        // Configura il layout per il pannello "HomePanel"
         GridBagConstraints gbc = setGridBagConstraints();
 
-        // CREAZIONE DELLA LABEL CONTENENTE IL TITOLO DEL TASK
-        UIBuilder titleLabelBuilder = new CustomLabelBuilder();
-        UIDirector.buildStandardLabel(titleLabelBuilder);
-        titleLabelBuilder.text(result.get(1)); // Imposta il testo del titolo
-        UIComponentFactory titleLabelFactory = new CustomLabelFactory(titleLabelBuilder);
-        CustomLabel titleLabel = (CustomLabel) titleLabelFactory.orderComponent(titleLabelBuilder);
+        // Crea e aggiungi la label del titolo
+        CustomLabel titleLabel = UIFactoryHelper.createLabel(result.get(1));
+        addComponentToPanel(titleLabel, gbc, 0);
 
-        // CREAZIONE DEL PANNELLO CONTENENTE LA DESCRIZIONE DEL TASK
-        CustomTextPaneBuilder textPaneBuilder = new CustomTextPaneBuilder();
-        UIDirector.buildStandardTextPane(textPaneBuilder);
-        textPaneBuilder.content(result.get(2)); // Imposta la descrizione
-        UIComponentFactory textPaneFactory = new CustomTextPaneFactory(textPaneBuilder);
-        CustomTextPane customTextPane = (CustomTextPane) textPaneFactory.createComponent();
-
-        // Creazione del pulsante DONE usando il Builder e la Factory
-        if (taskState != -1 && taskState != 100) {
-            UIBuilder buttonBuilder = new CustomButtonBuilder();
-            UIDirector.buildStandardButton(buttonBuilder);
-            buttonBuilder.text("DONE!").size(BUTTON_SIZE).action(new TaskDoneCommand(result.get(0)));
-            // Usa la factory per creare il pulsante
-            UIComponentFactory buttonFactory = new CustomButtonFactory(buttonBuilder);
-            doneButton = (CustomButton) buttonFactory.orderComponent(buttonBuilder);
-        }
-
-        // Aggiungi il titolo al pannello
-        gbc.gridy = 0;
-        homePanel.add(titleLabel, gbc);
-
-        // Avvolgi il JTextPane in un JScrollPane
-        JScrollPane scrollPane = new JScrollPane(customTextPane);
-        scrollPane.setPreferredSize(new Dimension(0, 350)); // Imposta una dimensione fissa per l'immagine
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-        // Aggiungi lo JScrollPane al pannello
-        gbc.gridy = 1;
-        gbc.weighty = 0.6; // Assegna il 60% dello spazio verticale
-        gbc.fill = GridBagConstraints.BOTH; // Permette al componente di espandersi in entrambe le direzioni
-        homePanel.add(scrollPane, gbc);
+        // Crea e aggiungi il pannello di descrizione
+        CustomTextPane customTextPane = UIFactoryHelper.createTextPane(result.get(2));
+        JScrollPane scrollPane = UIFactoryHelper.createScrollPane(customTextPane, new Dimension(0, 350));
+        addComponentToPanel(scrollPane, gbc, 1, 0.6);
 
         // Aggiungi un riempitivo per spingere i componenti verso l'alto
         gbc.gridy = 2;
-        gbc.weighty = 0.1; // Il riempitivo occupa il restante 10% dello spazio
+        gbc.weighty = 0.1;
         homePanel.add(Box.createVerticalGlue(), gbc);
 
-        // Aggiungi il pulsante Done se necessario
+        // Se il task non è ancora completato, aggiungi il pulsante DONE
         if (taskState != -1 && taskState != 100) {
-            gbc.gridy = 3;
-            gbc.weighty = 0.2; // Assegna il 20% dello spazio verticale
-            homePanel.add(doneButton, gbc);
+            doneButton = UIFactoryHelper.createButton("DONE!", new TaskDoneCommand(result.get(0)));
+            addComponentToPanel(doneButton, gbc, 3, 0.2);
         }
     }
 
-    public GridBagConstraints setGridBagConstraints() {
+    private void addComponentToPanel(Component component, GridBagConstraints gbc, int gridY) {
+        addComponentToPanel(component, gbc, gridY, 0);
+    }
+
+    private void addComponentToPanel(Component component, GridBagConstraints gbc, int gridY, double weightY) {
+        gbc.gridy = gridY;
+        gbc.weighty = weightY;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        homePanel.add(component, gbc);
+    }
+
+    private GridBagConstraints setGridBagConstraints() {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10); // Margini per i componenti
         gbc.fill = GridBagConstraints.HORIZONTAL;

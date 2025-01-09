@@ -3,36 +3,25 @@ package view.panel;
 import controller.commandPattern.navigationCommands.GoToSigninCommand;
 import controller.commandPattern.userCommand.LoginCommand;
 import core.GlobalResources;
-import view.UICreationalPattern.UIBuilders.*;
 import view.UICreationalPattern.UIComponents.*;
-import view.UICreationalPattern.UIFactories.*;
 
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
 public class LoginView extends JPanel {
-    private static final Dimension FIELD_SIZE = new Dimension(200, 30);
-    private static final Dimension BUTTON_SIZE = new Dimension(150, 50);
-    private static final Dimension LABEL_SIZE = new Dimension(150, 15);
-
     private CustomTextField userField;
     private CustomPasswordField passwordField;
     private CustomButton loginButton;
     private CustomLabel signinLabel;
-    private final CustomLabel usernameLabel;
-    private final CustomLabel passwordLabel;
+    private CustomLabel usernameLabel;
+    private CustomLabel passwordLabel;
 
     public LoginView() {
         // Impostazioni di layout e margini
         setupLayout();
 
         // Creazione dei componenti
-        createUserField();
-        createPasswordField();
-        createLoginButton();
-        createSigninLabel();
-        usernameLabel = createLabel("Username or Email: ");
-        passwordLabel = createLabel("Password: ");
+        createComponents();
 
         // Aggiungi componenti al pannello
         addComponentsToPanel();
@@ -48,63 +37,13 @@ public class LoginView extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
     }
 
-    private CustomLabel createLabel(String text){
-        UIBuilder labelBuilder = new CustomLabelBuilder();
-        UIDirector.buildStandardLabel(labelBuilder);
-        labelBuilder.text(text).size(LABEL_SIZE);
-        UIComponentFactory labelFactory = new CustomLabelFactory(labelBuilder);
-        return (CustomLabel) labelFactory.orderComponent(labelBuilder);
-    }
-
-    private void createUserField() {
-        // Creazione del campo di testo per lo username/Email
-        UIBuilder usernameFieldBuilder = new CustomTextFieldBuilder();
-        UIDirector.buildStandardTextField(usernameFieldBuilder);
-        usernameFieldBuilder.size(FIELD_SIZE)
-                .placeholder("Username or Email");
-
-        // Usa la factory per creare il campo di testo
-        UIComponentFactory usernameFieldFactory = new CustomTextFieldFactory(usernameFieldBuilder);
-        userField = (CustomTextField) usernameFieldFactory.orderComponent(usernameFieldBuilder);
-    }
-
-    private void createPasswordField() {
-        // Creazione del campo di testo per la password
-        UIBuilder passwordFieldBuilder = new CustomPasswordFieldBuilder();
-        UIDirector.buildStandardPasswordField(passwordFieldBuilder);
-        passwordFieldBuilder.text("Password")
-                .size(FIELD_SIZE)
-                .placeholder("Password");
-
-        // Usa la factory per creare il campo di testo
-        UIComponentFactory passwordFieldFactory = new CustomTextFieldFactory(passwordFieldBuilder);
-        passwordField = (CustomPasswordField) passwordFieldFactory.orderComponent(passwordFieldBuilder);
-    }
-
-    private void createLoginButton() {
-        // Creazione del pulsante di login
-        UIBuilder buttonBuilder = new CustomButtonBuilder();
-        UIDirector.buildStandardButton(buttonBuilder);
-        buttonBuilder.text("Login")
-                .size(BUTTON_SIZE)
-                .action(new LoginCommand(this));
-
-        // Usa la factory per creare il pulsante
-        UIComponentFactory buttonFactory = new CustomButtonFactory(buttonBuilder);
-        loginButton = (CustomButton) buttonFactory.orderComponent(buttonBuilder);
-    }
-
-    private void createSigninLabel() {
-        // Creazione del link per il signup
-        UIBuilder labelBuilder = new CustomLabelBuilder();
-        UIDirector.buildStandardClickableLabel(labelBuilder);
-        labelBuilder.text("Don't have an account? Sign up!")
-                .size(BUTTON_SIZE)
-                .action(new GoToSigninCommand());
-
-        // Usa la factory per creare la label
-        UIComponentFactory labelFactory = new CustomLabelFactory(labelBuilder);
-        signinLabel = (CustomLabel) labelFactory.orderComponent(labelBuilder);
+    private void createComponents(){
+        userField = UIFactoryHelper.createTextField("","Username or Email");
+        passwordField = UIFactoryHelper.createPasswordField("Password");
+        loginButton = UIFactoryHelper.createButton("Login", new LoginCommand(this));
+        signinLabel = UIFactoryHelper.createClickableLabel("Don't have an account? Sign up!", new GoToSigninCommand());
+        usernameLabel = UIFactoryHelper.createLabel("Username or Email: ");
+        passwordLabel = UIFactoryHelper.createLabel("Password: ");
     }
 
     private void addComponentsToPanel() {

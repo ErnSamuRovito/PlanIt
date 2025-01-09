@@ -4,9 +4,9 @@ import controller.commandPattern.CreateTaskCommand;
 import controller.commandPattern.navigationCommands.GoToDeskViewCommand;
 import core.ComponentManager;
 import core.GlobalResources;
-import view.UICreationalPattern.UIBuilders.*;
 import view.UICreationalPattern.UIComponents.*;
 import view.UICreationalPattern.UIFactories.*;
+import view.panel.UIFactoryHelper;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,9 +18,11 @@ public class TaskCreateDecorator extends CreatePanelDecorator {
 
     private CustomTextField nameTaskField;
     private CustomTextPane descriptionTaskPane;
+    private JScrollPane scrollPane;
     private CustomDataPicker customDataPicker;
     private CustomButton createButton;
     private CustomComboBox<String> comboBox;
+    private CustomLabel backLabel;
 
     public TaskCreateDecorator(CreatePanel createPanel) {
         super(createPanel);
@@ -33,64 +35,39 @@ public class TaskCreateDecorator extends CreatePanelDecorator {
         setLayout(new GridBagLayout());
         setBackground(GlobalResources.COLOR_PANNA);
 
+        createComponents();
+        addComponentsToPanel();
+    }
+
+    private void createComponents(){
+        // Task Name Field
+        nameTaskField = UIFactoryHelper.createTextField("", "Insert task name");
+        // Task Description Field (Scrollable TextPane)
+        descriptionTaskPane = UIFactoryHelper.createEditableTextPane("");
+        // Wrap il description task pane in uno JScrollPane
+        scrollPane = UIFactoryHelper.createScrollPane(descriptionTaskPane, new Dimension(500, 200));
+        // Date Picker
+        customDataPicker = UIFactoryHelper.createDataPicker(null);
+        // Priority ComboBox
+        String[] items = {"Low", "Medium", "High"};
+        comboBox = UIFactoryHelper.createComboBox(items, 0);
+        // Create New Task Button
+        createButton = UIFactoryHelper.createButton("Create New Task", new CreateTaskCommand(this));
+        // Create "Back" clickable label
+        backLabel = UIFactoryHelper.createClickableLabel("Back",
+                new GoToDeskViewCommand(ComponentManager.getInstance().getUser(), ComponentManager.getInstance().getCurrFolder()));
+    }
+
+    private void addComponentsToPanel(){
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.CENTER;
 
-        // Task Name Field
-        UIBuilder nameTaskFieldBuilder = new CustomTextFieldBuilder();
-        UIDirector.buildStandardTextField(nameTaskFieldBuilder);
-        nameTaskFieldBuilder.size(FIELD_SIZE).placeholder("Insert task name");
-
-        UIComponentFactory textFieldFactory = new CustomTextFieldFactory(nameTaskFieldBuilder);
-        nameTaskField = (CustomTextField) textFieldFactory.orderComponent(nameTaskFieldBuilder);
-
-        // Task Description Field (Scrollable TextPane)
-        UIBuilder descriptionTaskBuilder = new CustomTextPaneBuilder();
-        descriptionTaskBuilder.size(FIELD_SIZE)
-                .placeholder("Insert task description")
-                .editable(true)
-                .size(new Dimension(500, 200))
-                .backgroundColor(GlobalResources.COLOR_WHITE);
-        UIComponentFactory descriptionTextFieldFactory = new CustomTextPaneFactory(descriptionTaskBuilder);
-        descriptionTaskPane = (CustomTextPane) descriptionTextFieldFactory.orderComponent(descriptionTaskBuilder);
-
-        // Wrap the description task pane with a JScrollPane to make it scrollable
-        JScrollPane scrollPane = new JScrollPane(descriptionTaskPane);
-        scrollPane.setPreferredSize(new Dimension(500, 200)); // Set the size of the scrollable pane
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER); // Disable horizontal scroll
-
-        // Date Picker
-        customDataPicker = new CustomDataPicker();
-
-        // Priority ComboBox
-        String[] items = {"Low", "Medium", "High"};
-        comboBox = new CustomComboBox<>(items);
-
-        // Create New Task Button
-        UIBuilder buttonBuilder = new CustomButtonBuilder();
-        UIDirector.buildStandardButton(buttonBuilder);
-        buttonBuilder.text("Create New Task")
-                .size(BUTTON_SIZE)
-                .action(new CreateTaskCommand(this));
-        UIComponentFactory buttonFactory = new CustomButtonFactory(buttonBuilder);
-        createButton = (CustomButton) buttonFactory.orderComponent(buttonBuilder);
-
-        // Create "Back" clickable label
-        UIBuilder labelBuilder = new CustomLabelBuilder();
-        UIDirector.buildBackClickableLabel(labelBuilder);
-        labelBuilder.action(
-                new GoToDeskViewCommand(ComponentManager.getInstance().getUser(), ComponentManager.getInstance().getCurrFolder())
-        );
-        UIComponentFactory labelFactory = new CustomLabelFactory(labelBuilder);
-        CustomLabel backLabel = (CustomLabel) labelFactory.orderComponent(labelBuilder);
-
         gbc.gridy = 0;
         add(nameTaskField, gbc);
         gbc.gridy = 1;
-        add(scrollPane, gbc); // Add the scrollable description panel
+        add(scrollPane, gbc);
         gbc.gridy = 2;
         add(customDataPicker, gbc);
         gbc.gridy = 3;

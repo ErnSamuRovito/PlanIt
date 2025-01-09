@@ -5,9 +5,9 @@ import controller.commandPattern.navigationCommands.GoToDeskViewCommand;
 import core.GlobalResources;
 import model.dao.task.TaskDAOImpl;
 import core.SqLiteConnection;
-import view.UICreationalPattern.UIBuilders.*;
 import view.UICreationalPattern.UIComponents.*;
 import view.UICreationalPattern.UIFactories.*;
+import view.panel.UIFactoryHelper;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,11 +38,9 @@ public class TaskModifyDecorator extends CreatePanelDecorator {
         setLayout(new GridBagLayout());
         setBackground(GlobalResources.COLOR_PANNA);
 
-        GridBagConstraints gbc = createGridBagConstraints();
-
         loadTaskData();
-        buildComponents();
-        addComponentsToPanel(gbc);
+        createComponents();  // Separate method to create components
+        addComponentsToPanel();  // Add components to the panel
     }
 
     @Override
@@ -58,71 +56,19 @@ public class TaskModifyDecorator extends CreatePanelDecorator {
         return gbc;
     }
 
-    private void buildComponents() {
-        nameTaskField = buildNameTaskField();
-        descriptionTaskPane = buildDescriptionTaskPane();
-        customDataPicker = buildCustomDataPicker();
-        comboBox = buildComboBox();
-        modifyButton = buildModifyButton();
-        backLabel = createBackLabel();
+    // Separated the component creation logic here
+    private void createComponents() {
+        nameTaskField = UIFactoryHelper.createTextField(title != null ? title : "", "");
+        descriptionTaskPane = UIFactoryHelper.createEditableTextPane(description);
+        customDataPicker = UIFactoryHelper.createDataPicker(dueDate != null && !dueDate.isEmpty() ? dueDate : null);
+        comboBox = UIFactoryHelper.createComboBox(new String[]{"Low", "Medium", "High"}, urgency);
+        modifyButton = UIFactoryHelper.createButton("Modify Task", new ModifyTaskCommand(this));
+        backLabel = UIFactoryHelper.createClickableLabel("Back", new GoToDeskViewCommand());
     }
 
-    private CustomTextField buildNameTaskField() {
-        UIBuilder builder = new CustomTextFieldBuilder();
-        UIDirector.buildStandardTextField(builder);
-        builder.text(title).size(FIELD_SIZE).placeholder("");
-        UIComponentFactory factory = new CustomTextFieldFactory(builder);
-        return (CustomTextField) factory.orderComponent(builder);
-    }
-
-    private CustomTextPane buildDescriptionTaskPane() {
-        UIBuilder builder = new CustomTextPaneBuilder();
-        builder.content(description)
-                .size(new Dimension(500, 200))
-                .editable(true)
-                .backgroundColor(GlobalResources.COLOR_WHITE);
-        UIComponentFactory factory = new CustomTextPaneFactory(builder);
-        return (CustomTextPane) factory.orderComponent(builder);
-    }
-
-    private CustomDataPicker buildCustomDataPicker() {
-        CustomDataPicker picker = new CustomDataPicker();
-
-        // Verifica se dueDate è nullo e imposta una data predefinita se necessario
-        if (dueDate != null && !dueDate.isEmpty()) {
-            picker.setSelectedDate(dueDate);
-        } else {
-            // Imposta una data predefinita (es. data corrente)
-            picker.setSelectedDate("01/01/2025");  // Esempio di data predefinita
-        }
-
-        return picker;
-    }
-
-    private CustomComboBox<String> buildComboBox() {
-        String[] items = {"Low", "Medium", "High"};
-        CustomComboBox<String> box = new CustomComboBox<>(items);
-        box.setSelectedItem(convertUrgencyToString(urgency));
-        return box;
-    }
-
-    private CustomButton buildModifyButton() {
-        UIBuilder builder = new CustomButtonBuilder();
-        UIDirector.buildStandardButton(builder);
-        builder.text("Modify Task").size(BUTTON_SIZE).action(new ModifyTaskCommand(this));
-        UIComponentFactory factory = new CustomButtonFactory(builder);
-        return (CustomButton) factory.orderComponent(builder);
-    }
-
-    private CustomLabel createBackLabel() {
-        UIBuilder labelBuilder = new CustomLabelBuilder();
-        UIDirector.buildBackClickableLabel(labelBuilder);
-        labelBuilder.action(new GoToDeskViewCommand());
-        UIComponentFactory factory = new CustomLabelFactory(labelBuilder);
-        return (CustomLabel) factory.orderComponent(labelBuilder);
-    }
-
-    private void addComponentsToPanel(GridBagConstraints gbc) {
+    // Add all components to the panel
+    private void addComponentsToPanel() {
+        GridBagConstraints gbc = createGridBagConstraints();
         gbc.gridy = 0;
         add(nameTaskField, gbc);
         gbc.gridy = 1;
@@ -162,15 +108,6 @@ public class TaskModifyDecorator extends CreatePanelDecorator {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private String convertUrgencyToString(int urgency) {
-        return switch (urgency) {
-            case 0 -> "Low";
-            case 1 -> "Medium";
-            case 2 -> "High";
-            default -> "Low";
-        };
     }
 
     public String getTitle() {

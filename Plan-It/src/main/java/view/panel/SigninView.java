@@ -3,9 +3,7 @@ package view.panel;
 import controller.commandPattern.navigationCommands.GoToLoginCommand;
 import controller.commandPattern.userCommand.SigninCommand;
 import core.GlobalResources;
-import view.UICreationalPattern.UIBuilders.*;
 import view.UICreationalPattern.UIComponents.*;
-import view.UICreationalPattern.UIFactories.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,18 +26,7 @@ public class SigninView extends JPanel {
         setupLayout();
 
         // Creazione dei componenti
-        createUsernameField();
-        createEmailField();
-        createPasswordField();
-        createConfirmPasswordField();
-        createRegisterButton();
-        createLoginLabel();
-
-        // Creazione dei label
-        usernameLabel = createLabel("Username:");
-        emailLabel = createLabel("Email:");
-        passwordLabel = createLabel("Password:");
-        confirmPasswordLabel = createLabel("Confirm Password:");  // Nuovo label
+        createComponents();
 
         // Aggiungi componenti al pannello
         addComponentsToPanel();
@@ -56,72 +43,20 @@ public class SigninView extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
     }
 
-    private CustomLabel createLabel(String text){
-        UIBuilder labelBuilder = new CustomLabelBuilder();
-        UIDirector.buildStandardLabel(labelBuilder);
-        labelBuilder.text(text).size(LABEL_SIZE);
-        UIComponentFactory labelFactory = new CustomLabelFactory(labelBuilder);
-        return (CustomLabel) labelFactory.orderComponent(labelBuilder);
-    }
+    private void createComponents(){
+        // Creazione dei componenti tramite UIFactoryHelper
+        usernameField = UIFactoryHelper.createTextField("", "Username");
+        emailField = UIFactoryHelper.createTextField("", "Email");
+        passwordField = UIFactoryHelper.createPasswordField("Password");
+        confirmPasswordField = UIFactoryHelper.createPasswordField("Confirm Password");
+        registerButton = UIFactoryHelper.createButton("Register", new SigninCommand(this));
+        loginLabel = UIFactoryHelper.createClickableLabel("Already have an account? Log in!", new GoToLoginCommand());
 
-    private void createUsernameField() {
-        // Creazione del campo di testo per lo username
-        UIBuilder textFieldBuilder = new CustomTextFieldBuilder();
-        UIDirector.buildStandardTextField(textFieldBuilder);
-        textFieldBuilder.size(FIELD_SIZE).placeholder("Username");
-
-        UIComponentFactory textFieldFactory = new CustomTextFieldFactory(textFieldBuilder);
-        usernameField = (CustomTextField) textFieldFactory.orderComponent(textFieldBuilder);
-    }
-
-    private void createEmailField() {
-        // Creazione del campo di testo per l'email
-        UIBuilder textFieldBuilder = new CustomTextFieldBuilder();
-        UIDirector.buildStandardTextField(textFieldBuilder);
-        textFieldBuilder.size(FIELD_SIZE).placeholder("Email");
-
-        UIComponentFactory textFieldFactory = new CustomTextFieldFactory(textFieldBuilder);
-        emailField = (CustomTextField) textFieldFactory.orderComponent(textFieldBuilder);
-    }
-
-    private void createPasswordField() {
-        // Creazione del campo di testo per la password
-        UIBuilder passwordFieldBuilder = new CustomPasswordFieldBuilder();
-        UIDirector.buildStandardPasswordField(passwordFieldBuilder);
-        passwordFieldBuilder.size(FIELD_SIZE).placeholder("Password");
-
-        UIComponentFactory passwordFieldFactory = new CustomTextFieldFactory(passwordFieldBuilder);
-        passwordField = (CustomPasswordField) passwordFieldFactory.orderComponent(passwordFieldBuilder);
-    }
-
-    private void createConfirmPasswordField() {
-        // Creazione del campo di testo per la conferma della password
-        UIBuilder confirmPasswordFieldBuilder = new CustomPasswordFieldBuilder();
-        UIDirector.buildStandardPasswordField(confirmPasswordFieldBuilder);
-        confirmPasswordFieldBuilder.size(FIELD_SIZE).placeholder("Confirm Password");
-
-        UIComponentFactory confirmPasswordFieldFactory = new CustomTextFieldFactory(confirmPasswordFieldBuilder);
-        confirmPasswordField = (CustomPasswordField) confirmPasswordFieldFactory.orderComponent(confirmPasswordFieldBuilder);
-    }
-
-    private void createRegisterButton() {
-        // Creazione del pulsante per registrarsi
-        UIBuilder buttonBuilder = new CustomButtonBuilder();
-        UIDirector.buildStandardButton(buttonBuilder);
-        buttonBuilder.text("Register").size(BUTTON_SIZE).action(new SigninCommand(this));
-
-        UIComponentFactory buttonFactory = new CustomButtonFactory(buttonBuilder);
-        registerButton = (CustomButton) buttonFactory.orderComponent(buttonBuilder);
-    }
-
-    private void createLoginLabel() {
-        // Creazione del link per il login
-        UIBuilder labelBuilder = new CustomLabelBuilder();
-        UIDirector.buildStandardClickableLabel(labelBuilder);
-        labelBuilder.text("Already have an account? Log in!").size(BUTTON_SIZE).action(new GoToLoginCommand());
-
-        UIComponentFactory labelFactory = new CustomLabelFactory(labelBuilder);
-        loginLabel = (CustomLabel) labelFactory.orderComponent(labelBuilder);
+        // Creazione dei label
+        usernameLabel = UIFactoryHelper.createLabel("Username:");
+        emailLabel = UIFactoryHelper.createLabel("Email:");
+        passwordLabel = UIFactoryHelper.createLabel("Password:");
+        confirmPasswordLabel = UIFactoryHelper.createLabel("Confirm Password:");
     }
 
     private void addComponentsToPanel() {
