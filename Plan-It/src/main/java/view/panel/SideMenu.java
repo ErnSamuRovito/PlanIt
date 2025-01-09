@@ -46,7 +46,7 @@ public class SideMenu extends JPanel {
     private void addAvatarPlantGif() {
         // Aggiorna lo stato della pianta e visualizza la GIF corrispondente
         AvatarPlant.getInstance().updateState();
-        System.out.println(AvatarPlant.getInstance().getState().getClass().getSimpleName());
+        //System.out.println(AvatarPlant.getInstance().getState().getClass().getSimpleName());
 
         // Crea una JLabel con la GIF
         JLabel gifLabel = new JLabel(new ImageIcon(AvatarPlant.getInstance().getPathGifImage()));
