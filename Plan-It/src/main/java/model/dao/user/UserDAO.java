@@ -11,6 +11,8 @@ public interface UserDAO {
     String getHashedPassword(int id);
     void setPassword(int id, String password);
     void setEmail(String newEmail);
+    boolean isUsernameTaken(String username);
+    boolean isEmailTaken(String email);
 
     int logUser(String user, String password);
     int registerUserAndGetId(String username, String email, String password);

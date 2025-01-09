@@ -12,6 +12,8 @@ import model.plant.AvatarPlant;
 import view.UICreationalPattern.UIComponents.CustomTextField;
 
 import javax.swing.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class SaveSettingsCommand implements ActionCommand {
     private final CustomTextField usernameField;
@@ -30,12 +32,23 @@ public class SaveSettingsCommand implements ActionCommand {
         String newPlantName = namePlantField.getText();
         String newEmail = emailField.getText();
 
+        // Verifica se l'email è già utilizzata
+        if (newEmail != null && !newEmail.isEmpty() && isEmailTaken(newEmail)) {
+            JOptionPane.showMessageDialog(null, "This email is already registered.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Verifica se l'username è già utilizzato
+        if (newName != null && !newName.isEmpty() && isUsernameTaken(newName)) {
+            JOptionPane.showMessageDialog(null, "This username is already taken.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         // Verifica che l'email sia valida
-        if (( newEmail!=null && !newEmail.isEmpty() ) && !isValidEmail(newEmail)) {
-            // Se l'email non è valida, mostra un messaggio di errore
+        if ((newEmail != null && !newEmail.isEmpty()) && !isValidEmail(newEmail)) {
             JOptionPane.showMessageDialog(null, "Invalid email address. Please enter a valid email.",
                     "Error", JOptionPane.ERROR_MESSAGE);
-            return; // Non procedere oltre, non cambiare la schermata
+            return;
         }
 
         // Imposta i nuovi valori se tutti sono validi
@@ -45,6 +58,28 @@ public class SaveSettingsCommand implements ActionCommand {
 
         // Aggiorna la vista solo se tutte le informazioni sono valide
         ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getLoginView());
+    }
+
+    // Metodo per verificare se l'email è già utilizzata
+    private boolean isEmailTaken(String email) {
+        try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
+            UserDAOImpl userDAO = new UserDAOImpl(connection);
+            return userDAO.isEmailTaken(email);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return true; // Se c'è un errore, consideriamo l'email già presa
+        }
+    }
+
+    // Metodo per verificare se l'username è già utilizzato
+    private boolean isUsernameTaken(String username) {
+        try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
+            UserDAOImpl userDAO = new UserDAOImpl(connection);
+            return userDAO.isUsernameTaken(username);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return true; // Se c'è un errore, consideriamo l'username già preso
+        }
     }
 
     private void setNewUsername(String newUsername) {

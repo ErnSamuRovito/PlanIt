@@ -231,4 +231,34 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 
+    @Override
+    public boolean isUsernameTaken(String username) {
+        String sql = "SELECT COUNT(*) FROM User WHERE username = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Se il conteggio è maggiore di 0, l'username esiste già
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isEmailTaken(String email) {
+        String sql = "SELECT COUNT(*) FROM User WHERE email = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Se il conteggio è maggiore di 0, l'email esiste già
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }

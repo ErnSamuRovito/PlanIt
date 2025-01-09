@@ -46,6 +46,18 @@ public class SigninCommand implements ActionCommand {
         String passwordInput = parentView.getPasswordField().getPasswordString();
         String confirmPasswordInput = parentView.getConfirmPasswordField().getPasswordString();
 
+        // Controlla se l'email è già utilizzata
+        if (isEmailTaken(emailInput)) {
+            showMessageDialog(null, "This email is already registered.", ERROR_TITLE, ERROR_MESSAGE);
+            return;
+        }
+
+        // Controlla se l'username è già utilizzato
+        if (isUsernameTaken(usernameInput)) {
+            showMessageDialog(null, "This username is already taken.", ERROR_TITLE, ERROR_MESSAGE);
+            return;
+        }
+
         // Controlla la validità dell'email
         if (!FormatValidator.isValidEmail(emailInput)) {
             showMessageDialog(null, ERROR_EMAIL_INVALID, ERROR_TITLE, ERROR_MESSAGE);
@@ -89,6 +101,27 @@ public class SigninCommand implements ActionCommand {
             showMessageDialog(null, ERROR_REGISTRATION_FAILED, ERROR_TITLE, ERROR_MESSAGE);
         }
     }
+
+    private boolean isUsernameTaken(String username) {
+        try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
+            UserDAOImpl userDAO = new UserDAOImpl(connection);
+            return userDAO.isUsernameTaken(username);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return true; // Se si verifica un errore nella verifica, consideriamo l'username come già preso
+        }
+    }
+
+    private boolean isEmailTaken(String email) {
+        try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
+            UserDAOImpl userDAO = new UserDAOImpl(connection);
+            return userDAO.isEmailTaken(email);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return true; // Se si verifica un errore nella verifica, consideriamo l'email come già presa
+        }
+    }
+
 
     private boolean createPlant(String name, int owner) {
         try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
