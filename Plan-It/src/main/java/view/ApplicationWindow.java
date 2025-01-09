@@ -2,7 +2,10 @@
 
 package view;
 
-import model.SqLiteConnection;
+import core.SqLiteConnection;
+import model.DateComparison;
+import model.DesktopNotifier;
+import model.plant.AvatarPlant;
 import view.panel.LoginView;
 
 import javax.swing.*;
@@ -19,7 +22,7 @@ public class ApplicationWindow {
     private ApplicationWindow() {
         frame = new JFrame(DEFAULT_TITLE);
         frame.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-        frame.setResizable(false);
+        //frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Imposta la posizione al centro dello schermo
@@ -29,15 +32,11 @@ public class ApplicationWindow {
         // Imposta il pannello iniziale (LoginView)
         setPanel(new LoginView());
 
-
-        // connessione al DB
-        SqLiteConnection dbConnection = new SqLiteConnection();
-        Connection connection = dbConnection.getConnection();
-
-        // Puoi eseguire query qui utilizzando `connection`
+        DesktopNotifier notifier = new DesktopNotifier();
+        notifier.sendNotification("Titolo della Notifica", "Questo è un messaggio di notifica");
 
         // Non dimenticare di chiudere la connessione alla fine
-        // dbConnection.closeConnection();
+        //SqLiteConnection.getInstance().closeConnection();
     }
 
     public static synchronized ApplicationWindow getInstance() {

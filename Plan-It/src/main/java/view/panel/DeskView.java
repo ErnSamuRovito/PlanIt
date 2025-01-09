@@ -1,48 +1,145 @@
-// Package: view
-
 package view.panel;
 
-import core.GlobalResources;
-import core.ComponentManager; // Importa ComponentManager
-import view.ApplicationWindow;
-import view.UI.CustomButton;
-import view.factory.ButtonFactory; // Importa ButtonFactory
+import controller.commandPattern.ExploreFolderCommand;
+import controller.commandPattern.navigationCommands.GoBackCommand;
+import controller.commandPattern.navigationCommands.GoToLoginCommand;
+import controller.commandPattern.navigationCommands.GoToTaskViewCommand;
+import core.ComponentManager;
+import core.SqLiteConnection;
+import model.dao.folder.FolderDAOImpl;
+import model.dao.task.TaskDAOImpl;
+import model.plant.AvatarPlant;
+import view.panel.panelDecorators.CreatePanel;
+import view.panel.panelDecorators.FolderCreateDecorator;
+import view.panel.panelDecorators.TaskCreateDecorator;
+import view.panel.iconPanel.IconFactory;
+import view.panel.iconPanel.IconPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class DeskView extends JPanel {
 
-    public DeskView() {
+    private SplitPanel splitPanel;
+    private IconPanel iconPanelAdd, iconPanelBack;
+    private final String user, startFolder;
+
+    public DeskView(String user, String startFolder) {
+        this.user = user;
+        this.startFolder = startFolder;
+
+        // Imposta il layout principale
+        setLayout(new BorderLayout());
+
+        // Modifica punti salute Avatar
+        AvatarPlant.getInstance().subtractHP(AvatarPlant.getInstance().getPenance());
+
+        // Inizializza l'interfaccia utente
         initializeUI();
     }
 
     private void initializeUI() {
-        setLayout(new BorderLayout());
-        setBackground(GlobalResources.COLOR_PANNA);
+        // Crea e configura lo SplitPanel
+        splitPanel = new SplitPanel();
 
-        // Aggiunge il menù laterale
-        addSideMenu();
+        // Configura icone e dati
+        addBackIcon();
+        displayFoldersAndTasks();
+        addCreateIcon();
+        addPopupMenu();
+
+        // Aggiungi il comando per il ritorno alla schermata di login
+        splitPanel.addBackClickableLabel(new GoToLoginCommand());
+
+        // Aggiungi lo SplitPanel al centro del layout
+        add(splitPanel, BorderLayout.CENTER);
     }
 
-    // Metodo per creare e aggiungere il pannello laterale (menu)
-    private void addSideMenu() {
-        JPanel sideMenu = new JPanel();
-        sideMenu.setBackground(GlobalResources.COLOR_CREMA); // Colore del menu
-        sideMenu.setPreferredSize(new Dimension(200, getHeight())); // Larghezza fissa di 200 px
+    private void displayFoldersAndTasks() {
+        // Recupera i folder e i task dal data provider e li aggiunge al pannello
+        try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
 
-        // Crea il pulsante "Torna alla Login" utilizzando la factory
-        CustomButton backButton = new ButtonFactory("Exit")
-                .setSize(new Dimension(150, 40)) // Imposta la dimensione del pulsante
-                .setActionListener(e -> {
-                    // Associa l'azione di ritorno alla LoginView
-                    ApplicationWindow.getInstance().setPanel(ComponentManager.getInstance().getLoginView());
-                })
-                .create();
+            FolderDAOImpl folderDAO = new FolderDAOImpl(connection);
+            for (String folder : folderDAO.getFoldersByFolderAndUser(startFolder, user)) {
+                splitPanel.getHomePanel().add(
+                        IconFactory.createIconPanel(
+                                "folder", folder, new ExploreFolderCommand(user, folder)
+                        )
+                );
+            }
 
-        sideMenu.add(backButton); // Aggiungi il pulsante al menu laterale
+            TaskDAOImpl taskDAO = new TaskDAOImpl(connection);
+            for (String task : taskDAO.getTasksByFolderAndUser(startFolder, user)) {
+                String taskState = "task";
+                int taskStatus = taskDAO.checkTaskByFolderAndTitle(startFolder, user, task);
 
-        // Posiziona il menu sul lato sinistro
-        add(sideMenu, BorderLayout.WEST);
+                if (taskStatus == 100) {
+                    taskState = "taskCompleted";
+                } else if (taskStatus == -1) {
+                    taskState = "taskExpired";
+                }
+
+                splitPanel.getHomePanel().add(
+                        IconFactory.createIconPanel(
+                                taskState, task, new GoToTaskViewCommand(task, user, startFolder)
+                        )
+                );
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected void addPopupMenu() {
+        // Creazione del menu a comparsa
+        JPopupMenu popupMenu = new JPopupMenu();
+
+        // Creazione delle voci del menu per la creazione di folder o task
+        JMenuItem createFolderItem = new JMenuItem("Create Folder");
+        JMenuItem createTaskItem = new JMenuItem("Create Task");
+
+        // Aggiungi le voci al menu a comparsa
+        popupMenu.add(createFolderItem);
+        popupMenu.add(createTaskItem);
+
+        // Aggiungi gli action listener per ciascuna voce
+        createFolderItem.addActionListener(e -> createFolder());
+        createTaskItem.addActionListener(e -> createTask());
+
+        // Imposta il menu a comparsa sul pannello home
+        iconPanelAdd.setComponentPopupMenu(popupMenu);
+    }
+
+    protected void createTask() {
+        // Crea e imposta il pannello per la creazione di un task
+        CreatePanel createPanel = new CreatePanel();
+        createPanel = new TaskCreateDecorator(createPanel);
+        ComponentManager.getInstance().setPanel(createPanel);
+    }
+
+    protected void createFolder() {
+        // Crea e imposta il pannello per la creazione di una cartella
+        CreatePanel createPanel = new CreatePanel();
+        createPanel = new FolderCreateDecorator(createPanel);
+        ComponentManager.getInstance().setPanel(createPanel);
+    }
+
+    protected void addCreateIcon() {
+        // Aggiungi l'icona per la creazione
+        iconPanelAdd = IconFactory.createIconPanel("add", "new", null);
+        splitPanel.getHomePanel().add(iconPanelAdd);
+    }
+
+    protected void addBackIcon() {
+        // Aggiungi l'icona per il ritorno, se non siamo nella cartella root
+        if (!startFolder.equals("/root")) {
+            iconPanelBack = IconFactory.createIconPanel(
+                    "back", "back", new GoBackCommand()
+            );
+            splitPanel.getHomePanel().add(iconPanelBack);
+        }
     }
 }
