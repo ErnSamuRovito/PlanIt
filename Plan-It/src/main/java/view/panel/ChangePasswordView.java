@@ -6,6 +6,8 @@ import core.GlobalResources;
 import view.UICreationalPattern.UIComponents.CustomButton;
 import view.UICreationalPattern.UIComponents.CustomLabel;
 import view.UICreationalPattern.UIComponents.CustomPasswordField;
+import view.UICreationalPattern.UIFactoryHelper;
+
 import javax.swing.*;
 import java.awt.*;
 

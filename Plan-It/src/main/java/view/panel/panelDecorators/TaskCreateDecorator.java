@@ -5,8 +5,7 @@ import controller.commandPattern.navigationCommands.GoToDeskViewCommand;
 import core.ComponentManager;
 import core.GlobalResources;
 import view.UICreationalPattern.UIComponents.*;
-import view.UICreationalPattern.UIFactories.*;
-import view.panel.UIFactoryHelper;
+import view.UICreationalPattern.UIFactoryHelper;
 
 import javax.swing.*;
 import java.awt.*;

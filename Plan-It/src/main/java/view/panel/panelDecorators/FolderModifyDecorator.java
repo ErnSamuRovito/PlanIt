@@ -6,11 +6,10 @@ import core.ComponentManager;
 import core.GlobalResources;
 import core.SqLiteConnection;
 import model.dao.folder.FolderDAOImpl;
-import model.dao.task.TaskDAOImpl;
 import view.UICreationalPattern.UIComponents.CustomButton;
 import view.UICreationalPattern.UIComponents.CustomLabel;
 import view.UICreationalPattern.UIComponents.CustomTextField;
-import view.panel.UIFactoryHelper;
+import view.UICreationalPattern.UIFactoryHelper;
 
 import java.awt.*;
 import java.sql.Connection;

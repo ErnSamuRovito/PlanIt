@@ -7,7 +7,7 @@ import core.GlobalResources;
 import view.UICreationalPattern.UIComponents.CustomButton;
 import view.UICreationalPattern.UIComponents.CustomLabel;
 import view.UICreationalPattern.UIComponents.CustomTextField;
-import view.panel.UIFactoryHelper;
+import view.UICreationalPattern.UIFactoryHelper;
 
 import java.awt.*;
 

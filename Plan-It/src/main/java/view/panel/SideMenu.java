@@ -7,12 +7,8 @@ import core.SqLiteConnection;
 import model.dao.avatarPlant.AvatarPlantDAOImpl;
 import model.dao.avatarPlant.AvatarPlantDB;
 import model.plant.AvatarPlant;
-import view.UICreationalPattern.UIBuilders.CustomLabelBuilder;
-import view.UICreationalPattern.UIBuilders.UIBuilder;
-import view.UICreationalPattern.UIBuilders.UIDirector;
 import view.UICreationalPattern.UIComponents.CustomLabel;
-import view.UICreationalPattern.UIFactories.CustomLabelFactory;
-import view.UICreationalPattern.UIFactories.UIComponentFactory;
+import view.UICreationalPattern.UIFactoryHelper;
 
 import javax.swing.*;
 import java.awt.*;

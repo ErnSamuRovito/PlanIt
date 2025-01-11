@@ -4,6 +4,7 @@ import controller.commandPattern.navigationCommands.GoToLoginCommand;
 import controller.commandPattern.userCommand.SigninCommand;
 import core.GlobalResources;
 import view.UICreationalPattern.UIComponents.*;
+import view.UICreationalPattern.UIFactoryHelper;
 
 import javax.swing.*;
 import java.awt.*;

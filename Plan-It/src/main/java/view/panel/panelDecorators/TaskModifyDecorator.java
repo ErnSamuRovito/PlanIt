@@ -6,8 +6,7 @@ import core.GlobalResources;
 import model.dao.task.TaskDAOImpl;
 import core.SqLiteConnection;
 import view.UICreationalPattern.UIComponents.*;
-import view.UICreationalPattern.UIFactories.*;
-import view.panel.UIFactoryHelper;
+import view.UICreationalPattern.UIFactoryHelper;
 
 import javax.swing.*;
 import java.awt.*;
@@ -61,6 +60,8 @@ public class TaskModifyDecorator extends CreatePanelDecorator {
         nameTaskField = UIFactoryHelper.createTextField(title != null ? title : "", "");
         descriptionTaskPane = UIFactoryHelper.createEditableTextPane(description);
         customDataPicker = UIFactoryHelper.createDataPicker(dueDate != null && !dueDate.isEmpty() ? dueDate : null);
+        if (urgency>2) urgency = 2;
+        if (urgency<0) urgency = 0;
         comboBox = UIFactoryHelper.createComboBox(new String[]{"Low", "Medium", "High"}, urgency);
         modifyButton = UIFactoryHelper.createButton("Modify Task", new ModifyTaskCommand(this));
         backLabel = UIFactoryHelper.createClickableLabel("Back", new GoToDeskViewCommand());

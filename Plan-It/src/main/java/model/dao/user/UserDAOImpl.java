@@ -82,6 +82,9 @@ public class UserDAOImpl implements UserDAO {
         // Poi cancelliamo tutte le cartelle associate all'utente
         String deleteFoldersSql = "DELETE FROM Folder WHERE owner = ?";
 
+        // Poi cancelliamo la piantina associata all'utente
+        String deleteAvatarPlantSql = "DELETE FROM AvatarPlant WHERE owner = ?";
+
         // Infine, cancelliamo l'utente
         String deleteUserSql = "DELETE FROM User WHERE id = ?";
 
@@ -97,6 +100,12 @@ public class UserDAOImpl implements UserDAO {
 
             // Cancella le cartelle dell'utente
             try (PreparedStatement stmt = connection.prepareStatement(deleteFoldersSql)) {
+                stmt.setInt(1, id);
+                stmt.executeUpdate();
+            }
+
+            // Cancella la piantina associata all'utente
+            try (PreparedStatement stmt = connection.prepareStatement(deleteAvatarPlantSql)) {
                 stmt.setInt(1, id);
                 stmt.executeUpdate();
             }
@@ -132,11 +141,10 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public int logUser(String usernameOrEmail, String plainPassword) {
-        String query = "SELECT id, username, password FROM User WHERE username = ? OR email = ?";
+    public int logUser(String username, String plainPassword) {
+        String query = "SELECT id, username, password FROM User WHERE username = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, usernameOrEmail);
-            preparedStatement.setString(2, usernameOrEmail);
+            preparedStatement.setString(1, username);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {

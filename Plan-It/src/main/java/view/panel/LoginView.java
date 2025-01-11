@@ -4,6 +4,7 @@ import controller.commandPattern.navigationCommands.GoToSigninCommand;
 import controller.commandPattern.userCommand.LoginCommand;
 import core.GlobalResources;
 import view.UICreationalPattern.UIComponents.*;
+import view.UICreationalPattern.UIFactoryHelper;
 
 import java.awt.*;
 import javax.swing.*;
@@ -38,7 +39,7 @@ public class LoginView extends JPanel {
     }
 
     private void createComponents(){
-        userField = UIFactoryHelper.createTextField("","Username or Email");
+        userField = UIFactoryHelper.createTextField("","Username");
         passwordField = UIFactoryHelper.createPasswordField("Password");
         loginButton = UIFactoryHelper.createButton("Login", new LoginCommand(this));
         signinLabel = UIFactoryHelper.createClickableLabel("Don't have an account? Sign up!", new GoToSigninCommand());
