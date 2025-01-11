@@ -1,5 +1,7 @@
 package model.dao.task;
 
+import model.composite.Task;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +14,7 @@ public class TaskDAOImpl implements TaskDAO {
     }
 
     @Override
-    public boolean addTask(TaskDB task) {
+    public boolean addTask(Task task) {
         // Verifica se esiste già un task con lo stesso nome nella stessa cartella
         String checkSql = "SELECT COUNT(*) FROM Task WHERE title = ? AND folder = ?";
         try (PreparedStatement checkStmt = connection.prepareStatement(checkSql)) {
@@ -48,13 +50,13 @@ public class TaskDAOImpl implements TaskDAO {
 
 
     @Override
-    public TaskDB getTaskById(int id) {
+    public Task getTaskById(int id) {
         String sql = "SELECT * FROM Task WHERE id_task = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new TaskDB(
+                return new Task(
                         //rs.getInt("id_task"),
                         rs.getString("title"),
                         rs.getString("description"),
@@ -73,15 +75,15 @@ public class TaskDAOImpl implements TaskDAO {
     }
 
     @Override
-    public List<TaskDB> getTasksByFolder(int folderId) {
-        List<TaskDB> tasks = new ArrayList<>();
+    public List<Task> getTasksByFolder(int folderId) {
+        List<Task> tasks = new ArrayList<>();
         String sql = "SELECT * FROM Task WHERE folder = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, folderId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 tasks.add(
-                    new TaskDB(
+                    new Task(
                         //rs.getInt("id_task"),
                         rs.getString("title"),
                         rs.getString("description"),
@@ -101,7 +103,7 @@ public class TaskDAOImpl implements TaskDAO {
     }
 
     @Override
-    public boolean updateTask(TaskDB task, int id) {
+    public boolean updateTask(Task task, int id) {
         // Verifica se esiste già un task con lo stesso nome nella stessa cartella, ma con ID diverso
         String checkSql = "SELECT COUNT(*) FROM Task WHERE title = ? AND folder = ? AND id_task != ?";
         try (PreparedStatement checkStmt = connection.prepareStatement(checkSql)) {

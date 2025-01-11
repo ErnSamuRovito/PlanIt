@@ -2,8 +2,8 @@ package controller.commandPattern;
 
 import core.ComponentManager;
 import core.SqLiteConnection;
+import model.composite.Task;
 import model.dao.task.TaskDAOImpl;
-import model.dao.task.TaskDB;
 import view.panel.panelDecorators.TaskModifyDecorator;
 
 import javax.swing.*;
@@ -21,6 +21,7 @@ public class ModifyTaskCommand implements ActionCommand {
         try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
             TaskDAOImpl taskDAO = new TaskDAOImpl(connection);
 
+            // Otteniamo l'ID del task tramite il titolo, cartella e utente
             int id = taskDAO.getIdByFolderNameAndOwnerAndTitle(
                     ComponentManager.getInstance().getCurrFolder(),
                     ComponentManager.getInstance().getUser(),
@@ -28,23 +29,23 @@ public class ModifyTaskCommand implements ActionCommand {
             );
 
             if (id == -1) {
-                return;
+                return;  // Task non trovato
             }
 
-            // Cerca il task dal database usando l'id
-            TaskDB updatedTask = taskDAO.getTaskById(id);
+            // Recuperiamo il task dal database usando l'ID
+            Task updatedTask = taskDAO.getTaskById(id);
             if (updatedTask == null) {
-                return;
+                return;  // Task non trovato
             }
 
-            // Applica gli aggiornamenti al task
+            // Applichiamo gli aggiornamenti al task
             updatedTask.setTitle(panel.getNewTitle());
             updatedTask.setDescription(panel.getNewDescription());
             updatedTask.setDueDate(panel.getNewDueDate());
             updatedTask.setUrgency(panel.getNewUrgency());
 
-            // Aggiorna il task nel database
-            boolean success=taskDAO.updateTask(updatedTask, id);
+            // Aggiorniamo il task nel database
+            boolean success = taskDAO.updateTask(updatedTask, id);
 
             if (!success) {
                 // Se l'aggiornamento non è riuscito, mostra un pop-up di errore

@@ -1,6 +1,6 @@
-package model.dao.task;
+package model.composite;
 
-public class TaskDB {
+public class Task implements FileSystemComponent{
     private int idTask;
     private String title;
     private String description;
@@ -11,7 +11,19 @@ public class TaskDB {
     private int type;
     private String extraInfo;
 
-    public TaskDB(String title, String description, String dueDate, int urgency, int folder, int state, int type, String extraInfo) {
+    public Task(String title, String description, String dueDate, int urgency, int folder, int type, String extraInfo) {
+        //this.idTask = idTask;
+        this.title = title;
+        this.description = description;
+        this.dueDate = dueDate;
+        this.urgency = urgency;
+        this.folder = folder;
+        this.state = 0;
+        this.type = type;
+        this.extraInfo = extraInfo;
+    }
+
+    public Task(String title, String description, String dueDate, int urgency, int folder, int state, int type, String extraInfo) {
         //this.idTask = idTask;
         this.title = title;
         this.description = description;
@@ -42,4 +54,8 @@ public class TaskDB {
     public void setState(int state) {this.state = state;}
     public void setType(int type) {this.type = type;}
     public void setExtraInfo(String extraInfo) {this.extraInfo = extraInfo;}
+
+    @Override public void display() {
+        System.out.println("Task: " + title + ", Due: " + dueDate + ", Urgency: " + urgency + ", Folder: " + folder + ", State: " + state);
+    }
 }

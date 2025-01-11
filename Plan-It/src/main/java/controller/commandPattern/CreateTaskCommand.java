@@ -2,9 +2,9 @@ package controller.commandPattern;
 
 import core.ComponentManager;
 import core.SqLiteConnection;
+import model.composite.Task;
 import model.dao.folder.FolderDAOImpl;
 import model.dao.task.TaskDAOImpl;
-import model.dao.task.TaskDB;
 import view.panel.panelDecorators.TaskCreateDecorator;
 
 import javax.swing.*;
@@ -14,10 +14,8 @@ import java.sql.SQLException;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
 
-public class CreateTaskCommand implements ActionCommand{
+public class CreateTaskCommand implements ActionCommand {
     private final TaskCreateDecorator taskCreateDecorator;
-    TaskDB newTaskDB;
-    String nameTask;
 
     public CreateTaskCommand(TaskCreateDecorator taskCreateDecorator) {
         this.taskCreateDecorator = taskCreateDecorator;
@@ -25,7 +23,7 @@ public class CreateTaskCommand implements ActionCommand{
 
     @Override
     public void execute() {
-        nameTask = taskCreateDecorator.getNameTaskField();
+        String nameTask = taskCreateDecorator.getNameTaskField();
         String descriptionTask = taskCreateDecorator.getDescriptionTaskPane();
         String dateTask = taskCreateDecorator.getCustomDataPicker();
         int urgencyTask = taskCreateDecorator.getComboBoxSelection();
@@ -34,41 +32,38 @@ public class CreateTaskCommand implements ActionCommand{
         if (!nameTask.isEmpty() && !nameTask.matches(".*[/*.,?^].*")) {
             try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
                 FolderDAOImpl folderDAO = new FolderDAOImpl(connection);
-                newTaskDB = new TaskDB(
+                int folderId = folderDAO.getFolderIdByNameAndOwner(
+                        ComponentManager.getInstance().getCurrFolder(),
+                        ComponentManager.getInstance().getUser()
+                );
+
+                Task newTask = new Task(
                         nameTask,
                         descriptionTask,
                         dateTask,
                         urgencyTask,
-                        folderDAO.getFolderIdByNameAndOwner(
-                                ComponentManager.getInstance().getCurrFolder(),
-                                ComponentManager.getInstance().getUser()
-                        ),
-                        0,
+                        folderId,
                         typeTask,
                         "task extra info"
                 );
 
-                TaskDAOImpl taskDAOimpl = new TaskDAOImpl(connection);
+                TaskDAOImpl taskDAO = new TaskDAOImpl(connection);
 
-                boolean success=taskDAOimpl.addTask(newTaskDB);
+                boolean success = taskDAO.addTask(newTask);
 
                 if (!success) {
-                    // Se l'aggiornamento non è riuscito, mostra un pop-up di errore
                     JOptionPane.showMessageDialog(taskCreateDecorator,
                             "Error: A task with the same name already exists.",
                             "Creation Error",
                             JOptionPane.ERROR_MESSAGE);
                 } else {
-                    // Ricarica la vista della scrivania
                     ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView());
                 }
-
-                ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-        }else{
-            showMessageDialog(null, "A name for the task is required and cannot include the following characters: '/*.,?^'.", "Plan-It", ERROR_MESSAGE);
+        } else {
+            showMessageDialog(null, "A name for the task is required and cannot include special characters.", "Plan-It", ERROR_MESSAGE);
         }
     }
 }

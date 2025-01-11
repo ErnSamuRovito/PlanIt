@@ -2,8 +2,8 @@ package controller.commandPattern;
 
 import core.ComponentManager;
 import core.SqLiteConnection;
+import model.composite.Folder;
 import model.dao.folder.FolderDAOImpl;
-import model.dao.folder.FolderDB;
 import model.dao.user.UserDAOImpl;
 import view.panel.panelDecorators.FolderCreateDecorator;
 
@@ -14,9 +14,8 @@ import java.sql.SQLException;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
 
-public class CreateFolderCommand implements ActionCommand{
+public class CreateFolderCommand implements ActionCommand {
     private final FolderCreateDecorator createFolderDecorator;
-    FolderDB newFolderDB;
 
     public CreateFolderCommand(FolderCreateDecorator createFolderDecorator) {
         this.createFolderDecorator = createFolderDecorator;
@@ -33,17 +32,15 @@ public class CreateFolderCommand implements ActionCommand{
                         ComponentManager.getInstance().getCurrFolder(), ComponentManager.getInstance().getUser()
                 );
 
-                newFolderDB = new FolderDB(
-                        createFolderDecorator.getTextFieldName(),
-                        userId,
-                        parentId
-                );
+                // Creiamo un oggetto Folder
+                Folder newFolder = new Folder(createFolderDecorator.getTextFieldName(), userId, parentId);
 
-                FolderDAOImpl folderDAOimpl = new FolderDAOImpl(connection);
-                boolean success=folderDAOimpl.addFolder(newFolderDB);
+                // Aggiungi la nuova cartella nel database
+                FolderDAOImpl folderDAOImpl = new FolderDAOImpl(connection);
+                boolean success = folderDAOImpl.addFolder(newFolder);
 
                 if (!success) {
-                    // Se l'aggiornamento non è riuscito, mostra un pop-up di errore
+                    // Se la cartella non è stata creata (cartella con lo stesso nome esistente)
                     JOptionPane.showMessageDialog(createFolderDecorator,
                             "Error: A folder with the same name already exists.",
                             "Creation error",
@@ -52,10 +49,12 @@ public class CreateFolderCommand implements ActionCommand{
                     // Ricarica la vista della scrivania
                     ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView());
                 }
-
-                ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView());
-            } catch (SQLException e) {throw new RuntimeException(e);}
-        }else{
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new RuntimeException("Database error while creating folder", e);
+            }
+        } else {
+            // Messaggio di errore se il nome non è valido
             showMessageDialog(null, "A name for the folder is required and cannot include the following characters: '/*.,?^'.", "Plan-It", ERROR_MESSAGE);
         }
     }

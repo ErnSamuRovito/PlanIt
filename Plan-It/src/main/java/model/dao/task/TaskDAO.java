@@ -1,13 +1,14 @@
 package model.dao.task;
 
+import model.composite.Task;
 import java.util.ArrayList;
 import java.util.List;
 
 public interface TaskDAO {
-    boolean addTask(TaskDB task);
-    TaskDB getTaskById(int id);
-    List<TaskDB> getTasksByFolder(int folderId);
-    boolean updateTask(TaskDB task, int id);
+    boolean addTask(Task task);
+    Task getTaskById(int id);
+    List<Task> getTasksByFolder(int folderId);
+    boolean updateTask(Task task, int id);
     void deleteTask(int id);
 
     ArrayList<String> getTaskDataByTitleAndFolderAndUsername(String taskTitle, String folderName, String username);

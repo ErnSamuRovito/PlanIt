@@ -1,5 +1,7 @@
 package model.dao.folder;
 
+import model.composite.Folder;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,7 +17,7 @@ public class FolderDAOImpl implements FolderDAO {
     }
 
     @Override
-    public boolean addFolder(FolderDB folder) {
+    public boolean addFolder(Folder folder) {
         // Verifica se la cartella con lo stesso nome, owner e parent esiste già
         String checkSql = "SELECT COUNT(*) FROM Folder WHERE folder_name = ? AND owner = ? AND parent = ?";
         try (PreparedStatement checkStmt = connection.prepareStatement(checkSql)) {
@@ -25,12 +27,11 @@ public class FolderDAOImpl implements FolderDAO {
 
             try (ResultSet rs = checkStmt.executeQuery()) {
                 if (rs.next() && rs.getInt(1) > 0) {
-                    // Se esiste già una cartella con lo stesso nome, owner e parent, restituisce errore.
                     return false;
                 }
             }
 
-            // Se non esiste, esegui l'inserimento
+            // Inserimento della nuova cartella
             String sql = "INSERT INTO Folder (folder_name, owner, parent) VALUES (?, ?, ?)";
             try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                 stmt.setString(1, folder.getFolderName());
@@ -41,11 +42,9 @@ public class FolderDAOImpl implements FolderDAO {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
-            // Gestisci l'eccezione come appropriato
         }
         return true;
     }
-
 
     @Override
     public Boolean addRootFolder(int owner){
@@ -63,13 +62,13 @@ public class FolderDAOImpl implements FolderDAO {
     }
 
     @Override
-    public FolderDB getFolderById(int id) {
+    public Folder getFolderById(int id) {
         String sql = "SELECT * FROM Folder WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new FolderDB(rs.getString("folder_name"), rs.getInt("owner"), rs.getInt("parent"));
+                return new Folder(rs.getString("folder_name"), rs.getInt("owner"), rs.getInt("parent"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -94,14 +93,14 @@ public class FolderDAOImpl implements FolderDAO {
     }
 
     @Override
-    public List<FolderDB> getFoldersByOwner(int ownerId) {
-        List<FolderDB> folders = new ArrayList<>();
+    public List<Folder> getFoldersByOwner(int ownerId) {
+        List<Folder> folders = new ArrayList<>();
         String sql = "SELECT * FROM Folder WHERE owner = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, ownerId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                folders.add(new FolderDB(rs.getString("folder_name"), rs.getInt("owner"), rs.getInt("parent")));
+                folders.add(new Folder(rs.getString("folder_name"), rs.getInt("owner"), rs.getInt("parent")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -110,14 +109,14 @@ public class FolderDAOImpl implements FolderDAO {
     }
 
     @Override
-    public List<FolderDB> getSubfolders(int parentId) {
-        List<FolderDB> folders = new ArrayList<>();
+    public List<Folder> getSubfolders(int parentId) {
+        List<Folder> folders = new ArrayList<>();
         String sql = "SELECT * FROM Folder WHERE parent = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, parentId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                folders.add(new FolderDB(rs.getString("folder_name"), rs.getInt("owner"), rs.getInt("parent")));
+                folders.add(new Folder(rs.getString("folder_name"), rs.getInt("owner"), rs.getInt("parent")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -126,7 +125,7 @@ public class FolderDAOImpl implements FolderDAO {
     }
 
     @Override
-    public boolean updateFolder(FolderDB folder, int id) {
+    public boolean updateFolder(Folder folder, int id) {
         // Verifica se esiste già una cartella con lo stesso nome, owner e parent, ma con ID diverso
         String checkSql = "SELECT COUNT(*) FROM Folder WHERE folder_name = ? AND owner = ? AND parent = ? AND id != ?";
         try (PreparedStatement checkStmt = connection.prepareStatement(checkSql)) {
@@ -161,29 +160,29 @@ public class FolderDAOImpl implements FolderDAO {
     @Override
     public void deleteFolder(int id) {
         String deleteTasksSql = """
-        DELETE FROM Task 
-        WHERE folder IN (
-            WITH RECURSIVE subfolders AS (
-                SELECT id FROM Folder WHERE id = ?
-                UNION ALL
-                SELECT f.id FROM Folder f
-                INNER JOIN subfolders sf ON f.parent = sf.id
-            )
-            SELECT id FROM subfolders
+    DELETE FROM Task 
+    WHERE folder IN (
+        WITH RECURSIVE subfolders AS (
+            SELECT id FROM Folder WHERE id = ?
+            UNION ALL
+            SELECT f.id FROM Folder f
+            INNER JOIN subfolders sf ON f.parent = sf.id
         )
+        SELECT id FROM subfolders
+    )
     """;
 
         String deleteFoldersSql = """
-        DELETE FROM Folder 
-        WHERE id IN (
-            WITH RECURSIVE subfolders AS (
-                SELECT id FROM Folder WHERE id = ?
-                UNION ALL
-                SELECT f.id FROM Folder f
-                INNER JOIN subfolders sf ON f.parent = sf.id
-            )
-            SELECT id FROM subfolders
+    DELETE FROM Folder 
+    WHERE id IN (
+        WITH RECURSIVE subfolders AS (
+            SELECT id FROM Folder WHERE id = ?
+            UNION ALL
+            SELECT f.id FROM Folder f
+            INNER JOIN subfolders sf ON f.parent = sf.id
         )
+        SELECT id FROM subfolders
+    )
     """;
 
         try {
@@ -192,11 +191,11 @@ public class FolderDAOImpl implements FolderDAO {
             try (PreparedStatement deleteTasksStmt = connection.prepareStatement(deleteTasksSql);
                  PreparedStatement deleteFoldersStmt = connection.prepareStatement(deleteFoldersSql)) {
 
-                // Elimina i task associati a tutte le cartelle (compresa quella principale e le sottocartelle)
+                // Elimina i task associati
                 deleteTasksStmt.setInt(1, id);
                 deleteTasksStmt.executeUpdate();
 
-                // Elimina tutte le cartelle (compresa quella principale e le sottocartelle)
+                // Elimina le cartelle
                 deleteFoldersStmt.setInt(1, id);
                 deleteFoldersStmt.executeUpdate();
 
