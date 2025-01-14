@@ -16,4 +16,6 @@ public interface FolderDAO {
     String findParentFolder(String name);
 
     List<String> getFoldersByFolderAndUser(String startFolder, String user);
+
+    boolean updateFolderParent(int folderId, int newParentId);
 }

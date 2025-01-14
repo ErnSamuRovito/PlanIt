@@ -282,4 +282,18 @@ public class FolderDAOImpl implements FolderDAO {
         }
         return folders;
     }
+
+    @Override
+    public boolean updateFolderParent(int folderId, int newParentId) {
+        String sql = "UPDATE Folder SET parent = ? WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, newParentId);
+            stmt.setInt(2, folderId);
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

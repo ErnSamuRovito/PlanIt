@@ -11,6 +11,8 @@ import javax.swing.*;
 public class ComponentManager {
     private static ComponentManager instance;
     private String user, currFolder;
+    private String cuttedComponentType;
+    private Integer cuttedComponentId;
 
     // Costruttore privato per il singleton
     private ComponentManager() {}
@@ -48,4 +50,11 @@ public class ComponentManager {
     public void setPath(String user, String currFolder){this.user=user; this.currFolder=currFolder;}
     public String getUser() {return user;}
     public String getCurrFolder() {return currFolder;}
+
+    public void setCuttedComponent(String cuttedComponentType, Integer cuttedComponentId){
+        this.cuttedComponentType = cuttedComponentType;
+        this.cuttedComponentId = cuttedComponentId;
+    }
+    public String getCuttedComponentType() {return cuttedComponentType;}
+    public Integer getCuttedComponentId() {return cuttedComponentId;}
 }

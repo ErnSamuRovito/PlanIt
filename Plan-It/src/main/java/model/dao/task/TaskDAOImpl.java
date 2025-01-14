@@ -312,4 +312,18 @@ public class TaskDAOImpl implements TaskDAO {
             return -10000; // Valore di errore
         }
     }
+
+    @Override
+    public boolean updateTaskFolder(int taskId, int newFolderId) {
+        String sql = "UPDATE Task SET folder = ? WHERE id_task = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, newFolderId);
+            stmt.setInt(2, taskId);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

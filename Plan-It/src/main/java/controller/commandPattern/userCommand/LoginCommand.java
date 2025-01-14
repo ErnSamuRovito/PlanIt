@@ -22,6 +22,9 @@ public class LoginCommand implements ActionCommand {
     }
 
     @Override public void execute() {
+        //resetto il componente "tagliato".
+        ComponentManager.getInstance().setCuttedComponent(null,null);
+
         if (parentView != null) {
             String userInput = parentView.getUsername();
             String passwordInput = parentView.getPassword();

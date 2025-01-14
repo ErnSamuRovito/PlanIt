@@ -1,6 +1,7 @@
 package view.iconPanel;
 
 import controller.commandPattern.ActionCommand;
+import controller.commandPattern.CutComponentCommand;
 import controller.commandPattern.DeleteComponentCommand;
 import controller.commandPattern.navigationCommands.GoToModifyFolderCommand;
 import controller.commandPattern.navigationCommands.GoToModifyTaskCommand;
@@ -50,9 +51,11 @@ public class IconPanel extends JPanel {
         else
             editItem.addActionListener(e -> new GoToModifyTaskCommand(title).execute());
         deleteItem.addActionListener(e -> new DeleteComponentCommand(title,imagePath).execute()); //imagePath serve a capire se è una cartella o un task
+        cutItem.addActionListener(e -> new CutComponentCommand(title,imagePath).execute()); //imagePath serve a capire se è una cartella o un task
 
         contextMenu.add(editItem);
         contextMenu.add(deleteItem);
+        contextMenu.add(cutItem);
 
         return contextMenu;
     }
