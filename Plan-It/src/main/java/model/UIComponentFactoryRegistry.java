@@ -26,7 +26,8 @@ public class UIComponentFactoryRegistry {
     }
 
     // Metodo per registrare una factory
-    public void registerFactory(String componentType, UiFactory factory) {
+    public void registerFactory(String componentType, UiFactory factory)
+    {
         factories.put(componentType, factory);
     }
 
