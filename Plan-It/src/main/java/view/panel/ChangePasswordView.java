@@ -1,5 +1,6 @@
 package view.panel;
 
+import controller.commandPattern.navigationCommands.GoToDeskViewCommand;
 import controller.commandPattern.userCommand.ChangePasswordCommand;
 import view.UICreationalPattern.UIBuilders.UIBuilder;
 import view.UICreationalPattern.UIComponentFactoryRegistry;
@@ -36,6 +37,9 @@ public class ChangePasswordView extends TemplateView {
                 .text("Change password")
                 .action(new ChangePasswordCommand(this));
 
+        UIBuilder buildBackL = registry.getFactory("ClickableLabel").createBuild();
+        buildBackL.text("Back").action(new GoToDeskViewCommand());
+
         builders.add(buildOldPasswordL);            //0
         builders.add(buildOldPasswordPF);           //1
         builders.add(buildPasswordL);               //2
@@ -43,6 +47,7 @@ public class ChangePasswordView extends TemplateView {
         builders.add(buildConfirmPasswordL);        //4
         builders.add(buildConfirmPasswordPF);       //6
         builders.add(buildButton);                  //7
+        builders.add(buildBackL);                   //8
     }
 
     @Override

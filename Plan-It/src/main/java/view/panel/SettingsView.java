@@ -1,6 +1,7 @@
 package view.panel;
 
 import controller.commandPattern.navigationCommands.GoToChangePasswordCommand;
+import controller.commandPattern.navigationCommands.GoToDeskViewCommand;
 import controller.commandPattern.userCommand.DeleteUserCommand;
 import controller.commandPattern.userCommand.SaveSettingsCommand;
 import controller.controllers.AvatarPlantController;
@@ -69,6 +70,9 @@ public class SettingsView extends TemplateView {
                 .text("Save")
                 .action(new SaveSettingsCommand(this));
 
+        UIBuilder buildBackL = registry.getFactory("ClickableLabel").createBuild();
+        buildBackL.text("Back").action(new GoToDeskViewCommand());
+
         builders.add(buildUsernameL);               //0
         builders.add(buildUsernameTF);              //1
         builders.add(buildEmailL);                  //2
@@ -78,6 +82,7 @@ public class SettingsView extends TemplateView {
         builders.add(buildChangePasswordB);         //6
         builders.add(buildDeleateUserB);            //7
         builders.add(buildSaveB);                   //8
+        builders.add(buildBackL);                   //9
     }
 
     @Override
