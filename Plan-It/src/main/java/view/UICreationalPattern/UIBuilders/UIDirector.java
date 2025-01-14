@@ -93,7 +93,7 @@ public class UIDirector {
     // Crea un ComboBox standard
     public static void buildStandardComboBox(UIBuilder builder) {
         builder .backgroundColor(GlobalResources.COLOR_CREMA)
-                .hoverBackgroundColor(GlobalResources.COLOR_GREEN_1)
+                .hoverBackgroundColor(GlobalResources.COLOR_CREMA)
                 .pressedBackgroundColor(GlobalResources.COLOR_GREEN_2)
                 .textColor(Color.BLACK)
                 .size(GlobalResources.FIELD_SIZE)

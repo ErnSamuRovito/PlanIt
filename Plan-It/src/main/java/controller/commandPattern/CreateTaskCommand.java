@@ -5,7 +5,7 @@ import core.SqLiteConnection;
 import model.composite.Task;
 import model.dao.folder.FolderDAOImpl;
 import model.dao.task.TaskDAOImpl;
-import view.panel.panelDecorators.TaskCreateDecorator;
+import view.panel.TaskCreateView;
 
 import javax.swing.*;
 import java.sql.Connection;
@@ -15,21 +15,20 @@ import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class CreateTaskCommand implements ActionCommand {
-    private final TaskCreateDecorator taskCreateDecorator;
+    private final TaskCreateView taskCreateView;
 
-    public CreateTaskCommand(TaskCreateDecorator taskCreateDecorator) {
-        this.taskCreateDecorator = taskCreateDecorator;
+    public CreateTaskCommand(TaskCreateView taskCreateView) {
+        this.taskCreateView = taskCreateView;
     }
 
     @Override
     public void execute() {
-        String nameTask = taskCreateDecorator.getNameTaskField();
-        String descriptionTask = taskCreateDecorator.getDescriptionTaskPane();
-        String dateTask = taskCreateDecorator.getCustomDataPicker();
-        int urgencyTask = taskCreateDecorator.getComboBoxSelection();
-        int typeTask = taskCreateDecorator.getComboBoxSelection();
+        String titleTask = taskCreateView.getTitle();
+        String descriptionTask = taskCreateView.getDescription();
+        String dateTask = taskCreateView.getDate();
+        int urgencyTask = taskCreateView.getUrgency();
 
-        if (!nameTask.isEmpty() && !nameTask.matches(".*[/*.,?^].*")) {
+        if (!titleTask.isEmpty() && !titleTask.matches(".*[/*.,?^].*")) {
             try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
                 FolderDAOImpl folderDAO = new FolderDAOImpl(connection);
                 int folderId = folderDAO.getFolderIdByNameAndOwner(
@@ -38,12 +37,12 @@ public class CreateTaskCommand implements ActionCommand {
                 );
 
                 Task newTask = new Task(
-                        nameTask,
+                        titleTask,
                         descriptionTask,
                         dateTask,
                         urgencyTask,
                         folderId,
-                        typeTask,
+                        1,
                         "task extra info"
                 );
 
@@ -52,7 +51,7 @@ public class CreateTaskCommand implements ActionCommand {
                 boolean success = taskDAO.addTask(newTask);
 
                 if (!success) {
-                    JOptionPane.showMessageDialog(taskCreateDecorator,
+                    JOptionPane.showMessageDialog(taskCreateView,
                             "Error: A task with the same name already exists.",
                             "Creation Error",
                             JOptionPane.ERROR_MESSAGE);

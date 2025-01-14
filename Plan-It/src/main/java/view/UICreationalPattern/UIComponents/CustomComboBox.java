@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-public class CustomComboBox<E> extends JComboBox<E> implements UIComponent {
+public class CustomComboBox extends JComboBox<String> implements UIComponent {
     private final Color backgroundColor;
     private final Color hoverBackgroundColor;
     private final Color selectedBackgroundColor;
@@ -16,12 +16,12 @@ public class CustomComboBox<E> extends JComboBox<E> implements UIComponent {
     private final Boolean editable;
     private final ActionCommand command;
     private String[] items;
+    private final int selectedIndex;
 
     public CustomComboBox(String[] items, Color backgroundColor, Color hoverBackgroundColor,
                           Color selectedBackgroundColor, Color textColor, Dimension size,
-                          Boolean editable, ActionCommand command) {
+                          Boolean editable, ActionCommand command, int selectedIndex) {
 
-        this.items = items;
         this.backgroundColor = backgroundColor;
         this.hoverBackgroundColor = hoverBackgroundColor;
         this.selectedBackgroundColor = selectedBackgroundColor;
@@ -29,16 +29,24 @@ public class CustomComboBox<E> extends JComboBox<E> implements UIComponent {
         this.size = size;
         this.editable = editable;
         this.command = command;
+        this.selectedIndex = selectedIndex;
+
+        this.items = items; // Assegna direttamente gli items passati al costruttore
+
+        // Aggiunge gli elementi al JComboBox
+        for (String item : items) {
+            addItem(item);
+        }
+
+        // Imposta la selezione predefinita (dopo aver aggiunto gli item)
+        setSelectedIndex(selectedIndex);
 
         setEditable(editable);
         setPreferredSize(size);
         setBackground(backgroundColor);
         setForeground(textColor);
 
-        // Inizializza il rendering personalizzato
         initializeUI();
-
-        // Eventi specifici
         addListeners();
     }
 
@@ -91,6 +99,6 @@ public class CustomComboBox<E> extends JComboBox<E> implements UIComponent {
 
     @Override
     public void initialize() {
-        this.items = new String[]{"Option 1", "Option 2", "Option 3"};
+        // Non è più necessario sovrascrivere items qui
     }
 }

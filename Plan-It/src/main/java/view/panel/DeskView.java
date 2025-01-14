@@ -9,9 +9,6 @@ import core.SqLiteConnection;
 import model.dao.folder.FolderDAOImpl;
 import model.dao.task.TaskDAOImpl;
 import model.plant.AvatarPlant;
-import view.panel.panelDecorators.CreatePanel;
-import view.panel.panelDecorators.FolderCreateDecorator;
-import view.panel.panelDecorators.TaskCreateDecorator;
 import view.panel.iconPanel.IconFactory;
 import view.panel.iconPanel.IconPanel;
 
@@ -115,16 +112,14 @@ public class DeskView extends JPanel {
 
     protected void createTask() {
         // Crea e imposta il pannello per la creazione di un task
-        CreatePanel createPanel = new CreatePanel();
-        createPanel = new TaskCreateDecorator(createPanel);
-        ComponentManager.getInstance().setPanel(createPanel);
+        TaskCreateView taskCreateView = new TaskCreateView();
+        ComponentManager.getInstance().setPanel(taskCreateView);
     }
 
     protected void createFolder() {
         // Crea e imposta il pannello per la creazione di una cartella
-        CreatePanel createPanel = new CreatePanel();
-        createPanel = new FolderCreateDecorator(createPanel);
-        ComponentManager.getInstance().setPanel(createPanel);
+        FolderCreateView createFolderPanel = new FolderCreateView();
+        ComponentManager.getInstance().setPanel(createFolderPanel);
     }
 
     protected void addCreateIcon() {

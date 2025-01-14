@@ -10,6 +10,7 @@ public class CustomDataPickerBuilder extends UIBuilder{
                 backgroundColor,
                 textColor,
                 size,
-                editable);
+                editable,
+                date);
     }
 }

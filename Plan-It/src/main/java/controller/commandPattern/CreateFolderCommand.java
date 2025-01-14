@@ -5,7 +5,7 @@ import core.SqLiteConnection;
 import model.composite.Folder;
 import model.dao.folder.FolderDAOImpl;
 import model.dao.user.UserDAOImpl;
-import view.panel.panelDecorators.FolderCreateDecorator;
+import view.panel.FolderCreateView;
 
 import javax.swing.*;
 import java.sql.Connection;
@@ -15,15 +15,15 @@ import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class CreateFolderCommand implements ActionCommand {
-    private final FolderCreateDecorator createFolderDecorator;
+    private final FolderCreateView createFolderView;
 
-    public CreateFolderCommand(FolderCreateDecorator createFolderDecorator) {
-        this.createFolderDecorator = createFolderDecorator;
+    public CreateFolderCommand(FolderCreateView createFolderView) {
+        this.createFolderView = createFolderView;
     }
 
     @Override
     public void execute() {
-        if (!createFolderDecorator.getTextFieldName().isEmpty() && !createFolderDecorator.getTextFieldName().matches(".*[/*.,?^].*")) {
+        if (!createFolderView.getFolderName().isEmpty() && !createFolderView.getFolderName().matches(".*[/*.,?^].*")) {
             try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
                 UserDAOImpl userDAO = new UserDAOImpl(connection);
                 int userId = userDAO.getUserByUsername(ComponentManager.getInstance().getUser()).getId();
@@ -33,7 +33,7 @@ public class CreateFolderCommand implements ActionCommand {
                 );
 
                 // Creiamo un oggetto Folder
-                Folder newFolder = new Folder(createFolderDecorator.getTextFieldName(), userId, parentId);
+                Folder newFolder = new Folder(createFolderView.getFolderName(), userId, parentId);
 
                 // Aggiungi la nuova cartella nel database
                 FolderDAOImpl folderDAOImpl = new FolderDAOImpl(connection);
@@ -41,7 +41,7 @@ public class CreateFolderCommand implements ActionCommand {
 
                 if (!success) {
                     // Se la cartella non è stata creata (cartella con lo stesso nome esistente)
-                    JOptionPane.showMessageDialog(createFolderDecorator,
+                    JOptionPane.showMessageDialog(createFolderView,
                             "Error: A folder with the same name already exists.",
                             "Creation error",
                             JOptionPane.ERROR_MESSAGE);

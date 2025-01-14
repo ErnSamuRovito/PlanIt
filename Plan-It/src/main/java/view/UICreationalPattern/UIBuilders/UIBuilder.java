@@ -22,6 +22,8 @@ public abstract class UIBuilder {
     protected String contentType;
     protected String content;
     protected Boolean editable;
+    protected String date;
+    protected int selectedIndex;
 
     public UIBuilder text(String text) {
         this.text = text;
@@ -85,6 +87,14 @@ public abstract class UIBuilder {
     }
     public UIBuilder editable(Boolean editable) {
         this.editable = editable;
+        return this;
+    }
+    public UIBuilder date(String date) {
+        this.date = date;
+        return this;
+    }
+    public UIBuilder selectedIndex(int selectedIndex) {
+        this.selectedIndex = selectedIndex;
         return this;
     }
 

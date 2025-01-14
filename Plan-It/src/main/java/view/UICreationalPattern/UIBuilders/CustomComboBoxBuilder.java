@@ -6,7 +6,12 @@ import view.UICreationalPattern.UIComponents.UIComponent;
 import java.awt.*;
 
 public class CustomComboBoxBuilder extends UIBuilder {
-    private String[] items ; // Elementi della combo box
+    private String[] items;
+
+    public CustomComboBoxBuilder() {
+        // Inizializza gli elementi direttamente nel costruttore o nel metodo build
+        items = new String[]{"Low", "Medium", "High"};
+    }
 
     @Override
     public UIComponent build() {
@@ -14,7 +19,7 @@ public class CustomComboBoxBuilder extends UIBuilder {
             throw new IllegalStateException("Items cannot be null for CustomComboBox.");
         }
 
-        return new CustomComboBox<>(
+        return new CustomComboBox(
                 items,
                 backgroundColor != null ? backgroundColor : Color.WHITE,
                 hoverBackgroundColor != null ? hoverBackgroundColor : Color.LIGHT_GRAY,
@@ -22,7 +27,8 @@ public class CustomComboBoxBuilder extends UIBuilder {
                 textColor != null ? textColor : Color.BLACK,
                 size != null ? size : new Dimension(150, 30),
                 editable != null ? editable : false,
-                action
+                action,
+                selectedIndex
         );
     }
 }

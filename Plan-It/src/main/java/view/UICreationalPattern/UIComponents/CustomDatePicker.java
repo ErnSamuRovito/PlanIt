@@ -10,8 +10,9 @@ public class CustomDatePicker extends JSpinner implements UIComponent {
     private final Color textColor;
     private final Dimension size;
     private final Boolean editable;
+    private final String date;
 
-    public CustomDatePicker(Color backgroundColor, Color textColor, Dimension size, Boolean editable) {
+    public CustomDatePicker(Color backgroundColor, Color textColor, Dimension size, Boolean editable, String date) {
         // Crea un SpinnerDateModel per il JSpinner
         SpinnerDateModel dateModel = new SpinnerDateModel();
         setModel(dateModel);
@@ -28,12 +29,20 @@ public class CustomDatePicker extends JSpinner implements UIComponent {
         this.textColor = textColor;
         this.size = size;
         this.editable = editable;
+        this.date = date;
 
         // Impostiamo le proprietà
         setPreferredSize(size);
         setBackground(backgroundColor);
         setForeground(textColor);
         setEditable(editable);
+
+        // Se la data passata è null o vuota, impostiamo la data odierna
+        if (date == null || date.isEmpty()) {
+            setSelectedDateToToday(); // Imposta la data odierna
+        } else {
+            setSelectedDate(date); // Imposta la data passata
+        }
     }
 
     private void setEditable(Boolean editable) {
@@ -56,6 +65,13 @@ public class CustomDatePicker extends JSpinner implements UIComponent {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    // Imposta la data odierna nel formato "dd/MM/yyyy"
+    public void setSelectedDateToToday() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String today = dateFormat.format(new Date()); // Ottieni la data odierna in formato "dd/MM/yyyy"
+        setSelectedDate(today); // Imposta la data odierna
     }
 
     @Override

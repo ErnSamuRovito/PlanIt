@@ -4,15 +4,15 @@ import core.ComponentManager;
 import core.SqLiteConnection;
 import model.composite.Task;
 import model.dao.task.TaskDAOImpl;
-import view.panel.panelDecorators.TaskModifyDecorator;
+import view.panel.TaskModifyView;
 
 import javax.swing.*;
 import java.sql.Connection;
 
 public class ModifyTaskCommand implements ActionCommand {
-    private final TaskModifyDecorator panel;
+    private final TaskModifyView panel;
 
-    public ModifyTaskCommand(TaskModifyDecorator panel) {
+    public ModifyTaskCommand(TaskModifyView panel) {
         this.panel = panel;
     }
 

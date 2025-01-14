@@ -5,7 +5,7 @@ import model.services.TaskService;
 import view.ApplicationWindow;
 import view.panel.*;
 import view.panel.panelDecorators.CreatePanel;
-import view.panel.panelDecorators.TaskModifyDecorator;
+import view.panel.TaskModifyView;
 
 import javax.swing.*;
 
@@ -27,8 +27,8 @@ public class ComponentManager {
     public SigninView getSigninView() {return new SigninView();}
     public CreatePanel getCreatePanel() {return new CreatePanel();}
 
-    public TaskModifyDecorator getModifyTask(String taskTitle) {
-        return new TaskModifyDecorator(new CreatePanel(), taskTitle, user, currFolder);
+    public TaskModifyView getModifyTask(String taskTitle) {
+        return new TaskModifyView(taskTitle, user, currFolder);
     }
     public FolderModifyView getModifyFolder(String folderTitle) {
         return new FolderModifyView(user, folderTitle);
