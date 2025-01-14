@@ -1,6 +1,6 @@
 package model.dao.avatarPlant;
 
-import model.plant.AvatarPlant;
+import model.plantStates.AvatarPlant;
 
 import java.sql.*;
 import java.util.ArrayList;

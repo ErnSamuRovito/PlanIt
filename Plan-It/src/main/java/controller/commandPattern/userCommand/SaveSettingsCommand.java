@@ -8,8 +8,7 @@ import model.dao.avatarPlant.AvatarPlantDAO;
 import model.dao.avatarPlant.AvatarPlantDAOImpl;
 import model.dao.user.UserDAO;
 import model.dao.user.UserDAOImpl;
-import model.plant.AvatarPlant;
-import view.UICreationalPattern.UIComponents.CustomTextField;
+import model.plantStates.AvatarPlant;
 import view.panel.SettingsView;
 
 import javax.swing.*;

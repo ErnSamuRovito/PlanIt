@@ -5,9 +5,7 @@ import core.ComponentManager;
 import core.SqLiteConnection;
 import model.User;
 import model.dao.user.UserDAOImpl;
-import model.plant.AvatarPlant;
-import view.UICreationalPattern.UIComponents.CustomPasswordField;
-import view.UICreationalPattern.UIComponents.CustomTextField;
+import model.plantStates.AvatarPlant;
 import view.panel.LoginView;
 
 import java.sql.Connection;

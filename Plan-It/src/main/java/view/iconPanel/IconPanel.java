@@ -1,4 +1,4 @@
-package view.panel.iconPanel;
+package view.iconPanel;
 
 import controller.commandPattern.ActionCommand;
 import controller.commandPattern.DeleteComponentCommand;
@@ -42,6 +42,7 @@ public class IconPanel extends JPanel {
         JPopupMenu contextMenu = new JPopupMenu();
         JMenuItem editItem = new JMenuItem("Edit");
         JMenuItem deleteItem = new JMenuItem("Delete");
+        JMenuItem cutItem = new JMenuItem("Cut");
 
         // Aggiungi azioni ai menu item
         if (imagePath.equals(GlobalResources.folderImage))

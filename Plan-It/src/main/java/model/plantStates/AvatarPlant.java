@@ -1,4 +1,4 @@
-package model.plant;
+package model.plantStates;
 
 import core.SqLiteConnection;
 import model.utils.DateComparison;

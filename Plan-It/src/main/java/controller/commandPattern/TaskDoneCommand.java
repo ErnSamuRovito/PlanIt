@@ -3,7 +3,7 @@ package controller.commandPattern;
 import core.ComponentManager;
 import core.SqLiteConnection;
 import model.dao.task.TaskDAOImpl;
-import model.plant.AvatarPlant;
+import model.plantStates.AvatarPlant;
 
 import java.sql.Connection;
 import java.sql.SQLException;

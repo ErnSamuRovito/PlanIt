@@ -1,4 +1,4 @@
-package model.plant;
+package model.plantStates;
 
 public interface State {
 //    public abstract String getPathGifImage();

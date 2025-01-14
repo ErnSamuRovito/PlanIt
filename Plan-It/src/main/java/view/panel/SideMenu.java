@@ -6,7 +6,7 @@ import core.GlobalResources;
 import core.SqLiteConnection;
 import model.dao.avatarPlant.AvatarPlantDAOImpl;
 import model.dao.avatarPlant.AvatarPlantDB;
-import model.plant.AvatarPlant;
+import model.plantStates.AvatarPlant;
 import view.UICreationalPattern.UIComponents.CustomLabel;
 import view.UICreationalPattern.UIFactoryHelper;
 

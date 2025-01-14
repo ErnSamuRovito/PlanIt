@@ -33,8 +33,7 @@ public class ApplicationWindow {
         setPanel(new LoginView());
 
         DesktopNotifier notifier = new DesktopNotifier();
-        notifier.sendNotification("Titolo della Notifica", "Questo è un messaggio di notifica");
-
+        notifier.sendNotification("Welcome to Plan-It", "Manage your daily activities and achieve your goals!");
     }
 
     public static synchronized ApplicationWindow getInstance() {

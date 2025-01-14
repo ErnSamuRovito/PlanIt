@@ -8,9 +8,9 @@ import core.ComponentManager;
 import core.SqLiteConnection;
 import model.dao.folder.FolderDAOImpl;
 import model.dao.task.TaskDAOImpl;
-import model.plant.AvatarPlant;
-import view.panel.iconPanel.IconFactory;
-import view.panel.iconPanel.IconPanel;
+import model.plantStates.AvatarPlant;
+import view.iconPanel.IconFactory;
+import view.iconPanel.IconPanel;
 
 import javax.swing.*;
 import java.awt.*;

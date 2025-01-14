@@ -1,4 +1,4 @@
-package view.panel.iconPanel;
+package view.iconPanel;
 
 import controller.commandPattern.ActionCommand;
 import core.GlobalResources;
