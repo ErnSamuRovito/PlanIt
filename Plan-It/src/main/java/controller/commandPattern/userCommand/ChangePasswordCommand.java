@@ -3,34 +3,28 @@ package controller.commandPattern.userCommand;
 import controller.commandPattern.ActionCommand;
 import core.ComponentManager;
 import core.SqLiteConnection;
-import model.FormatValidator;
-import model.PasswordUtils;
+import model.utils.FormatValidator;
+import model.utils.PasswordUtils;
 import model.User;
 import model.dao.user.UserDAO;
 import model.dao.user.UserDAOImpl;
-import view.UICreationalPattern.UIComponents.CustomPasswordField;
+import view.panel.ChangePasswordView;
 
 import javax.swing.*;
 import java.util.Arrays;
 
 public class ChangePasswordCommand implements ActionCommand {
-    private final CustomPasswordField currentPasswordField;
-    private final CustomPasswordField passwordField;
-    private final CustomPasswordField confirmPasswordField;
+    private ChangePasswordView parentView;
 
-    public ChangePasswordCommand(CustomPasswordField currentPasswordField,
-                                 CustomPasswordField passwordField,
-                                 CustomPasswordField confirmPasswordField) {
-        this.currentPasswordField = currentPasswordField;
-        this.passwordField = passwordField;
-        this.confirmPasswordField = confirmPasswordField;
+    public ChangePasswordCommand(ChangePasswordView parentView) {
+        this.parentView = parentView;
     }
 
     @Override
     public void execute() {
-        char[] currentPassword = currentPasswordField.getPassword();
-        char[] newPassword = passwordField.getPassword();
-        char[] confirmPassword = confirmPasswordField.getPassword();
+        char[] currentPassword = parentView.getCurrPassword();
+        char[] newPassword = parentView.getNewPassword();
+        char[] confirmPassword = parentView.getConfirmPassword();
 
         try {
             // Ottieni la password hashata dal database

@@ -1,5 +1,7 @@
 package core;
 
+import controller.controllers.TaskController;
+import model.services.TaskService;
 import view.ApplicationWindow;
 import view.panel.TaskView;
 import view.panel.panelDecorators.CreatePanel;
@@ -10,6 +12,7 @@ import view.panel.panelDecorators.FolderModifyDecorator;
 import view.panel.panelDecorators.TaskModifyDecorator;
 
 import javax.swing.*;
+import java.util.ArrayList;
 
 public class ComponentManager {
     private static ComponentManager instance;
@@ -41,7 +44,9 @@ public class ComponentManager {
         return new DeskView(user, currFolder);
     }
     public TaskView getTaskView(String taskTitle){
-        return new TaskView(taskTitle,user,currFolder);
+        TaskService taskService = new TaskService();
+        TaskController taskController = new TaskController(taskService);
+        return new TaskView(taskTitle,user,currFolder,taskController);
     }
 
     // Metodo per impostare il pannello attivo tramite ApplicationWindow

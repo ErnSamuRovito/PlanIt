@@ -1,7 +1,7 @@
 package model.plant;
 
 import core.SqLiteConnection;
-import model.DateComparison;
+import model.utils.DateComparison;
 import model.User;
 import model.dao.avatarPlant.AvatarPlantDAOImpl;
 import model.dao.avatarPlant.AvatarPlantDB;

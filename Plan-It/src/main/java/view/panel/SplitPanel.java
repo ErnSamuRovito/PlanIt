@@ -45,7 +45,7 @@ public class SplitPanel extends JSplitPane {
         setBackground(GlobalResources.COLOR_PANNA);
     }
 
-    protected void addBackClickableLabel(ActionCommand command) {
+    public void addBackClickableLabel(ActionCommand command) {
         CustomLabelBuilder labelBuilder = new CustomLabelBuilder();
         UIDirector.buildBackClickableLabel(labelBuilder);
         labelBuilder.text("Back");

@@ -2,78 +2,65 @@ package view.panel;
 
 import controller.commandPattern.navigationCommands.GoToSigninCommand;
 import controller.commandPattern.userCommand.LoginCommand;
-import core.GlobalResources;
-import view.UICreationalPattern.UIComponents.*;
-import view.UICreationalPattern.UIFactoryHelper;
+import view.UICreationalPattern.UIComponentFactoryRegistry;
+import view.UICreationalPattern.UIBuilders.UIBuilder;
+import view.UICreationalPattern.UIComponents.CustomPasswordField;
+import view.UICreationalPattern.UIComponents.CustomTextField;
 
 import java.awt.*;
-import javax.swing.*;
 
-public class LoginView extends JPanel {
-    private CustomTextField userField;
-    private CustomPasswordField passwordField;
-    private CustomButton loginButton;
-    private CustomLabel signinLabel;
-    private CustomLabel usernameLabel;
-    private CustomLabel passwordLabel;
-
+public class LoginView extends TemplateView {
     public LoginView() {
-        // Impostazioni di layout e margini
-        setupLayout();
-
-        // Creazione dei componenti
-        createComponents();
-
-        // Aggiungi componenti al pannello
-        addComponentsToPanel();
+        initialize();
     }
 
-    private void setupLayout() {
-        // Imposta layout e margini del pannello
-        setLayout(new GridBagLayout());
-        setBackground(GlobalResources.COLOR_PANNA);
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // Margini per i componenti
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.anchor = GridBagConstraints.CENTER;
+    @Override
+    protected void createComponents() {
+        UIComponentFactoryRegistry registry = UIComponentFactoryRegistry.getInstance();
+
+        UIBuilder buildLabelUsername = registry.getFactory("Label").createBuild();
+        buildLabelUsername.text("Username");
+        UIBuilder buildTextField = registry.getFactory("TextField").createBuild();
+        buildTextField.placeholder("Username");
+
+        UIBuilder buildLabelPassword = registry.getFactory("Label").createBuild();
+        buildLabelPassword.text("Password");
+        UIBuilder buildPassword = registry.getFactory("PasswordField").createBuild();
+        buildPassword.placeholder("Password");
+
+        UIBuilder buildButton = registry.getFactory("Button").createBuild();
+        buildButton
+                .text("Login")
+                .action(new LoginCommand(this));
+        UIBuilder buildClickableLabel = registry.getFactory("ClickableLabel").createBuild();
+        buildClickableLabel
+                .text("Don't have an account? Sign up!")
+                .action(new GoToSigninCommand());
+
+        //IMPORTANTISSIMO RISPETTARE L'ORDINE DI INSERIMENTO!
+        builders.add(buildLabelUsername);
+        builders.add(buildTextField);
+        builders.add(buildLabelPassword);
+        builders.add(buildPassword);
+        builders.add(buildButton);
+        builders.add(buildClickableLabel);
     }
 
-    private void createComponents(){
-        userField = UIFactoryHelper.createTextField("","Username");
-        passwordField = UIFactoryHelper.createPasswordField("Password");
-        loginButton = UIFactoryHelper.createButton("Login", new LoginCommand(this));
-        signinLabel = UIFactoryHelper.createClickableLabel("Don't have an account? Sign up!", new GoToSigninCommand());
-        usernameLabel = UIFactoryHelper.createLabel("Username or Email: ");
-        passwordLabel = UIFactoryHelper.createLabel("Password: ");
+    @Override
+    protected void addComponentsToPanel() {
+        constructBuilders(builders);
+        for (int i = 0; i < components.size(); i++) {
+            gbc.gridy = i; // Posiziona il componente nella riga corretta
+            add((Component) components.get(i), gbc); // Usa gbc
+        }
     }
 
-    private void addComponentsToPanel() {
-        // Aggiungi i componenti al pannello con i giusti vincoli di layout
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // Margini per i componenti
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.anchor = GridBagConstraints.CENTER;
-
-        gbc.gridy = 0;
-        add(usernameLabel, gbc);
-        gbc.gridy = 1;
-        add(userField, gbc);
-        gbc.gridy = 2;
-        add(passwordLabel, gbc);
-        gbc.gridy = 3;
-        add(passwordField, gbc);
-        gbc.gridy = 4;
-        add(loginButton, gbc);
-        gbc.gridy = 5;
-        add(signinLabel, gbc);
+    public String getUsername(){
+        //IL COMPONENTE IN POSIZIONE 1 *DEVE* ESSERE IL TEXT FIELD DELL'USERNAME!
+        return ((CustomTextField) components.get(1)).getText();
     }
-
-    // Getter per i campi di input
-    public CustomTextField getUserField() {
-        return userField;
-    }
-
-    public CustomPasswordField getPasswordField() {
-        return passwordField;
+    public String getPassword(){
+        //IL COMPONENTE IN POSIZIONE 1 *DEVE* ESSERE IL PASSWORD FIELD DELLA PASSWORD!
+        return ((CustomPasswordField) components.get(3)).getPasswordString();
     }
 }

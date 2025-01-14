@@ -1,12 +1,11 @@
 package model.dao.user;
 
-import model.PasswordUtils;
+import model.utils.PasswordUtils;
 import model.User;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class UserDAOImpl implements UserDAO {
     private final Connection connection;
@@ -37,7 +36,7 @@ public class UserDAOImpl implements UserDAO {
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new UserDB(rs.getInt("id"), rs.getString("password"), rs.getString("email"), rs.getString("username"));
+                return new UserDB(rs.getInt("id"), rs.getString("username"), rs.getString("email"), rs.getString("password"));
             }
         } catch (SQLException e) {
             e.printStackTrace();

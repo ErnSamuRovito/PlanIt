@@ -3,7 +3,7 @@ package controller.commandPattern.userCommand;
 import controller.commandPattern.ActionCommand;
 import core.ComponentManager;
 import core.SqLiteConnection;
-import model.FormatValidator;
+import model.utils.FormatValidator;
 import model.User;
 import model.dao.avatarPlant.AvatarPlantDAOImpl;
 import model.dao.avatarPlant.AvatarPlantDB;
@@ -41,10 +41,10 @@ public class SigninCommand implements ActionCommand {
             return;
         }
 
-        String usernameInput = parentView.getUsernameField().getText();
-        String emailInput = parentView.getEmailField().getText();
-        String passwordInput = parentView.getPasswordField().getPasswordString();
-        String confirmPasswordInput = parentView.getConfirmPasswordField().getPasswordString();
+        String usernameInput = parentView.getUsername();
+        String emailInput = parentView.getEmail();
+        String passwordInput = parentView.getPassword();
+        String confirmPasswordInput = parentView.getConfirmPassword();
 
         // Controlla se l'email è già utilizzata
         if (isEmailTaken(emailInput)) {

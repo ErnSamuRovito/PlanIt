@@ -1,4 +1,4 @@
-package view.views;
+package view.panel;
 
 import core.GlobalResources;
 import view.UICreationalPattern.UIBuilders.UIBuilder;
@@ -15,7 +15,7 @@ public abstract class TemplateView extends JPanel
     protected List<UIComponent> components;
     protected GridBagConstraints gbc;
 
-    public TemplateView() {
+    protected void initialize(){
         builders = new ArrayList<>();
         components = new ArrayList<>();
         gbc = new GridBagConstraints(); // Inizializzazione sicura

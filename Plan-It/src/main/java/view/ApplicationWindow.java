@@ -3,9 +3,9 @@
 package view;
 
 import model.factories.*;
-import model.DesktopNotifier;
-import model.UIComponentFactoryRegistry;
-import view.views.LoginView;
+import model.utils.DesktopNotifier;
+import view.UICreationalPattern.UIComponentFactoryRegistry;
+import view.panel.LoginView;
 
 import javax.swing.*;
 
@@ -58,6 +58,7 @@ public class ApplicationWindow {
         UIComponentFactoryRegistry.getInstance().registerFactory("TextField", new TextFieldFactory());
         UIComponentFactoryRegistry.getInstance().registerFactory("PasswordField", new PasswordFieldFactory());
         UIComponentFactoryRegistry.getInstance().registerFactory("Label", new LabelFactory());
+        UIComponentFactoryRegistry.getInstance().registerFactory("ClickableLabel", new ClickableLabelFactory());
         UIComponentFactoryRegistry.getInstance().registerFactory("DataPicker", new DataPickerFactory());
         UIComponentFactoryRegistry.getInstance().registerFactory("ComboBox", new ComboBoxFactory());
         UIComponentFactoryRegistry.getInstance().registerFactory("TextPane", new TextPaneFactory());

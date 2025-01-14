@@ -10,27 +10,25 @@ import model.dao.user.UserDAO;
 import model.dao.user.UserDAOImpl;
 import model.plant.AvatarPlant;
 import view.UICreationalPattern.UIComponents.CustomTextField;
+import view.panel.SettingsView;
 
 import javax.swing.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 public class SaveSettingsCommand implements ActionCommand {
-    private final CustomTextField usernameField;
-    private final CustomTextField namePlantField;
-    private final CustomTextField emailField;
+    private final SettingsView parentView;
+    private String newName, newEmail, newPlantName;
 
-    public SaveSettingsCommand(CustomTextField usernameField, CustomTextField namePlantField, CustomTextField emailField) {
-        this.usernameField = usernameField;
-        this.namePlantField = namePlantField;
-        this.emailField = emailField;
+    public SaveSettingsCommand(SettingsView parentView) {
+        this.parentView = parentView;
     }
 
     @Override
     public void execute() {
-        String newName = usernameField.getText();
-        String newPlantName = namePlantField.getText();
-        String newEmail = emailField.getText();
+        this.newName=parentView.getUsername();
+        this.newEmail=parentView.getEmail();
+        this.newPlantName=parentView.getPlantName();
 
         // Verifica se l'email è già utilizzata
         if (newEmail != null && !newEmail.isEmpty() && isEmailTaken(newEmail)) {

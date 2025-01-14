@@ -1,4 +1,4 @@
-package model;
+package view.UICreationalPattern;
 
 import model.factories.UiFactory;
 

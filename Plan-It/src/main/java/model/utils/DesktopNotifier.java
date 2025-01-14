@@ -1,4 +1,4 @@
-package model;
+package model.utils;
 
 import java.awt.*;
 import java.io.*;
