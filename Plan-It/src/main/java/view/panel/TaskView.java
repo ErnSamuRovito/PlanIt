@@ -39,6 +39,7 @@ public class TaskView extends TemplateView {
         UIBuilder buildTextPane = registry.getFactory("TextPane").createBuild();
         buildTextPane
                 .content(taskData.get(2))
+                //.contentType("text/plain")
                 .editable(false);
 
         UIBuilder buildButton = registry.getFactory("Button").createBuild();

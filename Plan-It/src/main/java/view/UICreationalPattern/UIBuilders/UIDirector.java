@@ -86,7 +86,7 @@ public class UIDirector {
         builder .backgroundColor(Color.WHITE)
                 .textColor(Color.BLACK)
                 .size(new Dimension(500, 200))
-                .contentType("text/html")
+                .contentType("text/plain")
                 .editable(false);
     }
 

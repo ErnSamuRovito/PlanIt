@@ -1,8 +1,8 @@
 package view.UICreationalPattern.UIComponents;
 
-import jdk.jfr.ContentType;
-
 import javax.swing.*;
+import javax.swing.text.*;
+import javax.swing.text.html.HTMLEditorKit;
 import java.awt.*;
 
 public class CustomTextPane extends JTextPane implements UIComponent {
@@ -24,23 +24,30 @@ public class CustomTextPane extends JTextPane implements UIComponent {
         setPreferredSize(size);
         setBackground(backgroundColor);
         setForeground(textColor);
-        if (contentType!=null){
+
+        if (contentType != null) {
             setContentType(contentType);
+            if ("text/html".equals(contentType)) {
+                setEditorKit(new HTMLEditorKit());  // Usa HTMLEditorKit per il contenuto HTML
+            }
         }
+
         setText(content);
-        if (editable==null)
+
+        if (editable == null)
             setEditable(false);
-        else setEditable(editable);
+        else
+            setEditable(editable);
     }
 
     @Override
     public void initialize() {
-        // Possibilità di personalizzare ulteriormente il comportamento del JTextPane, se necessario
+        // Eventuali personalizzazioni aggiuntive
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        // Qui possiamo aggiungere logica di personalizzazione della grafica (ombra, bordi, ecc.)
+        // Eventuali personalizzazioni grafiche
     }
 }
