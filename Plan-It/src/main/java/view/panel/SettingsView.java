@@ -34,7 +34,6 @@ public class SettingsView extends TemplateView {
 
     @Override
     protected void createComponents() {
-        System.out.println("Sto eseguendo createComponents");
         UIComponentFactoryRegistry registry = UIComponentFactoryRegistry.getInstance();
 
         UIBuilder buildUsernameL = registry.getFactory("Label").createBuild();
@@ -83,7 +82,6 @@ public class SettingsView extends TemplateView {
 
     @Override
     protected void addComponentsToPanel() {
-        System.out.println("Sto eseguendo addComponentsToPanel");
         constructBuilders(builders);
         for (int i = 0; i < components.size(); i++) {
             gbc.gridy = i; // Posiziona il componente nella riga corretta
@@ -91,10 +89,7 @@ public class SettingsView extends TemplateView {
         }
     }
 
-    public String getUsername(){
-        System.out.println("Sto richiedendo l'Username...");
-        return ((CustomTextField) components.get(1)).getText();
-    }
+    public String getUsername(){return ((CustomTextField) components.get(1)).getText();}
     public String getEmail(){return ((CustomTextField) components.get(3)).getText();}
     public String getPlantName(){return ((CustomTextField) components.get(5)).getText();}
 }

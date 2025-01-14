@@ -4,15 +4,15 @@ import core.ComponentManager;
 import core.SqLiteConnection;
 import model.composite.Folder;
 import model.dao.folder.FolderDAOImpl;
-import view.panel.panelDecorators.FolderModifyDecorator;
+import view.panel.FolderModifyView;
 
 import javax.swing.*;
 import java.sql.Connection;
 
 public class ModifyFolderCommand implements ActionCommand {
-    private final FolderModifyDecorator panel;
+    private final FolderModifyView panel;
 
-    public ModifyFolderCommand(FolderModifyDecorator panel) {
+    public ModifyFolderCommand(FolderModifyView panel) {
         this.panel = panel;
     }
 
@@ -34,7 +34,7 @@ public class ModifyFolderCommand implements ActionCommand {
             }
 
             // Imposta il nuovo nome della cartella
-            folderToUpdate.setFolderName(panel.getTextFieldName());
+            folderToUpdate.setFolderName(panel.getFolderName());
 
             // Esegui l'aggiornamento nel DB
             boolean success = folderDAO.updateFolder(folderToUpdate, folderId);

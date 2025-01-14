@@ -3,16 +3,11 @@ package core;
 import controller.controllers.TaskController;
 import model.services.TaskService;
 import view.ApplicationWindow;
-import view.panel.TaskView;
+import view.panel.*;
 import view.panel.panelDecorators.CreatePanel;
-import view.panel.LoginView;
-import view.panel.DeskView;
-import view.panel.SigninView;
-import view.panel.panelDecorators.FolderModifyDecorator;
 import view.panel.panelDecorators.TaskModifyDecorator;
 
 import javax.swing.*;
-import java.util.ArrayList;
 
 public class ComponentManager {
     private static ComponentManager instance;
@@ -35,8 +30,8 @@ public class ComponentManager {
     public TaskModifyDecorator getModifyTask(String taskTitle) {
         return new TaskModifyDecorator(new CreatePanel(), taskTitle, user, currFolder);
     }
-    public FolderModifyDecorator getModifyFolder(String folderTitle) {
-        return new FolderModifyDecorator(new CreatePanel(), user, folderTitle);
+    public FolderModifyView getModifyFolder(String folderTitle) {
+        return new FolderModifyView(user, folderTitle);
     }
 
 
