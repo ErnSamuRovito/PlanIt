@@ -13,8 +13,11 @@ public class LoginView extends TemplateView {
         UIBuilder buildTextField = registry.getFactory("TextField").createBuild();
             buildTextField.placeholder("username");
 
+        UIBuilder buildPassword = registry.getFactory("PasswordField").createBuild();
+            buildPassword.placeholder("password");
+
         builders.add(buildTextField);
-        builders.add(registry.getFactory("PasswordField").createBuild());
+        builders.add(buildPassword);
         builders.add(registry.getFactory("Button").createBuild());
     }
 
