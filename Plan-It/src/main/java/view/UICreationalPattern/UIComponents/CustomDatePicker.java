@@ -1,12 +1,17 @@
 package view.UICreationalPattern.UIComponents;
 
 import javax.swing.*;
+import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class CustomDataPicker extends JSpinner {
+public class CustomDatePicker extends JSpinner implements UIComponent {
+    private final Color backgroundColor;
+    private final Color textColor;
+    private final Dimension size;
+    private final Boolean editable;
 
-    public CustomDataPicker() {
+    public CustomDatePicker(Color backgroundColor, Color textColor, Dimension size, Boolean editable) {
         // Crea un SpinnerDateModel per il JSpinner
         SpinnerDateModel dateModel = new SpinnerDateModel();
         setModel(dateModel);
@@ -15,8 +20,24 @@ public class CustomDataPicker extends JSpinner {
         JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(this, "dd/MM/yyyy");
         setEditor(dateEditor);
 
-        // Impostiamo un layout di esempio per visualizzare correttamente il componente
+        // Impostiamo il layout di esempio per visualizzare correttamente il componente
         setLayout(new java.awt.FlowLayout());
+
+        // Imposta proprietà personalizzabili
+        this.backgroundColor = backgroundColor;
+        this.textColor = textColor;
+        this.size = size;
+        this.editable = editable;
+
+        // Impostiamo le proprietà
+        setPreferredSize(size);
+        setBackground(backgroundColor);
+        setForeground(textColor);
+        setEditable(editable);
+    }
+
+    private void setEditable(Boolean editable) {
+        this.setEnabled(editable);
     }
 
     // Metodo per ottenere la data selezionata nel formato "dd/MM/yyyy"
@@ -35,5 +56,10 @@ public class CustomDataPicker extends JSpinner {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void initialize() {
+        // Eventi o personalizzazioni addizionali possono essere implementati qui
     }
 }

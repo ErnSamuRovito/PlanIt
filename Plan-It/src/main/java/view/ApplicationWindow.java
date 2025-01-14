@@ -2,14 +2,12 @@
 
 package view;
 
-import core.SqLiteConnection;
-import model.DateComparison;
+import model.factories.*;
 import model.DesktopNotifier;
-import model.plant.AvatarPlant;
-import view.panel.LoginView;
+import model.UIComponentFactoryRegistry;
+import view.views.LoginView;
 
 import javax.swing.*;
-import java.sql.*;
 
 public class ApplicationWindow {
     private static ApplicationWindow instance;
@@ -22,12 +20,14 @@ public class ApplicationWindow {
     private ApplicationWindow() {
         frame = new JFrame(DEFAULT_TITLE);
         frame.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-        //frame.setResizable(false);
+        // frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Imposta la posizione al centro dello schermo
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+
+        initializeFactories();
 
         // Imposta il pannello iniziale (LoginView)
         setPanel(new LoginView());
@@ -35,8 +35,6 @@ public class ApplicationWindow {
         DesktopNotifier notifier = new DesktopNotifier();
         notifier.sendNotification("Titolo della Notifica", "Questo è un messaggio di notifica");
 
-        // Non dimenticare di chiudere la connessione alla fine
-        //SqLiteConnection.getInstance().closeConnection();
     }
 
     public static synchronized ApplicationWindow getInstance() {
@@ -52,5 +50,16 @@ public class ApplicationWindow {
         frame.add(panel);
         frame.revalidate();
         frame.repaint();
+    }
+
+    private void initializeFactories()
+    {
+        UIComponentFactoryRegistry.getInstance().registerFactory("Button", new ButtonFactory());
+        UIComponentFactoryRegistry.getInstance().registerFactory("TextField", new TextFieldFactory());
+        UIComponentFactoryRegistry.getInstance().registerFactory("PasswordField", new PasswordFieldFactory());
+        UIComponentFactoryRegistry.getInstance().registerFactory("Label", new LabelFactory());
+        UIComponentFactoryRegistry.getInstance().registerFactory("DataPicker", new DataPickerFactory());
+        UIComponentFactoryRegistry.getInstance().registerFactory("ComboBox", new ComboBoxFactory());
+        UIComponentFactoryRegistry.getInstance().registerFactory("TextPane", new TextPaneFactory());
     }
 }

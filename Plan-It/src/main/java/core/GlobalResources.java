@@ -1,6 +1,6 @@
 package core;
 
-import java.awt.Color;
+import java.awt.*;
 
 public abstract class GlobalResources {
     //Color's constants
@@ -11,6 +11,12 @@ public abstract class GlobalResources {
     public static final Color COLOR_WHITE = new Color(255, 255, 255, 255);
     public static final Color COLOR_RED1 = new Color(255, 100, 100, 255);
     public static final Color COLOR_RED2 = new Color(255, 0, 100, 255);
+
+    // Dimension constants
+    public static final Dimension FIELD_SIZE = new Dimension(200, 30);
+    public static final Dimension BUTTON_SIZE = new Dimension(150, 50);
+    public static final Dimension DESCRIPTION_SIZE = new Dimension(500, 200);
+    public static final Dimension LABEL_SIZE = new Dimension(150, 15);
 
     //Folder's constants
     public static final String folderImage="src/main/java/resources/images/folder.png";

@@ -19,7 +19,7 @@ public class TaskModifyDecorator extends CreatePanelDecorator {
 
     private CustomTextField nameTaskField;
     private CustomTextPane descriptionTaskPane;
-    private CustomDataPicker customDataPicker;
+    private CustomDatePicker customDataPicker;
     private CustomComboBox<String> comboBox;
     private CustomButton modifyButton;
     private CustomLabel backLabel;
@@ -59,10 +59,10 @@ public class TaskModifyDecorator extends CreatePanelDecorator {
     private void createComponents() {
         nameTaskField = UIFactoryHelper.createTextField(title != null ? title : "", "");
         descriptionTaskPane = UIFactoryHelper.createEditableTextPane(description);
-        customDataPicker = UIFactoryHelper.createDataPicker(dueDate != null && !dueDate.isEmpty() ? dueDate : null);
+        //customDataPicker = UIFactoryHelper.createDataPicker(dueDate != null && !dueDate.isEmpty() ? dueDate : null);
         if (urgency>2) urgency = 2;
         if (urgency<0) urgency = 0;
-        comboBox = UIFactoryHelper.createComboBox(new String[]{"Low", "Medium", "High"}, urgency);
+        //comboBox = UIFactoryHelper.createComboBox(new String[]{"Low", "Medium", "High"}, urgency);
         modifyButton = UIFactoryHelper.createButton("Modify Task", new ModifyTaskCommand(this));
         backLabel = UIFactoryHelper.createClickableLabel("Back", new GoToDeskViewCommand());
     }

@@ -18,7 +18,7 @@ public class TaskCreateDecorator extends CreatePanelDecorator {
     private CustomTextField nameTaskField;
     private CustomTextPane descriptionTaskPane;
     private JScrollPane scrollPane;
-    private CustomDataPicker customDataPicker;
+    private CustomDatePicker customDataPicker;
     private CustomButton createButton;
     private CustomComboBox<String> comboBox;
     private CustomLabel backLabel;
@@ -46,10 +46,10 @@ public class TaskCreateDecorator extends CreatePanelDecorator {
         // Wrap il description task pane in uno JScrollPane
         scrollPane = UIFactoryHelper.createScrollPane(descriptionTaskPane, new Dimension(500, 200));
         // Date Picker
-        customDataPicker = UIFactoryHelper.createDataPicker(null);
+        //customDataPicker = UIFactoryHelper.createDataPicker(null);
         // Priority ComboBox
         String[] items = {"Low", "Medium", "High"};
-        comboBox = UIFactoryHelper.createComboBox(items, 0);
+        //comboBox = UIFactoryHelper.createComboBox(items, 0);
         // Create New Task Button
         createButton = UIFactoryHelper.createButton("Create New Task", new CreateTaskCommand(this));
         // Create "Back" clickable label

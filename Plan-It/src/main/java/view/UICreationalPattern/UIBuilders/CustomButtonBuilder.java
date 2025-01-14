@@ -5,7 +5,14 @@ public class CustomButtonBuilder extends UIBuilder {
     @Override
     public CustomButton build() {
         return new CustomButton(
-                backgroundColor, hoverBackgroundColor, pressedBackgroundColor, textColor, text, size, opaque, action
+                backgroundColor,
+                hoverBackgroundColor,
+                pressedBackgroundColor,
+                textColor,
+                text,
+                size,
+                opaque,
+                action
         );
     }
 }

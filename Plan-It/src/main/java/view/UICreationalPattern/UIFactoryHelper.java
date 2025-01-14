@@ -49,7 +49,7 @@ public abstract class UIFactoryHelper {
     public static CustomLabel createLabel(String text){
         UIBuilder labelBuilder = new CustomLabelBuilder();
         UIDirector.buildStandardLabel(labelBuilder);
-        labelBuilder.text(text).size(LABEL_SIZE);
+        labelBuilder.text(text);
         UIComponentFactory labelFactory = new CustomLabelFactory(labelBuilder);
         return (CustomLabel) labelFactory.orderComponent(labelBuilder);
     }
@@ -59,7 +59,6 @@ public abstract class UIFactoryHelper {
         UIBuilder labelBuilder = new CustomLabelBuilder();
         UIDirector.buildStandardClickableLabel(labelBuilder);
         labelBuilder.text(text)
-                .size(BUTTON_SIZE)
                 .action(action);
 
         // Usa la factory per creare la label
@@ -72,7 +71,6 @@ public abstract class UIFactoryHelper {
         UIBuilder passwordFieldBuilder = new CustomPasswordFieldBuilder();
         UIDirector.buildStandardPasswordField(passwordFieldBuilder);
         passwordFieldBuilder.text("Password")
-                .size(FIELD_SIZE)
                 .placeholder("Password");
 
         // Usa la factory per creare il campo di testo
@@ -80,30 +78,29 @@ public abstract class UIFactoryHelper {
         return (CustomPasswordField) passwordFieldFactory.orderComponent(passwordFieldBuilder);
     }
 
-    public static CustomDataPicker createDataPicker(String selectedDate) {
-        // Ottieni la data di oggi
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        Date today = new Date();
-        String formattedDate = dateFormat.format(today);
+//    public static CustomDatePicker createDataPicker(String selectedDate) {
+//        // Ottieni la data di oggi
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+//        Date today = new Date();
+//        String formattedDate = dateFormat.format(today);
+//
+//        // Crea un CustomDataPicker e imposta la data selezionata
+//        //CustomDatePicker picker = new CustomDatePicker();
+//        //picker.setSelectedDate(selectedDate != null && !selectedDate.isEmpty() ? selectedDate : formattedDate);
+//
+//        //    return picker;
+//    }
 
-        // Crea un CustomDataPicker e imposta la data selezionata
-        CustomDataPicker picker = new CustomDataPicker();
-        picker.setSelectedDate(selectedDate != null && !selectedDate.isEmpty() ? selectedDate : formattedDate);
-
-        return picker;
-    }
-
-    public static CustomComboBox<String> createComboBox(String[] items, int selectedIndex) {
-        CustomComboBox<String> box = new CustomComboBox<>(items);
-        box.setSelectedIndex(selectedIndex);
-        return box;
-    }
+//    public static CustomComboBox<String> createComboBox(String[] items, int selectedIndex) {
+//        CustomComboBox<String> box = new CustomComboBox<>(items);
+//        box.setSelectedIndex(selectedIndex);
+//        return box;
+//    }
 
     public static CustomTextPane createTextPane(String content) {
         UIBuilder builder = new CustomTextPaneBuilder();
         UIDirector.buildStandardTextPane(builder);
-        builder.content(content)
-                .size(FIELD_SIZE);
+        builder.content(content);
         UIComponentFactory factory = new CustomTextPaneFactory(builder);
         return (CustomTextPane) factory.orderComponent(builder);
     }
@@ -111,7 +108,6 @@ public abstract class UIFactoryHelper {
     public static CustomTextPane createEditableTextPane(String content){
         UIBuilder builder = new CustomTextPaneBuilder();
         builder.content(content)
-                .size(FIELD_SIZE)
                 .placeholder("Insert task description")
                 .editable(true)
                 .size(new Dimension(500, 200))
