@@ -5,7 +5,7 @@ package view;
 import model.factories.*;
 import model.utils.DesktopNotifier;
 import view.UICreationalPattern.UIComponentFactoryRegistry;
-import view.panel.LoginView;
+import view.panels.LoginView;
 
 import javax.swing.*;
 

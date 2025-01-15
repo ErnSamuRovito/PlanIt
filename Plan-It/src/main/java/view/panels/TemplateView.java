@@ -1,4 +1,4 @@
-package view.panel;
+package view.panels;
 
 import core.GlobalResources;
 import view.UICreationalPattern.UIBuilders.UIBuilder;

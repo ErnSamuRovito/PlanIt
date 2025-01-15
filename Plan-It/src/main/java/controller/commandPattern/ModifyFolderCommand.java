@@ -4,7 +4,7 @@ import core.ComponentManager;
 import core.SqLiteConnection;
 import model.composite.Folder;
 import model.dao.folder.FolderDAOImpl;
-import view.panel.FolderModifyView;
+import view.panels.FolderModifyView;
 
 import javax.swing.*;
 import java.sql.Connection;

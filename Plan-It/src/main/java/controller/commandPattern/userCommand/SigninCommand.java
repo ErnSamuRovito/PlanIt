@@ -10,7 +10,7 @@ import model.dao.avatarPlant.AvatarPlantDB;
 import model.dao.folder.FolderDAOImpl;
 import model.dao.user.UserDAOImpl;
 import model.plantStates.AvatarPlant;
-import view.panel.SigninView;
+import view.panels.SigninView;
 
 import java.sql.Connection;
 import java.sql.SQLException;

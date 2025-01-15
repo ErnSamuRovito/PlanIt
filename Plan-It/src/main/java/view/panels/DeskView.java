@@ -1,4 +1,4 @@
-package view.panel;
+package view.panels;
 
 import controller.commandPattern.PasteComponentCommand;
 import controller.commandPattern.navigationCommands.GoBackCommand;
@@ -6,6 +6,7 @@ import controller.commandPattern.navigationCommands.GoToLoginCommand;
 import controller.controllers.DeskController;
 import core.ComponentManager;
 import model.plantStates.AvatarPlant;
+import view.helperPanels.SplitPanel;
 import view.iconPanel.IconFactory;
 import view.iconPanel.IconPanel;
 

@@ -9,7 +9,7 @@ import model.dao.avatarPlant.AvatarPlantDAOImpl;
 import model.dao.user.UserDAO;
 import model.dao.user.UserDAOImpl;
 import model.plantStates.AvatarPlant;
-import view.panel.SettingsView;
+import view.panels.SettingsView;
 
 import javax.swing.*;
 import java.sql.Connection;

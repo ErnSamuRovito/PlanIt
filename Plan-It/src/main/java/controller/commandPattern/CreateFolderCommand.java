@@ -5,7 +5,7 @@ import core.SqLiteConnection;
 import model.composite.Folder;
 import model.dao.folder.FolderDAOImpl;
 import model.dao.user.UserDAOImpl;
-import view.panel.FolderCreateView;
+import view.panels.FolderCreateView;
 
 import javax.swing.*;
 import java.sql.Connection;

@@ -5,7 +5,7 @@ import core.ComponentManager;
 import core.SqLiteConnection;
 import model.dao.user.UserDAO;
 import model.dao.user.UserDAOImpl;
-import view.panel.LoginView;
+import view.panels.LoginView;
 import javax.swing.JOptionPane;
 
 public class DeleteUserCommand implements ActionCommand {

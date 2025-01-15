@@ -1,4 +1,4 @@
-package view.panel;
+package view.helperPanels;
 
 import controller.commandPattern.ActionCommand;
 import core.GlobalResources;

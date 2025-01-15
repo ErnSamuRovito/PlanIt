@@ -1,12 +1,15 @@
-package view.panel;
+package view.helperPanels;
 
 import controller.commandPattern.navigationCommands.GoToSettingsCommand;
+import controller.controllers.TaskController;
 import core.ComponentManager;
 import core.GlobalResources;
 import core.SqLiteConnection;
+import model.composite.Task;
 import model.dao.avatarPlant.AvatarPlantDAOImpl;
 import model.dao.avatarPlant.AvatarPlantDB;
 import model.plantStates.AvatarPlant;
+import model.services.TaskService;
 import view.UICreationalPattern.UIComponents.CustomLabel;
 import view.UICreationalPattern.UIFactoryHelper;
 
@@ -29,9 +32,8 @@ public class SideMenu extends JPanel {
         addAvatarPlantGif();
         addPlantNameLabel();
         addSettingsButton();
-
-        // Spingi tutto sotto
-        add(Box.createVerticalGlue());
+        addTasksDueToday();
+        add(Box.createVerticalGlue()); // Spingi tutto sotto
     }
 
     private void addAvatarPlantGif() {
@@ -72,5 +74,29 @@ public class SideMenu extends JPanel {
 
         // Se non ci sono piante, return un fallback name
         return "Plant";
+    }
+
+    private void addTasksDueToday() {
+        int width = 200; // Imposta una larghezza coerente con il pannello
+        int maxHeight = 150; // Altezza massima per il pannello
+
+        // Crea un'istanza di TaskDueTodayPanel
+        TaskDueTodayPanel taskDueTodayPanel = new TaskDueTodayPanel();
+
+        // Imposta un layout per il pannello che consenta l'espansione verticale
+        taskDueTodayPanel.setLayout(new BoxLayout(taskDueTodayPanel, BoxLayout.Y_AXIS));
+
+        // Wrappare TaskDueTodayPanel con JScrollPane
+        JScrollPane scrollPane = new JScrollPane(taskDueTodayPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        // Imposta dimensioni preferite e massime per il JScrollPane
+        scrollPane.setPreferredSize(new Dimension(width, maxHeight));
+        scrollPane.setMinimumSize(new Dimension(width, 50)); // altezza minima
+        scrollPane.setMaximumSize(new Dimension(width, maxHeight)); // altezza massima
+
+        // Aggiungere il JScrollPane al SideMenu
+        add(scrollPane);
     }
 }

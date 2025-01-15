@@ -5,7 +5,7 @@ import core.SqLiteConnection;
 import model.composite.Task;
 import model.dao.folder.FolderDAOImpl;
 import model.dao.task.TaskDAOImpl;
-import view.panel.TaskCreateView;
+import view.panels.TaskCreateView;
 
 import javax.swing.*;
 import java.sql.Connection;

@@ -3,7 +3,7 @@ package controller.controllers;
 import core.SqLiteConnection;
 import model.dao.folder.FolderDAOImpl;
 import model.dao.task.TaskDAOImpl;
-import view.panel.DeskView;
+import view.panels.DeskView;
 import view.iconPanel.IconFactory;
 import controller.commandPattern.ExploreFolderCommand;
 import controller.commandPattern.navigationCommands.GoToTaskViewCommand;

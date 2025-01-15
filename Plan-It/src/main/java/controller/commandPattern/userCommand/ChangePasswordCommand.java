@@ -8,7 +8,7 @@ import model.utils.PasswordUtils;
 import model.User;
 import model.dao.user.UserDAO;
 import model.dao.user.UserDAOImpl;
-import view.panel.ChangePasswordView;
+import view.panels.ChangePasswordView;
 
 import javax.swing.*;
 import java.util.Arrays;

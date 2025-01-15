@@ -1,6 +1,7 @@
 package model.services;
 
 import core.SqLiteConnection;
+import model.composite.Task;
 import model.dao.task.TaskDAOImpl;
 
 import java.sql.Connection;
@@ -21,6 +22,24 @@ public class TaskService {
         try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
             TaskDAOImpl taskDAO = new TaskDAOImpl(connection);
             return taskDAO.getTaskDataByTitleAndFolderAndUsername(title, startFolder, user);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ArrayList<Task> getTasksDueToday(String username) {
+        try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
+            TaskDAOImpl taskDAO = new TaskDAOImpl(connection);
+            return taskDAO.getTasksDueTodayByUser(username);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String getFolderNameByTaskTitle(String taskTitle) {
+        try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
+            TaskDAOImpl taskDAO = new TaskDAOImpl(connection);
+            return taskDAO.getFolderNameByTaskTitle(taskTitle); // Richiama il DAO
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

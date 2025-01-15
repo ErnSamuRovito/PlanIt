@@ -326,4 +326,63 @@ public class TaskDAOImpl implements TaskDAO {
             return false;
         }
     }
+
+    @Override
+    public ArrayList<Task> getTasksDueTodayByUser(String username) {
+        ArrayList<Task> tasks = new ArrayList<>();
+        String sql = """
+        SELECT * FROM Task
+        WHERE due_date = strftime('%d/%m/%Y', 'now')
+        AND folder IN (
+            SELECT id FROM Folder WHERE owner = (SELECT id FROM User WHERE username = ?)
+        )
+    """;
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    tasks.add(new Task(
+                            rs.getString("title"),
+                            rs.getString("description"),
+                            rs.getString("due_date"),
+                            rs.getInt("urgency"),
+                            rs.getInt("folder"),
+                            rs.getInt("state"),
+                            rs.getInt("type"),
+                            rs.getString("extra_info")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tasks;
+    }
+
+    @Override
+    public String getFolderNameByTaskTitle(String taskTitle) {
+        String folderName = null;
+        String sql = """
+        SELECT f.folder_name
+        FROM Task t
+        JOIN Folder f ON t.folder = f.id
+        WHERE t.title = ?;
+    """;
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, taskTitle);
+
+            try (ResultSet resultSet = stmt.executeQuery()) {
+                if (resultSet.next()) {
+                    folderName = resultSet.getString("folder_name"); // Ottieni il nome della cartella
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return folderName; // Restituisci il nome della cartella, o null se non trovato
+    }
+
+
 }

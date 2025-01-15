@@ -1,8 +1,9 @@
-package view.panel;
+package view.panels;
 
 import controller.commandPattern.TaskDoneCommand;
 import controller.commandPattern.navigationCommands.GoToDeskViewCommand;
 import controller.controllers.TaskController;
+import model.services.TaskService;
 import view.UICreationalPattern.UIComponentFactoryRegistry;
 import view.UICreationalPattern.UIBuilders.UIBuilder;
 
@@ -13,9 +14,12 @@ import java.util.ArrayList;
 public class TaskView extends TemplateView {
     private final ArrayList<String> taskData;
 
-    public TaskView(String title, String user, String currFolder, TaskController taskController) {
+    public TaskView(String title, String user, String currFolder) {
         // Estrae i dati del task usando il TaskController
+        TaskService taskService = new TaskService();
+        TaskController taskController = new TaskController(taskService);
         taskData = taskController.getTaskData(title, user, currFolder);
+
         /* Indici dei dati:
            ("id_task")       0
            ("title")         1

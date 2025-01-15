@@ -6,7 +6,7 @@ import core.SqLiteConnection;
 import model.User;
 import model.dao.user.UserDAOImpl;
 import model.plantStates.AvatarPlant;
-import view.panel.LoginView;
+import view.panels.LoginView;
 
 import java.sql.Connection;
 import java.sql.SQLException;

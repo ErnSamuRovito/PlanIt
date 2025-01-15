@@ -2,7 +2,7 @@ package controller.commandPattern.navigationCommands;
 
 import controller.commandPattern.ActionCommand;
 import core.ComponentManager;
-import view.panel.SettingsView;
+import view.panels.SettingsView;
 
 public class GoToSettingsCommand implements ActionCommand {
     @Override

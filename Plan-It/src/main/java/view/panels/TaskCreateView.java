@@ -1,4 +1,4 @@
-package view.panel;
+package view.panels;
 
 import controller.commandPattern.CreateTaskCommand;
 import controller.commandPattern.navigationCommands.GoToDeskViewCommand;

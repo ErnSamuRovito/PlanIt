@@ -1,4 +1,4 @@
-package view.panel;
+package view.panels;
 
 import controller.commandPattern.navigationCommands.GoToSigninCommand;
 import controller.commandPattern.userCommand.LoginCommand;

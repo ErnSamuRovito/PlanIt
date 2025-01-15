@@ -20,4 +20,6 @@ public interface TaskDAO {
 
     int getIdByFolderNameAndOwnerAndTitle(String folderName, String owner, String title);
     boolean updateTaskFolder(int taskId, int newFolderId);
+    ArrayList<Task> getTasksDueTodayByUser(String username);
+    String getFolderNameByTaskTitle(String taskTitle);
 }

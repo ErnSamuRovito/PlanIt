@@ -1,5 +1,6 @@
 package controller.controllers;
 
+import model.composite.Task;
 import model.services.TaskService;
 
 import java.util.ArrayList;
@@ -17,6 +18,14 @@ public class TaskController {
 
     public ArrayList<String> getTaskData(String title, String user, String startFolder) {
         return taskService.getTaskData(title, startFolder, user);
+    }
+
+    public ArrayList<Task> getTasksDueToday(String username) {
+        return taskService.getTasksDueToday(username);
+    }
+
+    public String getFolderNameByTaskTitle(String taskTitle) {
+        return taskService.getFolderNameByTaskTitle(taskTitle); // Richiama il service
     }
 }
 

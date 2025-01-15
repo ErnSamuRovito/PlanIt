@@ -1,4 +1,4 @@
-package view.panel;
+package view.panels;
 
 import controller.commandPattern.CreateFolderCommand;
 import controller.commandPattern.navigationCommands.GoToDeskViewCommand;
@@ -58,11 +58,6 @@ public class FolderCreateView extends TemplateView {
         }
     }
 
-    /**
-     * Ottiene il nome della cartella dal campo di testo.
-     *
-     * @return Nome della cartella.
-     */
     public String getFolderName() {
         return ((CustomTextField) components.get(FOLDER_NAME_TEXTFIELD_INDEX)).getText();
     }

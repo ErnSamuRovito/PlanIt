@@ -38,6 +38,8 @@ public class PasteComponentCommand implements ActionCommand {
             }
 
             System.out.println("Sposto il "+ComponentManager.getInstance().getCuttedComponentType()+" id: "+ComponentManager.getInstance().getCuttedComponentId()+" in "+newParentId);
+            //resetto il componente "tagliato".
+            ComponentManager.getInstance().setCuttedComponent(null,null);
             ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView()); //Aggiorno la DeskView
         }catch (SQLException e) {throw new RuntimeException(e);}
     }

@@ -3,8 +3,8 @@ package core;
 import controller.controllers.TaskController;
 import model.services.TaskService;
 import view.ApplicationWindow;
-import view.panel.*;
-import view.panel.TaskModifyView;
+import view.panels.*;
+import view.panels.TaskModifyView;
 
 import javax.swing.*;
 
@@ -39,9 +39,7 @@ public class ComponentManager {
         return new DeskView(user, currFolder);
     }
     public TaskView getTaskView(String taskTitle){
-        TaskService taskService = new TaskService();
-        TaskController taskController = new TaskController(taskService);
-        return new TaskView(taskTitle,user,currFolder,taskController);
+        return new TaskView(taskTitle,user,currFolder);
     }
 
     // Metodo per impostare il pannello attivo tramite ApplicationWindow

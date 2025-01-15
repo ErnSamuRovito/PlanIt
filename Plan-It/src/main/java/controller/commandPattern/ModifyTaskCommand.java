@@ -4,7 +4,7 @@ import core.ComponentManager;
 import core.SqLiteConnection;
 import model.composite.Task;
 import model.dao.task.TaskDAOImpl;
-import view.panel.TaskModifyView;
+import view.panels.TaskModifyView;
 
 import javax.swing.*;
 import java.sql.Connection;
