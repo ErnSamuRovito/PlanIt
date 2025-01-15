@@ -23,7 +23,7 @@ public class ModifyTaskCommand implements ActionCommand {
 
             // Otteniamo l'ID del task tramite il titolo, cartella e utente
             int id = taskDAO.getIdByFolderNameAndOwnerAndTitle(
-                    ComponentManager.getInstance().getCurrFolder(),
+                    ComponentManager.getInstance().getCurrFolderName(),
                     ComponentManager.getInstance().getUser(),
                     panel.getTitle()
             );

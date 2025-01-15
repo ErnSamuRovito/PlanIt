@@ -20,7 +20,7 @@ public class PasteComponentCommand implements ActionCommand {
             if (ComponentManager.getInstance().getCuttedComponentType().equals("folder")) {
                 //cartella in cui devo andare
                 newParentId=folderDAO.getFolderIdByNameAndOwner(
-                        ComponentManager.getInstance().getCurrFolder(),
+                        ComponentManager.getInstance().getCurrFolderName(),
                         ComponentManager.getInstance().getUser()
                 );
                 if (!folderDAO.checkFolderExistsInParent(newParentId,ComponentManager.getInstance().getCuttedComponentId())) {
@@ -36,7 +36,7 @@ public class PasteComponentCommand implements ActionCommand {
                 }
             }else if (ComponentManager.getInstance().getCuttedComponentType().equals("task")){
                 newParentId=folderDAO.getFolderIdByNameAndOwner(
-                        ComponentManager.getInstance().getCurrFolder(),
+                        ComponentManager.getInstance().getCurrFolderName(),
                         ComponentManager.getInstance().getUser()
                 );
                 if (!taskDAO.checkTaskExistsInFolder(newParentId,ComponentManager.getInstance().getCuttedComponentId())) {

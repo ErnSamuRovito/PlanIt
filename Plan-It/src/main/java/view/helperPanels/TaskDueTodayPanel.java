@@ -37,13 +37,14 @@ public class TaskDueTodayPanel extends TemplateView {
 
         for (Task task : tasks) {
             UIBuilder taskLabelBuilder = registry.getFactory("ClickableLabel").createBuild();
+            System.out.println("ID: "+task.getIdTask());
             taskLabelBuilder
                     .text(task.getTitle())
                     .action(
                             new GoToTaskViewCommand(
                                     task.getTitle(),
                                     ComponentManager.getInstance().getUser(),
-                                    taskController.getFolderNameByTaskTitle(task.getTitle())
+                                    taskController.getFolderIdByTaskId(task.getIdTask())
                             )
                     );
             builders.add(taskLabelBuilder);

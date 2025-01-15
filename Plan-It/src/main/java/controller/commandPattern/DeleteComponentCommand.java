@@ -26,7 +26,7 @@ public class DeleteComponentCommand implements ActionCommand {
                 type = "task";
                 TaskDAOImpl taskDAO = new TaskDAOImpl(connection);
                 id = taskDAO.getIdByFolderNameAndOwnerAndTitle(
-                        ComponentManager.getInstance().getCurrFolder(),
+                        ComponentManager.getInstance().getCurrFolderName(),
                         ComponentManager.getInstance().getUser(),
                         title
                 );

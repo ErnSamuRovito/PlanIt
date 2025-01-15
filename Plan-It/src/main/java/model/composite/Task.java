@@ -23,8 +23,8 @@ public class Task implements FileSystemComponent{
         this.extraInfo = extraInfo;
     }
 
-    public Task(String title, String description, String dueDate, int urgency, int folder, int state, int type, String extraInfo) {
-        //this.idTask = idTask;
+    public Task(int idTask, String title, String description, String dueDate, int urgency, int folder, int state, int type, String extraInfo) {
+        this.idTask = idTask;
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;

@@ -1,8 +1,10 @@
 package controller.commandPattern.userCommand;
 
 import controller.commandPattern.ActionCommand;
+import controller.controllers.FolderController;
 import core.ComponentManager;
 import core.SqLiteConnection;
+import model.services.FolderService;
 import model.utils.FormatValidator;
 import model.User;
 import model.dao.avatarPlant.AvatarPlantDAOImpl;
@@ -95,7 +97,10 @@ public class SigninCommand implements ActionCommand {
                     System.err.println(ERROR_PLANT_CREATION);
                 }
 
-                ComponentManager.getInstance().setPath(usernameInput, "/root");
+                FolderController folderController=new FolderController(new FolderService());
+                int folderId=folderController.getFolderIdByNameAndOwner("/root",usernameInput);
+
+                ComponentManager.getInstance().setPath(usernameInput, folderId);
                 ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView());
             } else {
                 System.err.println(ERROR_ROOT_FOLDER_CREATION);

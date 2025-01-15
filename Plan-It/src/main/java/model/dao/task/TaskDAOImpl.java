@@ -57,7 +57,7 @@ public class TaskDAOImpl implements TaskDAO {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return new Task(
-                        //rs.getInt("id_task"),
+                        rs.getInt("id_task"),
                         rs.getString("title"),
                         rs.getString("description"),
                         rs.getString("due_date"),
@@ -84,7 +84,7 @@ public class TaskDAOImpl implements TaskDAO {
             if (rs.next()) {
                 tasks.add(
                     new Task(
-                        //rs.getInt("id_task"),
+                        rs.getInt("id_task"),
                         rs.getString("title"),
                         rs.getString("description"),
                         rs.getString("due_date"),
@@ -342,6 +342,7 @@ public class TaskDAOImpl implements TaskDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     tasks.add(new Task(
+                            rs.getInt("id_task"),
                             rs.getString("title"),
                             rs.getString("description"),
                             rs.getString("due_date"),
@@ -360,28 +361,27 @@ public class TaskDAOImpl implements TaskDAO {
     }
 
     @Override
-    public String getFolderNameByTaskTitle(String taskTitle) {
-        String folderName = null;
+    public int getFolderIdByTaskId(int taskId) {
+        int folderId = -1;
         String sql = """
-        SELECT f.folder_name
-        FROM Task t
-        JOIN Folder f ON t.folder = f.id
-        WHERE t.title = ?;
+        SELECT folder
+        FROM Task
+        WHERE id_task = ?;
     """;
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, taskTitle);
+            stmt.setInt(1, taskId);
 
             try (ResultSet resultSet = stmt.executeQuery()) {
                 if (resultSet.next()) {
-                    folderName = resultSet.getString("folder_name"); // Ottieni il nome della cartella
+                    folderId = resultSet.getInt("folder"); // Ottieni l'id della cartella
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return folderName; // Restituisci il nome della cartella, o null se non trovato
+        return folderId; // Restituisci il nome della cartella, o null se non trovato
     }
 
     @Override

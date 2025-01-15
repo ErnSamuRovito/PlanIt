@@ -212,28 +212,24 @@ public class FolderDAOImpl implements FolderDAO {
     }
 
     @Override
-    public String findParentFolder(String folderName) {
-        String parentName = null;
+    public int findParentFolder(int folderId) {
+        int parentId = -1;
         String query = """
-        SELECT folder_name FROM Folder WHERE id = (
-            SELECT parent
-            FROM Folder
-            WHERE folder_name = ?
-        );
+        SELECT parent FROM Folder WHERE id = ?;
         """;
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, folderName); // Imposta il nome della cartella di cui cercare il parent
+            statement.setInt(1, folderId); // Imposta il nome della cartella di cui cercare il parent
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) { // Se esiste un risultato
-                    parentName = resultSet.getString("folder_name");
+                    parentId = resultSet.getInt("parent");
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Error fetching parent folder from database", e);
         }
-        return parentName; // Ritorna il nome della cartella genitore o null se non trovato
+        return parentId; // Ritorna il nome della cartella genitore o null se non trovato
     }
 
     @Override

@@ -1,5 +1,6 @@
 package controller.controllers;
 
+import core.ComponentManager;
 import model.composite.Folder;
 import model.services.FolderService;
 

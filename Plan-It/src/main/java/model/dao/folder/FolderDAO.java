@@ -13,7 +13,7 @@ public interface FolderDAO {
     List<Folder> getSubfolders(int parentId);
     boolean updateFolder(Folder folder, int id);
     void deleteFolder(int id);
-    String findParentFolder(String name);
+    int findParentFolder(int folderId);
 
     List<String> getFoldersByFolderAndUser(String startFolder, String user);
 

@@ -1,8 +1,10 @@
 package controller.controllers;
 
+import core.ComponentManager;
 import core.SqLiteConnection;
 import model.dao.folder.FolderDAOImpl;
 import model.dao.task.TaskDAOImpl;
+import model.services.FolderService;
 import view.panels.DeskView;
 import view.iconPanel.IconFactory;
 import controller.commandPattern.ExploreFolderCommand;
@@ -35,8 +37,11 @@ public class DeskController {
             TaskDAOImpl taskDAO = new TaskDAOImpl(connection);
             for (String task : taskDAO.getTasksByFolderAndUser(startFolder, user)) {
                 String taskState = determineTaskState(taskDAO, task);
+
+                int folderId=folderDAO.getFolderIdByNameAndOwner(startFolder, ComponentManager.getInstance().getUser());
+
                 view.addIconPanel(
-                        IconFactory.createIconPanel(taskState, task, new GoToTaskViewCommand(task, user, startFolder))
+                        IconFactory.createIconPanel(taskState, task, new GoToTaskViewCommand(task, user, folderId))
                 );
             }
 

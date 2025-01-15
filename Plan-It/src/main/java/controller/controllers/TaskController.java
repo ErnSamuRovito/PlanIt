@@ -24,8 +24,8 @@ public class TaskController {
         return taskService.getTasksDueToday(username);
     }
 
-    public String getFolderNameByTaskTitle(String taskTitle) {
-        return taskService.getFolderNameByTaskTitle(taskTitle); // Richiama il service
+    public int getFolderIdByTaskId(int taskId) {
+        return taskService.getFolderIdByTaskId(taskId); // Richiama il service
     }
 }
 

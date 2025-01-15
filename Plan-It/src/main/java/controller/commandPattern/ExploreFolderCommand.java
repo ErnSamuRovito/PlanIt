@@ -1,6 +1,8 @@
 package controller.commandPattern;
 
+import controller.controllers.FolderController;
 import core.ComponentManager;
+import model.services.FolderService;
 
 public class ExploreFolderCommand implements ActionCommand {
     private final String userInput, folderName;
@@ -11,7 +13,10 @@ public class ExploreFolderCommand implements ActionCommand {
     }
 
     @Override public void execute() {
-        ComponentManager.getInstance().setPath(userInput, folderName);
+        FolderController folderController=new FolderController(new FolderService());
+        int folderId=folderController.getFolderIdByNameAndOwner(folderName,ComponentManager.getInstance().getUser());
+
+        ComponentManager.getInstance().setPath(userInput, folderId);
         ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView());
     }
 }

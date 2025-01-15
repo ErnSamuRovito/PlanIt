@@ -4,16 +4,17 @@ import controller.commandPattern.ActionCommand;
 import core.ComponentManager;
 
 public class GoToTaskViewCommand implements ActionCommand {
-    private final String taskTitle, user, startFolder;
+    private final String taskTitle, user;
+    private final int startFolderId;
 
-    public GoToTaskViewCommand(String taskTitle, String user, String startFolder){
+    public GoToTaskViewCommand(String taskTitle, String user, int startFolderId){
         this.taskTitle = taskTitle;
         this.user = user;
-        this.startFolder=startFolder;
+        this.startFolderId=startFolderId;
     }
 
     @Override public void execute() {
-        ComponentManager.getInstance().setPath(user,startFolder);
+        ComponentManager.getInstance().setPath(user,startFolderId);
         ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getTaskView(taskTitle));
     }
 }

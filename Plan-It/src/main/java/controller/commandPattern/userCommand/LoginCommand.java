@@ -1,11 +1,13 @@
 package controller.commandPattern.userCommand;
 
 import controller.commandPattern.ActionCommand;
+import controller.controllers.FolderController;
 import core.ComponentManager;
 import core.SqLiteConnection;
 import model.User;
 import model.dao.user.UserDAOImpl;
 import model.plantStates.AvatarPlant;
+import model.services.FolderService;
 import view.panels.LoginView;
 
 import java.sql.Connection;
@@ -43,7 +45,11 @@ public class LoginCommand implements ActionCommand {
                 User.getInstance().loadUser(idLogged);
                 AvatarPlant.getInstance().loadPlant(User.getInstance().getId());
                 AvatarPlant.getInstance().updateState();
-                ComponentManager.getInstance().setPath(userInput,"/root");
+
+                FolderController folderController=new FolderController(new FolderService());
+                int folderId=folderController.getFolderIdByNameAndOwner("/root",userInput);
+
+                ComponentManager.getInstance().setPath(userInput,folderId);
                 ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView());
             } else {
                 showMessageDialog(null, "Login failed. Try again.", "Plan-It", ERROR_MESSAGE);

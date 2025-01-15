@@ -32,7 +32,7 @@ public class CreateTaskCommand implements ActionCommand {
             try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
                 FolderDAOImpl folderDAO = new FolderDAOImpl(connection);
                 int folderId = folderDAO.getFolderIdByNameAndOwner(
-                        ComponentManager.getInstance().getCurrFolder(),
+                        ComponentManager.getInstance().getCurrFolderName(),
                         ComponentManager.getInstance().getUser()
                 );
 

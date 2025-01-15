@@ -1,16 +1,19 @@
 package core;
 
-import controller.controllers.TaskController;
-import model.services.TaskService;
+import model.dao.folder.FolderDAOImpl;
+import model.dao.task.TaskDAOImpl;
 import view.ApplicationWindow;
 import view.panels.*;
 import view.panels.TaskModifyView;
 
 import javax.swing.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class ComponentManager {
     private static ComponentManager instance;
-    private String user, currFolder;
+    private String user, currFolderName;
+    private Integer currFolderId;
     private String cuttedComponentType;
     private Integer cuttedComponentId;
 
@@ -28,7 +31,7 @@ public class ComponentManager {
     public SigninView getSigninView() {return new SigninView();}
 
     public TaskModifyView getModifyTask(String taskTitle) {
-        return new TaskModifyView(taskTitle, user, currFolder);
+        return new TaskModifyView(taskTitle, user, currFolderName);
     }
     public FolderModifyView getModifyFolder(String folderTitle) {
         return new FolderModifyView(user, folderTitle);
@@ -36,18 +39,27 @@ public class ComponentManager {
 
 
     public DeskView getDeskView() {
-        return new DeskView(user, currFolder);
+        return new DeskView(user, currFolderName);
     }
     public TaskView getTaskView(String taskTitle){
-        return new TaskView(taskTitle,user,currFolder);
+        return new TaskView(taskTitle,user, currFolderName);
     }
 
     // Metodo per impostare il pannello attivo tramite ApplicationWindow
     public void setPanel(JPanel panel) {ApplicationWindow.getInstance().setPanel(panel);}
 
-    public void setPath(String user, String currFolder){this.user=user; this.currFolder=currFolder;}
+    public void setPath(String user, Integer currFolderId){
+        this.user=user;
+        this.currFolderId=currFolderId;
+        try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
+            FolderDAOImpl folderDAO = new FolderDAOImpl(connection);
+            this.currFolderName=folderDAO.getFolderById(currFolderId).getFolderName();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
     public String getUser() {return user;}
-    public String getCurrFolder() {return currFolder;}
+    public String getCurrFolderName() {return currFolderName;}
 
     public void setCuttedComponent(String cuttedComponentType, Integer cuttedComponentId){
         this.cuttedComponentType = cuttedComponentType;

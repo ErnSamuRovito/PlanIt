@@ -29,7 +29,7 @@ public class CreateFolderCommand implements ActionCommand {
                 int userId = userDAO.getUserByUsername(ComponentManager.getInstance().getUser()).getId();
                 FolderDAOImpl folderDAO = new FolderDAOImpl(connection);
                 int parentId = folderDAO.getFolderIdByNameAndOwner(
-                        ComponentManager.getInstance().getCurrFolder(), ComponentManager.getInstance().getUser()
+                        ComponentManager.getInstance().getCurrFolderName(), ComponentManager.getInstance().getUser()
                 );
 
                 // Creiamo un oggetto Folder

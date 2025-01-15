@@ -36,10 +36,10 @@ public class TaskService {
         }
     }
 
-    public String getFolderNameByTaskTitle(String taskTitle) {
+    public int getFolderIdByTaskId(int taskId) {
         try (Connection connection = SqLiteConnection.getInstance().getConnection()) {
             TaskDAOImpl taskDAO = new TaskDAOImpl(connection);
-            return taskDAO.getFolderNameByTaskTitle(taskTitle); // Richiama il DAO
+            return taskDAO.getFolderIdByTaskId(taskId); // Richiama il DAO
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

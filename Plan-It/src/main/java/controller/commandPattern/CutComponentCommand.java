@@ -29,7 +29,7 @@ public class CutComponentCommand implements ActionCommand{
             }else{
                 TaskDAOImpl taskDAO = new TaskDAOImpl(connection);
                 int taskId = taskDAO.getIdByFolderNameAndOwnerAndTitle(
-                        ComponentManager.getInstance().getCurrFolder(),
+                        ComponentManager.getInstance().getCurrFolderName(),
                         ComponentManager.getInstance().getUser(),
                         title
                 );
