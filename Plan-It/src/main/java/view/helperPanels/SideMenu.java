@@ -24,7 +24,7 @@ public class SideMenu extends JPanel {
     public SideMenu() {
         super();
 
-        // imposta un vertical layout (BoxLayout) per il side menu
+        // Imposta un vertical layout (BoxLayout) per il side menu
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(GlobalResources.COLOR_CREMA);
         setPreferredSize(new Dimension(200, 0)); // Fixed width e auto height
@@ -32,8 +32,14 @@ public class SideMenu extends JPanel {
         addAvatarPlantGif();
         addPlantNameLabel();
         addSettingsButton();
+
+        // Aggiungi uno spazio verticale per spingere il menu "Tasks Due Today" più in basso
+        add(Box.createVerticalStrut(20)); // Puoi regolare il valore per aumentare o diminuire lo spazio
+
         addTasksDueToday();
-        add(Box.createVerticalGlue()); // Spingi tutto sotto
+
+        // Usa un glue per spingere tutto verso il basso
+        add(Box.createVerticalGlue());
     }
 
     private void addAvatarPlantGif() {
