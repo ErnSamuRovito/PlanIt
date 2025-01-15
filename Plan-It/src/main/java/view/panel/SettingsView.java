@@ -1,5 +1,6 @@
 package view.panel;
 
+import controller.commandPattern.ActionCommand;
 import controller.commandPattern.navigationCommands.GoToChangePasswordCommand;
 import controller.commandPattern.navigationCommands.GoToDeskViewCommand;
 import controller.commandPattern.userCommand.DeleteUserCommand;
@@ -21,14 +22,15 @@ public class SettingsView extends TemplateView {
     private UserDB userDB;
     private AvatarPlantDB avatarPlantDB;
 
-    public SettingsView(){
+    public SettingsView() {
+        // Recupero le informazioni dell'utente e della pianta
         UserService userService = new UserService();
         UserController userController = new UserController(userService);
-        userDB=userController.getUserByUsername();
+        userDB = userController.getUserByUsername();
 
         AvatarPlantService avatarPlantService = new AvatarPlantService();
         AvatarPlantController avatarPlantController = new AvatarPlantController(avatarPlantService);
-        avatarPlantDB=avatarPlantController.getPlantByOwnerId(userDB.getId());
+        avatarPlantDB = avatarPlantController.getPlantByOwnerId(userDB.getId());
 
         initialize();
     }
@@ -37,52 +39,69 @@ public class SettingsView extends TemplateView {
     protected void createComponents() {
         UIComponentFactoryRegistry registry = UIComponentFactoryRegistry.getInstance();
 
-        UIBuilder buildUsernameL = registry.getFactory("Label").createBuild();
-        buildUsernameL.text("Username");
-        UIBuilder buildUsernameTF = registry.getFactory("TextField").createBuild();
-        buildUsernameTF.placeholder(userDB.getUsername());
+        // Creazione dei componenti con metodi helper
+        UIBuilder buildUsernameL = createLabel("Username");
+        UIBuilder buildUsernameTF = createTextField(userDB.getUsername());
 
-        UIBuilder buildEmailL = registry.getFactory("Label").createBuild();
-        buildEmailL.text("Email");
-        UIBuilder buildEmailTF = registry.getFactory("TextField").createBuild();
-        buildEmailTF.placeholder(userDB.getEmail());
+        UIBuilder buildEmailL = createLabel("Email");
+        UIBuilder buildEmailTF = createTextField(userDB.getEmail());
 
-        UIBuilder buildPlantNameL = registry.getFactory("Label").createBuild();
-        buildPlantNameL.text("Plant name");
-        UIBuilder buildPlantNameTF = registry.getFactory("TextField").createBuild();
-        buildPlantNameTF.placeholder(avatarPlantDB.getName());
+        UIBuilder buildPlantNameL = createLabel("Plant name");
+        UIBuilder buildPlantNameTF = createTextField(avatarPlantDB.getName());
 
-        UIBuilder buildChangePasswordB = registry.getFactory("Button").createBuild();
-        buildChangePasswordB
-                .text("Change password")
-                .action(new GoToChangePasswordCommand());
+        UIBuilder buildChangePasswordB = createButton("Change password", new GoToChangePasswordCommand());
+        UIBuilder buildDeleateUserB = createButton("Delete User", new DeleteUserCommand(userDB.getId()), GlobalResources.COLOR_RED1, GlobalResources.COLOR_RED2);
+        UIBuilder buildSaveB = createButton("Save", new SaveSettingsCommand(this));
+        UIBuilder buildBackL = createClickableLabel(new GoToDeskViewCommand());
 
-        UIBuilder buildDeleateUserB = registry.getFactory("Button").createBuild();
-        buildDeleateUserB
-                .text("Delete User")
-                .backgroundColor(GlobalResources.COLOR_RED1)
-                .hoverBackgroundColor(GlobalResources.COLOR_RED2)
-                .pressedBackgroundColor(GlobalResources.COLOR_RED1)
-                .action(new DeleteUserCommand(userDB.getId()));
+        // Aggiunta dei componenti
+        builders.add(buildUsernameL);
+        builders.add(buildUsernameTF);
+        builders.add(buildEmailL);
+        builders.add(buildEmailTF);
+        builders.add(buildPlantNameL);
+        builders.add(buildPlantNameTF);
+        builders.add(buildChangePasswordB);
+        builders.add(buildDeleateUserB);
+        builders.add(buildSaveB);
+        builders.add(buildBackL);
+    }
 
-        UIBuilder buildSaveB = registry.getFactory("Button").createBuild();
-        buildSaveB
-                .text("Save")
-                .action(new SaveSettingsCommand(this));
+    private UIBuilder createLabel(String text) {
+        UIComponentFactoryRegistry registry = UIComponentFactoryRegistry.getInstance();
+        UIBuilder builder = registry.getFactory("Label").createBuild();
+        builder.text(text);
+        return builder;
+    }
 
-        UIBuilder buildBackL = registry.getFactory("ClickableLabel").createBuild();
-        buildBackL.text("Back").action(new GoToDeskViewCommand());
+    private UIBuilder createTextField(String placeholder) {
+        UIComponentFactoryRegistry registry = UIComponentFactoryRegistry.getInstance();
+        UIBuilder builder = registry.getFactory("TextField").createBuild();
+        builder.placeholder(placeholder);
+        return builder;
+    }
 
-        builders.add(buildUsernameL);               //0
-        builders.add(buildUsernameTF);              //1
-        builders.add(buildEmailL);                  //2
-        builders.add(buildEmailTF);                 //3
-        builders.add(buildPlantNameL);              //4
-        builders.add(buildPlantNameTF);             //5
-        builders.add(buildChangePasswordB);         //6
-        builders.add(buildDeleateUserB);            //7
-        builders.add(buildSaveB);                   //8
-        builders.add(buildBackL);                   //9
+    private UIBuilder createButton(String text, ActionCommand action) {
+        return createButton(text, action, null, null);
+    }
+
+    private UIBuilder createButton(String text, ActionCommand action, Color bgColor, Color hoverColor) {
+        UIComponentFactoryRegistry registry = UIComponentFactoryRegistry.getInstance();
+        UIBuilder builder = registry.getFactory("Button").createBuild();
+        builder.text(text).action(action);
+        if (bgColor != null && hoverColor != null) {
+            builder.backgroundColor(bgColor)
+                    .hoverBackgroundColor(hoverColor)
+                    .pressedBackgroundColor(bgColor);
+        }
+        return builder;
+    }
+
+    private UIBuilder createClickableLabel(ActionCommand action) {
+        UIComponentFactoryRegistry registry = UIComponentFactoryRegistry.getInstance();
+        UIBuilder builder = registry.getFactory("ClickableLabel").createBuild();
+        builder.text("Back").action(action);
+        return builder;
     }
 
     @Override
@@ -94,7 +113,19 @@ public class SettingsView extends TemplateView {
         }
     }
 
-    public String getUsername(){return ((CustomTextField) components.get(1)).getText();}
-    public String getEmail(){return ((CustomTextField) components.get(3)).getText();}
-    public String getPlantName(){return ((CustomTextField) components.get(5)).getText();}
+    public String getUsername() {
+        return getTextFieldValue(1);
+    }
+
+    public String getEmail() {
+        return getTextFieldValue(3);
+    }
+
+    public String getPlantName() {
+        return getTextFieldValue(5);
+    }
+
+    private String getTextFieldValue(int index) {
+        return ((CustomTextField) components.get(index)).getText();
+    }
 }

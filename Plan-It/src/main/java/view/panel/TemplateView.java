@@ -19,6 +19,7 @@ public abstract class TemplateView extends JPanel
         builders = new ArrayList<>();
         components = new ArrayList<>();
         gbc = new GridBagConstraints(); // Inizializzazione sicura
+
         prepareView();
     }
 

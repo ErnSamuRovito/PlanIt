@@ -17,20 +17,15 @@ public class ChangePasswordView extends TemplateView {
     protected void createComponents() {
         UIComponentFactoryRegistry registry = UIComponentFactoryRegistry.getInstance();
 
-        UIBuilder buildOldPasswordL = registry.getFactory("Label").createBuild();
-        buildOldPasswordL.text("Current Password");
-        UIBuilder buildOldPasswordPF = registry.getFactory("PasswordField").createBuild();
-        buildOldPasswordPF.placeholder("Password");
+        // Creazione dei componenti UI per la vista
+        UIBuilder buildOldPasswordL = createLabel("Current Password");
+        UIBuilder buildOldPasswordPF = createPasswordField("Password");
 
-        UIBuilder buildPasswordL = registry.getFactory("Label").createBuild();
-        buildPasswordL.text("New Password");
-        UIBuilder buildPasswordPF = registry.getFactory("PasswordField").createBuild();
-        buildPasswordPF.placeholder("Password");
+        UIBuilder buildPasswordL = createLabel("New Password");
+        UIBuilder buildPasswordPF = createPasswordField("Password");
 
-        UIBuilder buildConfirmPasswordL = registry.getFactory("Label").createBuild();
-        buildConfirmPasswordL.text("Confirm password");
-        UIBuilder buildConfirmPasswordPF = registry.getFactory("PasswordField").createBuild();
-        buildConfirmPasswordPF.placeholder("Confirm password");
+        UIBuilder buildConfirmPasswordL = createLabel("Confirm password");
+        UIBuilder buildConfirmPasswordPF = createPasswordField("Confirm password");
 
         UIBuilder buildButton = registry.getFactory("Button").createBuild();
         buildButton
@@ -40,14 +35,29 @@ public class ChangePasswordView extends TemplateView {
         UIBuilder buildBackL = registry.getFactory("ClickableLabel").createBuild();
         buildBackL.text("Back").action(new GoToDeskViewCommand());
 
-        builders.add(buildOldPasswordL);            //0
-        builders.add(buildOldPasswordPF);           //1
-        builders.add(buildPasswordL);               //2
-        builders.add(buildPasswordPF);              //3
-        builders.add(buildConfirmPasswordL);        //4
-        builders.add(buildConfirmPasswordPF);       //6
-        builders.add(buildButton);                  //7
-        builders.add(buildBackL);                   //8
+        // Aggiunta dei componenti nella lista builder
+        builders.add(buildOldPasswordL);
+        builders.add(buildOldPasswordPF);
+        builders.add(buildPasswordL);
+        builders.add(buildPasswordPF);
+        builders.add(buildConfirmPasswordL);
+        builders.add(buildConfirmPasswordPF);
+        builders.add(buildButton);
+        builders.add(buildBackL);
+    }
+
+    private UIBuilder createLabel(String text) {
+        UIComponentFactoryRegistry registry = UIComponentFactoryRegistry.getInstance();
+        UIBuilder builder = registry.getFactory("Label").createBuild();
+        builder.text(text);
+        return builder;
+    }
+
+    private UIBuilder createPasswordField(String placeholder) {
+        UIComponentFactoryRegistry registry = UIComponentFactoryRegistry.getInstance();
+        UIBuilder builder = registry.getFactory("PasswordField").createBuild();
+        builder.placeholder(placeholder);
+        return builder;
     }
 
     @Override
@@ -59,16 +69,22 @@ public class ChangePasswordView extends TemplateView {
         }
     }
 
-    public char[] getCurrPassword(){
-        String passwordString = ((CustomPasswordField) components.get(1)).getPasswordString();
+    // Metodo generale per ottenere la password
+    private char[] getPassword(int index) {
+        String passwordString = ((CustomPasswordField) components.get(index)).getPasswordString();
         return passwordString.toCharArray();  // Converte la stringa in un char[]
     }
-    public char[] getNewPassword(){
-        String passwordString = ((CustomPasswordField) components.get(3)).getPasswordString();
-        return passwordString.toCharArray();  // Converte la stringa in un char[]
+
+    // Metodi specifici per ottenere le password dai campi
+    public char[] getCurrPassword() {
+        return getPassword(1);  // Campo della password corrente
     }
-    public char[] getConfirmPassword(){
-        String passwordString = ((CustomPasswordField) components.get(5)).getPasswordString();
-        return passwordString.toCharArray();  // Converte la stringa in un char[]
+
+    public char[] getNewPassword() {
+        return getPassword(3);  // Campo della nuova password
+    }
+
+    public char[] getConfirmPassword() {
+        return getPassword(5);  // Campo della conferma password
     }
 }

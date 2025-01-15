@@ -16,12 +16,12 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class TaskModifyView extends TemplateView {
-    private ArrayList<String> taskData;
+    private final ArrayList<String> taskData;
 
-    public TaskModifyView(String title,String user,String startFolder) {
+    public TaskModifyView(String title, String user, String startFolder) {
         TaskService taskService = new TaskService();
         TaskController taskController = new TaskController(taskService);
-        taskData=taskController.getTaskData(title,user,startFolder);
+        this.taskData = taskController.getTaskData(title, user, startFolder);
 
         initialize();
     }
@@ -30,39 +30,41 @@ public class TaskModifyView extends TemplateView {
     protected void createComponents() {
         UIComponentFactoryRegistry registry = UIComponentFactoryRegistry.getInstance();
 
-        UIBuilder buildLabelTitle = registry.getFactory("Label").createBuild();
-        buildLabelTitle.text("Title");
-        UIBuilder buildTextFieldTitle = registry.getFactory("TextField").createBuild();
-        buildTextFieldTitle.text(taskData.get(1));
+        builders.add(createLabelBuilder(registry, "Title"));              // 0
+        builders.add(createTextFieldBuilder(registry, taskData.get(1)));   // 1
+        builders.add(createTextPaneBuilder(registry, taskData.get(2)));    // 2
+        builders.add(createComboBoxBuilder(registry, taskData.get(4)));    // 3
+        builders.add(createDatePickerBuilder(registry, taskData.get(3)));  // 4
+        builders.add(createButtonBuilder(registry));                       // 5
+        builders.add(createBackLabelBuilder(registry));                    // 6
+    }
 
-        UIBuilder buildTextPane = registry.getFactory("TextPane").createBuild();
-        buildTextPane
-                .content(taskData.get(2))
-                .editable(true);
+    private UIBuilder createLabelBuilder(UIComponentFactoryRegistry registry, String text) {
+        return registry.getFactory("Label").createBuild().text(text);
+    }
 
-        UIBuilder buildDataPicker = registry.getFactory("DataPicker").createBuild();
-        buildDataPicker.date(taskData.get(3));
+    private UIBuilder createTextFieldBuilder(UIComponentFactoryRegistry registry, String text) {
+        return registry.getFactory("TextField").createBuild().text(text);
+    }
 
-        UIBuilder buildComboBox = registry.getFactory("ComboBox").createBuild();
-        buildComboBox.selectedIndex(Integer.parseInt(taskData.get(4)));
+    private UIBuilder createTextPaneBuilder(UIComponentFactoryRegistry registry, String content) {
+        return registry.getFactory("TextPane").createBuild().content(content).editable(true);
+    }
 
-        UIBuilder buildButton = registry.getFactory("Button").createBuild();
-        buildButton
-                .text("Modify")
-                .action(new ModifyTaskCommand(this));
+    private UIBuilder createComboBoxBuilder(UIComponentFactoryRegistry registry, String selectedIndex) {
+        return registry.getFactory("ComboBox").createBuild().selectedIndex(Integer.parseInt(selectedIndex));
+    }
 
-        UIBuilder builderBackLabel = registry.getFactory("ClickableLabel").createBuild();
-        builderBackLabel
-                .text("Back")
-                .action(new GoToDeskViewCommand());
+    private UIBuilder createDatePickerBuilder(UIComponentFactoryRegistry registry, String date) {
+        return registry.getFactory("DataPicker").createBuild().date(date);
+    }
 
-        builders.add(buildLabelTitle);          //0
-        builders.add(buildTextFieldTitle);      //1
-        builders.add(buildTextPane);            //2
-        builders.add(buildComboBox);            //3
-        builders.add(buildDataPicker);          //4
-        builders.add(buildButton);              //5
-        builders.add(builderBackLabel);         //6
+    private UIBuilder createButtonBuilder(UIComponentFactoryRegistry registry) {
+        return registry.getFactory("Button").createBuild().text("Modify").action(new ModifyTaskCommand(this));
+    }
+
+    private UIBuilder createBackLabelBuilder(UIComponentFactoryRegistry registry) {
+        return registry.getFactory("ClickableLabel").createBuild().text("Back").action(new GoToDeskViewCommand());
     }
 
     @Override
@@ -72,27 +74,37 @@ public class TaskModifyView extends TemplateView {
             gbc.gridy = i;
 
             if (i == 2) {
-                // Recupera il componente al indice 1 (che dovrebbe essere il TextPane)
-                Component component = (Component) components.get(i);
-
-                // Creiamo un JScrollPane con il componente
-                JScrollPane scrollPane = new JScrollPane(component);
-                scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-                scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
-                // Aggiungi lo scrollPane al pannello
-                add(scrollPane, gbc);
+                addComponentWithScrollPane(components.get(i));
             } else {
-                // Aggiungi il componente normalmente per gli altri casi
                 add((Component) components.get(i), gbc);
             }
         }
     }
 
-    public String getTitle(){return taskData.get(1);}
+    private void addComponentWithScrollPane(Object component) {
+        JScrollPane scrollPane = new JScrollPane((Component) component);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        add(scrollPane, gbc);
+    }
 
-    public String getNewTitle(){return ((CustomTextField) components.get(1)).getText();}
-    public String getNewDescription(){return ((CustomTextPane) components.get(2)).getText();}
-    public int getNewUrgency(){return ((CustomComboBox) components.get(3)).getSelectedIndex();}
-    public String getNewDueDate(){return ((CustomDatePicker) components.get(4)).getSelectedDate();}
+    public String getTitle() {
+        return taskData.get(1);
+    }
+
+    public String getNewTitle() {
+        return ((CustomTextField) components.get(1)).getText();
+    }
+
+    public String getNewDescription() {
+        return ((CustomTextPane) components.get(2)).getText();
+    }
+
+    public int getNewUrgency() {
+        return ((CustomComboBox) components.get(3)).getSelectedIndex();
+    }
+
+    public String getNewDueDate() {
+        return ((CustomDatePicker) components.get(4)).getSelectedDate();
+    }
 }

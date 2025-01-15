@@ -23,10 +23,16 @@ public class DeskView extends JPanel {
         this.startFolder = startFolder;
 
         setLayout(new BorderLayout());
-        AvatarPlant.getInstance().subtractHP(AvatarPlant.getInstance().getPenance());
+        handleAvatarPenance();
 
         initializeUI();
-        new DeskController(this, user, startFolder);
+        initializeController();
+    }
+
+    // Sezione: Inizializzazione
+    private void handleAvatarPenance() {
+        AvatarPlant avatarPlant = AvatarPlant.getInstance();
+        avatarPlant.subtractHP(avatarPlant.getPenance());
     }
 
     private void initializeUI() {
@@ -36,37 +42,13 @@ public class DeskView extends JPanel {
         add(splitPanel, BorderLayout.CENTER);
     }
 
+    private void initializeController() {
+        new DeskController(this, user, startFolder);
+    }
+
+    // Sezione: Gestione IconPanel
     public void addIconPanel(IconPanel iconPanel) {
         splitPanel.getHomePanel().add(iconPanel);
-    }
-
-    public void addPopupMenu() {
-        // Creazione del menu a comparsa
-        JPopupMenu popupMenu = new JPopupMenu();
-        JMenuItem createFolderItem = new JMenuItem("Create Folder");
-        JMenuItem createTaskItem = new JMenuItem("Create Task");
-        JMenuItem pasteComponent = new JMenuItem("Paste");
-
-        popupMenu.add(createFolderItem);
-        popupMenu.add(createTaskItem);
-        createFolderItem.addActionListener(e -> createFolder());
-        createTaskItem.addActionListener(e -> createTask());
-
-        if (ComponentManager.getInstance().getCuttedComponentId()!=null && ComponentManager.getInstance().getCuttedComponentType()!=null) {
-            popupMenu.add(pasteComponent);
-            pasteComponent.addActionListener(e -> new PasteComponentCommand().execute());
-        }
-        iconPanelAdd.setComponentPopupMenu(popupMenu);
-    }
-
-    protected void createTask() {
-        TaskCreateView taskCreateView = new TaskCreateView();
-        ComponentManager.getInstance().setPanel(taskCreateView);
-    }
-
-    protected void createFolder() {
-        FolderCreateView createFolderPanel = new FolderCreateView();
-        ComponentManager.getInstance().setPanel(createFolderPanel);
     }
 
     public void addCreateIcon() {
@@ -75,11 +57,56 @@ public class DeskView extends JPanel {
     }
 
     protected void addBackIcon() {
-        if (!startFolder.equals("/root")) {
-            iconPanelBack = IconFactory.createIconPanel(
-                    "back", "back", new GoBackCommand()
-            );
+        if (!isRootFolder()) {
+            iconPanelBack = IconFactory.createIconPanel("back", "back", new GoBackCommand());
             splitPanel.getHomePanel().add(iconPanelBack);
         }
+    }
+
+    private boolean isRootFolder() {
+        return "/root".equals(startFolder);
+    }
+
+    // Sezione: Gestione Popup Menu
+    public void addPopupMenu() {
+        JPopupMenu popupMenu = createPopupMenu();
+        iconPanelAdd.setComponentPopupMenu(popupMenu);
+    }
+
+    private JPopupMenu createPopupMenu() {
+        JPopupMenu popupMenu = new JPopupMenu();
+
+        // Aggiunta opzioni principali
+        addMenuItem(popupMenu, "Create Folder", e -> createFolder());
+        addMenuItem(popupMenu, "Create Task", e -> createTask());
+
+        // Aggiunta opzione "Paste" se applicabile
+        if (isPasteAvailable()) {
+            addMenuItem(popupMenu, "Paste", e -> new PasteComponentCommand().execute());
+        }
+        return popupMenu;
+    }
+
+    private void addMenuItem(JPopupMenu menu, String label, java.awt.event.ActionListener action) {
+        JMenuItem menuItem = new JMenuItem(label);
+        menuItem.addActionListener(action);
+        menu.add(menuItem);
+    }
+
+    private boolean isPasteAvailable() {
+        ComponentManager componentManager = ComponentManager.getInstance();
+        return componentManager.getCuttedComponentId() != null &&
+                componentManager.getCuttedComponentType() != null;
+    }
+
+    // Sezione: Azioni di creazione
+    protected void createFolder() {
+        FolderCreateView createFolderPanel = new FolderCreateView();
+        ComponentManager.getInstance().setPanel(createFolderPanel);
+    }
+
+    protected void createTask() {
+        TaskCreateView taskCreateView = new TaskCreateView();
+        ComponentManager.getInstance().setPanel(taskCreateView);
     }
 }
