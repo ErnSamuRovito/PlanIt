@@ -384,5 +384,24 @@ public class TaskDAOImpl implements TaskDAO {
         return folderName; // Restituisci il nome della cartella, o null se non trovato
     }
 
-
+    @Override
+    public boolean checkTaskExistsInFolder(int folderId, Integer taskId) {
+        String sql = """
+        SELECT COUNT(*)
+        FROM Task
+        WHERE folder = ? AND title=(
+            SELECT title FROM Task WHERE id_task = ?
+        )
+        """;
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, folderId);
+            stmt.setInt(2, taskId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.getInt(1) > 0; // Restituisce true se esiste un task con lo stesso nome
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // Se si verifica un errore, restituisce false
+        }
+    }
 }

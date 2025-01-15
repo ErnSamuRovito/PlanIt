@@ -5,6 +5,7 @@ import core.SqLiteConnection;
 import model.dao.folder.FolderDAOImpl;
 import model.dao.task.TaskDAOImpl;
 
+import javax.swing.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -22,22 +23,35 @@ public class PasteComponentCommand implements ActionCommand {
                         ComponentManager.getInstance().getCurrFolder(),
                         ComponentManager.getInstance().getUser()
                 );
-                folderDAO.updateFolderParent(
-                        ComponentManager.getInstance().getCuttedComponentId(),
-                        newParentId
-                );
+                if (!folderDAO.checkFolderExistsInParent(newParentId,ComponentManager.getInstance().getCuttedComponentId())) {
+                    folderDAO.updateFolderParent(
+                            ComponentManager.getInstance().getCuttedComponentId(),
+                            newParentId
+                    );
+                }else{
+                    JOptionPane.showMessageDialog(null,
+                        "Error: A folder with the same name already exists in the destination folder.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                }
             }else if (ComponentManager.getInstance().getCuttedComponentType().equals("task")){
                 newParentId=folderDAO.getFolderIdByNameAndOwner(
                         ComponentManager.getInstance().getCurrFolder(),
                         ComponentManager.getInstance().getUser()
                 );
-                taskDAO.updateTaskFolder(
-                        ComponentManager.getInstance().getCuttedComponentId(),
-                        newParentId
-                );
+                if (!taskDAO.checkTaskExistsInFolder(newParentId,ComponentManager.getInstance().getCuttedComponentId())) {
+                    taskDAO.updateTaskFolder(
+                            ComponentManager.getInstance().getCuttedComponentId(),
+                            newParentId
+                    );
+                }else{
+                    JOptionPane.showMessageDialog(null,
+                            "Error: A task with the same name already exists in the destination folder.",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             }
 
-            System.out.println("Sposto il "+ComponentManager.getInstance().getCuttedComponentType()+" id: "+ComponentManager.getInstance().getCuttedComponentId()+" in "+newParentId);
             //resetto il componente "tagliato".
             ComponentManager.getInstance().setCuttedComponent(null,null);
             ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView()); //Aggiorno la DeskView

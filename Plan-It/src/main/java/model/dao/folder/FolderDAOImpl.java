@@ -296,4 +296,25 @@ public class FolderDAOImpl implements FolderDAO {
             return false;
         }
     }
+
+    @Override
+    public boolean checkFolderExistsInParent(int parentId, Integer folderId) {
+        String sql = """
+            SELECT COUNT(*)
+            FROM Folder
+            WHERE parent = ? AND folder_name = (
+                SELECT folder_name FROM Folder WHERE id = ?
+            );
+        """;
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, parentId);
+            stmt.setInt(2, folderId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.getInt(1) > 0; // Restituisce true se esiste una cartella con lo stesso nome
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // Se si verifica un errore, restituisce false
+        }
+    }
 }

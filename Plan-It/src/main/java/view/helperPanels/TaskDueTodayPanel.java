@@ -43,8 +43,6 @@ public class TaskDueTodayPanel extends TemplateView {
                             new GoToTaskViewCommand(
                                     task.getTitle(),
                                     ComponentManager.getInstance().getUser(),
-                                    //ComponentManager.getInstance().getCurrFolder() //--> NON VA BENE
-                                    //task.getFolder() --> name
                                     taskController.getFolderNameByTaskTitle(task.getTitle())
                             )
                     );

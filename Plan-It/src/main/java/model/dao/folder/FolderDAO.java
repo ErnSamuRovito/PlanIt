@@ -18,4 +18,5 @@ public interface FolderDAO {
     List<String> getFoldersByFolderAndUser(String startFolder, String user);
 
     boolean updateFolderParent(int folderId, int newParentId);
+    boolean checkFolderExistsInParent(int parentId, Integer folderId);
 }

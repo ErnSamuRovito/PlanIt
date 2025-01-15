@@ -22,4 +22,6 @@ public interface TaskDAO {
     boolean updateTaskFolder(int taskId, int newFolderId);
     ArrayList<Task> getTasksDueTodayByUser(String username);
     String getFolderNameByTaskTitle(String taskTitle);
+
+    boolean checkTaskExistsInFolder(int folderId, Integer taskId);
 }
