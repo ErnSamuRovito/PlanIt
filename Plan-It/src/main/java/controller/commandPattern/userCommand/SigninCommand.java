@@ -70,7 +70,7 @@ public class SigninCommand implements ActionCommand {
         }
 
         // Controlla la validità della password
-        if (!FormatValidator.isValidPassword(passwordInput)) {
+        if (FormatValidator.isValidPassword(passwordInput)) {
             showMessageDialog(null, ERROR_PASSWORD_INVALID, ERROR_TITLE, ERROR_MESSAGE);
             return;
         }

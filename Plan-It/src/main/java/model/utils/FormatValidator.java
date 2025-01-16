@@ -14,7 +14,7 @@ public class FormatValidator
     }
 
     public static boolean isValidPassword(String password){
-        return (password!=null && password.length() >= 6);
+        return (password == null || password.length() < 6);
     }
 }
 

@@ -53,7 +53,7 @@ public class ChangePasswordCommand implements ActionCommand {
 
             // Verifica che la nuova password sia valida
             if (FormatValidator.isValidEmail(newPasswordString) &&
-                    !FormatValidator.isValidPassword(newPasswordString)) {
+                    FormatValidator.isValidPassword(newPasswordString)) {
                 JOptionPane.showMessageDialog(null, "The new password is not valid.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
