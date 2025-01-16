@@ -1,12 +1,13 @@
 package model.plantStates;
 
-import core.SqLiteConnection;
+import model.persistance.SqLiteConnection;
+import model.persistance.dao.avatarPlant.AvatarPlantDAO;
 import model.utils.DateComparison;
 import model.User;
-import model.dao.avatarPlant.AvatarPlantDAOImpl;
-import model.dao.avatarPlant.AvatarPlantDB;
-import model.dao.task.TaskDAO;
-import model.dao.task.TaskDAOImpl;
+import model.persistance.dao.avatarPlant.AvatarPlantDAOImpl;
+import model.persistance.dao.avatarPlant.AvatarPlantDB;
+import model.persistance.dao.task.TaskDAO;
+import model.persistance.dao.task.TaskDAOImpl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -164,42 +165,56 @@ public class AvatarPlant {
     }
 
     public int getPenance() {
+        System.out.println("\n----------------------------\nSONO IN 'getPenance() - AvatarPlant.'");
         int totalPenance = 0;
         DateComparison dateComparison = new DateComparison();
 
         HashMap<Integer, Integer> urgencyMap = new HashMap<>();
-        urgencyMap.put(1, PENANCE_LOW_TASK);
-        urgencyMap.put(2, PENANCE_MEDIUM_TASK);
-        urgencyMap.put(3, PENANCE_HIGH_TASK);
+        urgencyMap.put(0, PENANCE_LOW_TASK);
+        urgencyMap.put(1, PENANCE_MEDIUM_TASK);
+        urgencyMap.put(2, PENANCE_HIGH_TASK);
 
-        String query = "SELECT Task.id_task, Task.state, Task.due_date, Task.urgency FROM Task "
-                + "JOIN Folder ON Task.folder = Folder.id "
-                + "JOIN User ON Folder.owner = User.id "
-                + "WHERE User.id = ?";
+        String query = """
+                SELECT Task.id_task, Task.state, Task.due_date, Task.urgency FROM Task
+                JOIN Folder ON Task.folder = Folder.id
+                JOIN User ON Folder.owner = User.id
+                WHERE User.id = ?;
+                """;
 
         try (Connection connection = SqLiteConnection.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-
+            TaskDAO taskDAO = new TaskDAOImpl(connection);
+            AvatarPlantDAO avatarPlantDAO = new AvatarPlantDAOImpl(connection);
             statement.setInt(1, User.getInstance().getId());
+            //System.out.println("Executing query for user ID: " + User.getInstance().getId());
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     String dueDate = resultSet.getString("due_date");
                     int urgency = resultSet.getInt("urgency");
+                    int taskState = resultSet.getInt("state");
 
-                    if (dateComparison.compareDate(dueDate) < 0 && resultSet.getInt("state") != -1) {
+                    //System.out.println("Task ID: " + resultSet.getInt("id_task"));
+                    //System.out.println("Due date: " + dueDate + ", Urgency: " + urgency + ", State: " + taskState);
+
+                    //System.out.println("Controllo la due date del task...");
+                    if (dateComparison.compareDate(dueDate) < 0 && taskState != -1) {
                         totalPenance += urgencyMap.getOrDefault(urgency, 0);
+                        System.out.println("Task expired. Adding penance: " + totalPenance);
+
                         int taskId = resultSet.getInt("id_task");
-                        TaskDAO taskDAO = new TaskDAOImpl(connection);
                         taskDAO.markTaskAsExpired(taskId);
                     }
                 }
+                AvatarPlantDB avatarPlantDB = new AvatarPlantDB(id, name, hp-totalPenance, owner);
+                avatarPlantDAO.updatePlant(avatarPlantDB);
             }
 
         } catch (SQLException e) {
             throw new RuntimeException("Error calculating penance for user with owner ID: " + owner, e);
         }
 
+        System.out.println("Total penance calculated: " + totalPenance);
         return totalPenance;
     }
 }

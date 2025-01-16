@@ -1,4 +1,4 @@
-package model.dao.user;
+package model.persistance.dao.user;
 
 import model.utils.PasswordUtils;
 import model.User;

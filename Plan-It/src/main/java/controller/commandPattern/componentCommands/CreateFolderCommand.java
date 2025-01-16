@@ -1,10 +1,11 @@
-package controller.commandPattern;
+package controller.commandPattern.componentCommands;
 
+import controller.commandPattern.ActionCommand;
 import core.ComponentManager;
-import core.SqLiteConnection;
+import model.persistance.SqLiteConnection;
 import model.composite.Folder;
-import model.dao.folder.FolderDAOImpl;
-import model.dao.user.UserDAOImpl;
+import model.persistance.dao.folder.FolderDAOImpl;
+import model.persistance.dao.user.UserDAOImpl;
 import view.panels.FolderCreateView;
 
 import javax.swing.*;

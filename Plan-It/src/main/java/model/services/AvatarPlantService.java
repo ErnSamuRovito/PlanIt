@@ -1,8 +1,8 @@
 package model.services;
 
-import core.SqLiteConnection;
-import model.dao.avatarPlant.AvatarPlantDAOImpl;
-import model.dao.avatarPlant.AvatarPlantDB;
+import model.persistance.SqLiteConnection;
+import model.persistance.dao.avatarPlant.AvatarPlantDAOImpl;
+import model.persistance.dao.avatarPlant.AvatarPlantDB;
 
 import java.sql.Connection;
 import java.sql.SQLException;

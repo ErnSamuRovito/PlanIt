@@ -1,6 +1,6 @@
 package view.panels;
 
-import controller.commandPattern.PasteComponentCommand;
+import controller.commandPattern.componentCommands.PasteComponentCommand;
 import controller.commandPattern.navigationCommands.GoBackCommand;
 import controller.commandPattern.navigationCommands.GoToLoginCommand;
 import controller.controllers.DeskController;
@@ -33,6 +33,7 @@ public class DeskView extends JPanel {
     // Sezione: Inizializzazione
     private void handleAvatarPenance() {
         AvatarPlant avatarPlant = AvatarPlant.getInstance();
+        //System.out.println("PENALITA': "+avatarPlant.getPenance());
         avatarPlant.subtractHP(avatarPlant.getPenance());
     }
 

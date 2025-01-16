@@ -1,10 +1,11 @@
-package controller.commandPattern;
+package controller.commandPattern.componentCommands;
 
+import controller.commandPattern.ActionCommand;
 import core.ComponentManager;
 import core.GlobalResources;
-import core.SqLiteConnection;
-import model.dao.folder.FolderDAOImpl;
-import model.dao.task.TaskDAOImpl;
+import model.persistance.SqLiteConnection;
+import model.persistance.dao.folder.FolderDAOImpl;
+import model.persistance.dao.task.TaskDAOImpl;
 import javax.swing.*;
 import java.sql.Connection;
 import java.sql.SQLException;

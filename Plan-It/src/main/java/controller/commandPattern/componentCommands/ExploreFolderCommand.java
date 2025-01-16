@@ -1,5 +1,6 @@
-package controller.commandPattern;
+package controller.commandPattern.componentCommands;
 
+import controller.commandPattern.ActionCommand;
 import controller.controllers.FolderController;
 import core.ComponentManager;
 import model.services.FolderService;

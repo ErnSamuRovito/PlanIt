@@ -1,6 +1,6 @@
 package controller.controllers;
 
-import model.dao.user.UserDB;
+import model.persistance.dao.user.UserDB;
 import model.services.UserService;
 
 public class UserController {

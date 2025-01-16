@@ -1,14 +1,15 @@
-package controller.commandPattern;
+package controller.commandPattern.componentCommands;
 
+import controller.commandPattern.ActionCommand;
 import core.ComponentManager;
-import core.SqLiteConnection;
-import model.dao.task.TaskDAOImpl;
+import model.persistance.SqLiteConnection;
+import model.persistance.dao.task.TaskDAOImpl;
 import model.plantStates.AvatarPlant;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class TaskDoneCommand implements ActionCommand{
+public class TaskDoneCommand implements ActionCommand {
     int id_task_completed;
 
     public TaskDoneCommand(String id_task) {

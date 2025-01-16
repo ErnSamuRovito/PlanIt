@@ -1,9 +1,9 @@
 package model.services;
 
 import core.ComponentManager;
-import core.SqLiteConnection;
-import model.dao.user.UserDAOImpl;
-import model.dao.user.UserDB;
+import model.persistance.SqLiteConnection;
+import model.persistance.dao.user.UserDAOImpl;
+import model.persistance.dao.user.UserDB;
 
 import java.sql.Connection;
 import java.sql.SQLException;

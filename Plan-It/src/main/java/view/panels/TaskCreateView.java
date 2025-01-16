@@ -1,6 +1,6 @@
 package view.panels;
 
-import controller.commandPattern.CreateTaskCommand;
+import controller.commandPattern.componentCommands.CreateTaskCommand;
 import controller.commandPattern.navigationCommands.GoToDeskViewCommand;
 import view.UICreationalPattern.UIBuilders.UIBuilder;
 import view.UICreationalPattern.UIComponentFactoryRegistry;

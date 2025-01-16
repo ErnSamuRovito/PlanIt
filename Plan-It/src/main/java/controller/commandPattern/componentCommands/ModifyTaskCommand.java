@@ -1,9 +1,10 @@
-package controller.commandPattern;
+package controller.commandPattern.componentCommands;
 
+import controller.commandPattern.ActionCommand;
 import core.ComponentManager;
-import core.SqLiteConnection;
+import model.persistance.SqLiteConnection;
 import model.composite.Task;
-import model.dao.task.TaskDAOImpl;
+import model.persistance.dao.task.TaskDAOImpl;
 import view.panels.TaskModifyView;
 
 import javax.swing.*;

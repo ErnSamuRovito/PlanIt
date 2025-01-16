@@ -1,7 +1,7 @@
 package core;
 
-import model.dao.folder.FolderDAOImpl;
-import model.dao.task.TaskDAOImpl;
+import model.persistance.SqLiteConnection;
+import model.persistance.dao.folder.FolderDAOImpl;
 import view.ApplicationWindow;
 import view.panels.*;
 import view.panels.TaskModifyView;

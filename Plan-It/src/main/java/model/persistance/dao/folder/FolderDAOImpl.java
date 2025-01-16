@@ -1,4 +1,4 @@
-package model.dao.folder;
+package model.persistance.dao.folder;
 
 import model.composite.Folder;
 

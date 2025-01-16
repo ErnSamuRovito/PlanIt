@@ -1,6 +1,6 @@
 package view.panels;
 
-import controller.commandPattern.TaskDoneCommand;
+import controller.commandPattern.componentCommands.TaskDoneCommand;
 import controller.commandPattern.navigationCommands.GoToDeskViewCommand;
 import controller.controllers.TaskController;
 import model.services.TaskService;

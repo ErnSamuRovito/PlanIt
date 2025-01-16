@@ -1,4 +1,4 @@
-package model.dao.task;
+package model.persistance.dao.task;
 
 import model.composite.Task;
 
@@ -243,6 +243,7 @@ public class TaskDAOImpl implements TaskDAO {
 
     @Override
     public void markTaskAsExpired(int id_task) {
+        System.out.println("ESEGUO 'markTaskAsExpired' sul task: " + id_task);
         String sql = "UPDATE Task SET state = -1 WHERE id_task = ?;";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id_task);

@@ -1,15 +1,12 @@
 package view.helperPanels;
 
 import controller.commandPattern.navigationCommands.GoToSettingsCommand;
-import controller.controllers.TaskController;
 import core.ComponentManager;
 import core.GlobalResources;
-import core.SqLiteConnection;
-import model.composite.Task;
-import model.dao.avatarPlant.AvatarPlantDAOImpl;
-import model.dao.avatarPlant.AvatarPlantDB;
+import model.persistance.SqLiteConnection;
+import model.persistance.dao.avatarPlant.AvatarPlantDAOImpl;
+import model.persistance.dao.avatarPlant.AvatarPlantDB;
 import model.plantStates.AvatarPlant;
-import model.services.TaskService;
 import view.UICreationalPattern.UIComponents.CustomLabel;
 import view.UICreationalPattern.UIFactoryHelper;
 

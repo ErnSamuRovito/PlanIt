@@ -3,12 +3,7 @@ package controller.commandPattern.navigationCommands;
 import controller.commandPattern.ActionCommand;
 import controller.controllers.FolderController;
 import core.ComponentManager;
-import core.SqLiteConnection;
-import model.dao.folder.FolderDAOImpl;
 import model.services.FolderService;
-
-import java.sql.Connection;
-import java.sql.SQLException;
 
 public class GoToDeskViewCommand implements ActionCommand {
     private final String user,folder;

@@ -1,4 +1,4 @@
-package model.dao.user;
+package model.persistance.dao.user;
 import java.util.List;
 
 public interface UserDAO {

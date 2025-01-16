@@ -1,4 +1,4 @@
-package model.dao.avatarPlant;
+package model.persistance.dao.avatarPlant;
 
 import java.util.List;
 

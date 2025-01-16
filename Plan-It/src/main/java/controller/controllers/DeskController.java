@@ -1,13 +1,12 @@
 package controller.controllers;
 
 import core.ComponentManager;
-import core.SqLiteConnection;
-import model.dao.folder.FolderDAOImpl;
-import model.dao.task.TaskDAOImpl;
-import model.services.FolderService;
+import model.persistance.SqLiteConnection;
+import model.persistance.dao.folder.FolderDAOImpl;
+import model.persistance.dao.task.TaskDAOImpl;
 import view.panels.DeskView;
 import view.iconPanel.IconFactory;
-import controller.commandPattern.ExploreFolderCommand;
+import controller.commandPattern.componentCommands.ExploreFolderCommand;
 import controller.commandPattern.navigationCommands.GoToTaskViewCommand;
 
 import java.sql.Connection;

@@ -1,6 +1,6 @@
 package view.panels;
 
-import controller.commandPattern.ModifyFolderCommand;
+import controller.commandPattern.componentCommands.ModifyFolderCommand;
 import controller.commandPattern.navigationCommands.GoToDeskViewCommand;
 import controller.controllers.FolderController;
 import model.services.FolderService;

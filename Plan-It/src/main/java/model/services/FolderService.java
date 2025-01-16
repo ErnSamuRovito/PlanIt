@@ -1,9 +1,8 @@
 package model.services;
 
-import core.ComponentManager;
-import core.SqLiteConnection;
+import model.persistance.SqLiteConnection;
 import model.composite.Folder;
-import model.dao.folder.FolderDAOImpl;
+import model.persistance.dao.folder.FolderDAOImpl;
 
 import java.sql.Connection;
 import java.sql.SQLException;

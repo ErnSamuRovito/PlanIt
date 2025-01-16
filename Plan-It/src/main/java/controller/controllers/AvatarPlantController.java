@@ -1,6 +1,6 @@
 package controller.controllers;
 
-import model.dao.avatarPlant.AvatarPlantDB;
+import model.persistance.dao.avatarPlant.AvatarPlantDB;
 import model.services.AvatarPlantService;
 
 public class AvatarPlantController {

@@ -1,8 +1,8 @@
 package view.iconPanel;
 
 import controller.commandPattern.ActionCommand;
-import controller.commandPattern.CutComponentCommand;
-import controller.commandPattern.DeleteComponentCommand;
+import controller.commandPattern.componentCommands.CutComponentCommand;
+import controller.commandPattern.componentCommands.DeleteComponentCommand;
 import controller.commandPattern.navigationCommands.GoToModifyFolderCommand;
 import controller.commandPattern.navigationCommands.GoToModifyTaskCommand;
 import core.GlobalResources;

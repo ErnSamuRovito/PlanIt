@@ -1,6 +1,6 @@
 package view.panels;
 
-import controller.commandPattern.CreateFolderCommand;
+import controller.commandPattern.componentCommands.CreateFolderCommand;
 import controller.commandPattern.navigationCommands.GoToDeskViewCommand;
 import view.UICreationalPattern.UIBuilders.UIBuilder;
 import view.UICreationalPattern.UIComponentFactoryRegistry;

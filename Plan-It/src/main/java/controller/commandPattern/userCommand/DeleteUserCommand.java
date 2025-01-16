@@ -2,9 +2,9 @@ package controller.commandPattern.userCommand;
 
 import controller.commandPattern.ActionCommand;
 import core.ComponentManager;
-import core.SqLiteConnection;
-import model.dao.user.UserDAO;
-import model.dao.user.UserDAOImpl;
+import model.persistance.SqLiteConnection;
+import model.persistance.dao.user.UserDAO;
+import model.persistance.dao.user.UserDAOImpl;
 import view.panels.LoginView;
 import javax.swing.JOptionPane;
 

@@ -1,4 +1,4 @@
-package model.dao.user;
+package model.persistance.dao.user;
 
 public class UserDB {
     private int id;
