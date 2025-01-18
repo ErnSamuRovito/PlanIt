@@ -18,12 +18,8 @@ public class DateComparison {
     public int compareDate(String date) {
         try {
             LocalDate otherDateString = LocalDate.parse(date, formatter);
-            System.out.println("Comparing current date: " + currentDate + " with due date: " + otherDateString);
-            int daysDifference = (int) ChronoUnit.DAYS.between(currentDate, otherDateString);
-            System.out.println("Days difference: " + daysDifference);
-            return daysDifference;
+            return (int) ChronoUnit.DAYS.between(currentDate, otherDateString);
         } catch (Exception e) {
-            System.out.println("Error parsing date: " + date);
             e.printStackTrace();
             return 0;
         }

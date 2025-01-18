@@ -90,11 +90,10 @@ public class SigninCommand implements ActionCommand {
             if (createRootFolder(userId)) {
                 // Crea la piantina associata all'utente
                 if (createPlant(usernameInput + "'s Plant", userId)) {
-                    System.out.println(SUCCESS_PLANT_CREATION);
                     AvatarPlant.getInstance().loadPlant(userId);
                     AvatarPlant.getInstance().updateState();
                 } else {
-                    System.err.println(ERROR_PLANT_CREATION);
+                    showMessageDialog(null, ERROR_PLANT_CREATION, ERROR_TITLE, ERROR_MESSAGE);
                 }
 
                 FolderController folderController=new FolderController(new FolderService());
@@ -103,7 +102,7 @@ public class SigninCommand implements ActionCommand {
                 ComponentManager.getInstance().setPath(usernameInput, folderId);
                 ComponentManager.getInstance().setPanel(ComponentManager.getInstance().getDeskView());
             } else {
-                System.err.println(ERROR_ROOT_FOLDER_CREATION);
+                showMessageDialog(null, ERROR_ROOT_FOLDER_CREATION, ERROR_TITLE, ERROR_MESSAGE);
             }
         } else {
             showMessageDialog(null, ERROR_REGISTRATION_FAILED, ERROR_TITLE, ERROR_MESSAGE);

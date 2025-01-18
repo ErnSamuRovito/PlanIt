@@ -37,7 +37,6 @@ public class TaskDueTodayPanel extends TemplateView {
 
         for (Task task : tasks) {
             UIBuilder taskLabelBuilder = registry.getFactory("ClickableLabel").createBuild();
-            System.out.println("ID: "+task.getIdTask());
             taskLabelBuilder
                     .text(task.getTitle())
                     .action(

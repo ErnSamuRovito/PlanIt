@@ -18,7 +18,7 @@ public abstract class TemplateView extends JPanel
     protected void initialize(){
         builders = new ArrayList<>();
         components = new ArrayList<>();
-        gbc = new GridBagConstraints(); // Inizializzazione sicura
+        gbc = new GridBagConstraints();
 
         prepareView();
     }
@@ -34,7 +34,7 @@ public abstract class TemplateView extends JPanel
         setLayout(new GridBagLayout());
         setBackground(GlobalResources.COLOR_PANNA);
         gbc.gridx = 0;
-        gbc.insets = new Insets(10, 10, 10, 10); // Margini
+        gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.CENTER;
     }

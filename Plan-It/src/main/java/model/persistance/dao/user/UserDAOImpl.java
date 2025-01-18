@@ -233,7 +233,6 @@ public class UserDAOImpl implements UserDAO {
             preparedStatement.setInt(2, User.getInstance().getId()); // id dell'utente
             preparedStatement.executeUpdate(); // Esegui l'aggiornamento
         } catch (SQLException e) {
-            System.err.println("Error updating email: " + e.getMessage());
             throw new RuntimeException("Error updating email", e); // Rilancia l'errore se qualcosa va storto
         }
     }

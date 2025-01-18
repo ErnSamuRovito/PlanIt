@@ -33,7 +33,6 @@ public class DeskView extends JPanel {
     // Sezione: Inizializzazione
     private void handleAvatarPenance() {
         AvatarPlant avatarPlant = AvatarPlant.getInstance();
-        //System.out.println("PENALITA': "+avatarPlant.getPenance());
         avatarPlant.subtractHP(avatarPlant.getPenance());
     }
 

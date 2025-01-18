@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class AvatarPlant {
-    private static  AvatarPlant instance; // Thread-safe singleton
+    private static  AvatarPlant instance;
 
     private int id;
     private String name;
@@ -165,7 +165,6 @@ public class AvatarPlant {
     }
 
     public int getPenance() {
-        System.out.println("\n----------------------------\nSONO IN 'getPenance() - AvatarPlant.'");
         int totalPenance = 0;
         DateComparison dateComparison = new DateComparison();
 
@@ -186,7 +185,6 @@ public class AvatarPlant {
             TaskDAO taskDAO = new TaskDAOImpl(connection);
             AvatarPlantDAO avatarPlantDAO = new AvatarPlantDAOImpl(connection);
             statement.setInt(1, User.getInstance().getId());
-            //System.out.println("Executing query for user ID: " + User.getInstance().getId());
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
@@ -194,13 +192,8 @@ public class AvatarPlant {
                     int urgency = resultSet.getInt("urgency");
                     int taskState = resultSet.getInt("state");
 
-                    //System.out.println("Task ID: " + resultSet.getInt("id_task"));
-                    //System.out.println("Due date: " + dueDate + ", Urgency: " + urgency + ", State: " + taskState);
-
-                    //System.out.println("Controllo la due date del task...");
                     if (dateComparison.compareDate(dueDate) < 0 && taskState != -1) {
                         totalPenance += urgencyMap.getOrDefault(urgency, 0);
-                        System.out.println("Task expired. Adding penance: " + totalPenance);
 
                         int taskId = resultSet.getInt("id_task");
                         taskDAO.markTaskAsExpired(taskId);
@@ -213,8 +206,6 @@ public class AvatarPlant {
         } catch (SQLException e) {
             throw new RuntimeException("Error calculating penance for user with owner ID: " + owner, e);
         }
-
-        System.out.println("Total penance calculated: " + totalPenance);
         return totalPenance;
     }
 }

@@ -17,7 +17,6 @@ public class ComponentManager {
     private String cuttedComponentType;
     private Integer cuttedComponentId;
 
-    // Costruttore privato per il singleton
     private ComponentManager() {}
 
     public static synchronized ComponentManager getInstance() {

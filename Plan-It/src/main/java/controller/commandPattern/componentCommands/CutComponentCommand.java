@@ -37,7 +37,6 @@ public class CutComponentCommand implements ActionCommand {
                 ComponentManager.getInstance().setCuttedComponent("task",taskId);
             }
 
-            System.out.println("Cutted Component: "+ComponentManager.getInstance().getCuttedComponentType()+" - "+ComponentManager.getInstance().getCuttedComponentId());
         }catch (SQLException e) {throw new RuntimeException(e);}
     }
 }
