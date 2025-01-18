@@ -52,9 +52,8 @@ public class ChangePasswordCommand implements ActionCommand {
             String newPasswordString = new String(newPassword);
 
             // Verifica che la nuova password sia valida
-            if (FormatValidator.isValidEmail(newPasswordString) &&
-                    FormatValidator.isValidPassword(newPasswordString)) {
-                JOptionPane.showMessageDialog(null, "The new password is not valid.", "Error", JOptionPane.ERROR_MESSAGE);
+            if (FormatValidator.isValidPassword(newPasswordString)) {
+                JOptionPane.showMessageDialog(null, "The password should be longer than 6 characters.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
